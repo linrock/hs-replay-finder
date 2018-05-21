@@ -1,12 +1,30 @@
 body
   font-family "Helvetica Neue", Arial, sans-serif
 
+h1
+  font-size 18px
+  font-weight bold
+  margin-bottom 30px
+
 .container
   margin 50px auto
-  width 450px
+  width 600px
 
-.stats
-  margin 20px auto
+.sidebar
+  position fixed
+  left 50px
+  top 20px
+
+  .filters
+    .filter
+      display flex
+      margin 5px 0
+
+      .label
+        width 100px
+
+  .stats
+    margin-top 40px
 
 .replays
   margin-bottom 50px
