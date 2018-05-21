@@ -45,9 +45,21 @@
     <% @replays.each do |replay| %>
       <a href="<%= replay.replay_link %>" class="replay-link" target="_blank">
         <span class="player player1"><%= replay.player1_archetype %></span>
-        <span class="rank"><%= replay.player1_rank %></span>
+        <span class="rank">
+          <% if replay.player1_legend_rank %>
+            <span class="legend-rank"><%= replay.player1_legend_rank %></span>
+          <% else %>
+            <span class="rank-rank">r<%= replay.player1_rank %></span>
+          <% end %>
+        </span>
         <span class="vs">vs.</span>
-        <span class="rank"><%= replay.player2_rank %></span>
+        <span class="rank">
+          <% if replay.player2_legend_rank %>
+            <span class="legend-rank"><%= replay.player2_legend_rank %></span>
+          <% else %>
+            <span class="rank-rank">r<%= replay.player2_rank %></span>
+          <% end %>
+        </span>
         <span class="player player2"><%= replay.player2_archetype %></span>
       </a>
     <% end %>

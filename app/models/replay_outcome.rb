@@ -57,8 +57,11 @@ class ReplayOutcome < ApplicationRecord
   end
 
   def player1_rank
-    rank = data["player1_legend_rank"]
-    rank != "None" ? rank : nil
+    data["player1_rank"] != "None" ? data["player1_rank"] : nil
+  end
+
+  def player1_legend_rank
+    data["player1_legend_rank"] != "None" ? data["player1_legend_rank"] : nil
   end
 
   def player2_archetype
@@ -66,8 +69,11 @@ class ReplayOutcome < ApplicationRecord
   end
 
   def player2_rank
-    rank = data["player2_legend_rank"]
-    rank != "None" ? rank : nil
+    data["player2_rank"] != "None" ? data["player2_rank"] : nil
+  end
+
+  def player2_legend_rank
+    data["player2_legend_rank"] != "None" ? data["player2_legend_rank"] : nil
   end
 
   def replay_string
