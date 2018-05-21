@@ -1,10 +1,16 @@
-<section class="replays">
-  <% @replays.each do |replay| %>
-    <div class="replay-info">
-      <div><%= replay.replay_string %></div>
-      <a href="<%= replay.replay_link %>" class="replay-link" target="_blank">
-        <%= replay.replay_link %>
-      </a>
-    </div>
-  <% end %>
-</section>
+<div class="container">
+  <section class="stats">
+    <%= @replays.count %> replays found
+  </section>
+
+  <section class="replays">
+    <% @replays.each do |replay| %>
+      <div class="replay-info">
+        <div><%= replay.replay_string %></div>
+        <a href="<%= replay.replay_link %>" class="replay-link" target="_blank">
+          <%= replay.replay_link %>
+        </a>
+      </div>
+    <% end %>
+  </section>
+</div>

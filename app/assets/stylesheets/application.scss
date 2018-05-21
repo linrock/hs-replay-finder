@@ -7,9 +7,17 @@ body {
   font-family: "Helvetica Neue", Arial, sans-serif;
 }
 
-.replays {
-  margin: 50px auto;
+.container {
   width: 600px;
+  margin: 50px auto;
+}
+
+.stats {
+  margin: 20px auto;
+}
+
+.replays {
+  margin-bottom: 50px;
 }
 
 .replay-info {
