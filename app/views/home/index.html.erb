@@ -5,12 +5,13 @@
 
   <section class="replays">
     <% @replays.each do |replay| %>
-      <div class="replay-info">
-        <div><%= replay.replay_string %></div>
-        <a href="<%= replay.replay_link %>" class="replay-link" target="_blank">
-          <%= replay.replay_link %>
-        </a>
-      </div>
+      <a href="<%= replay.replay_link %>" class="replay-link" target="_blank">
+        <span class="player player1"><%= replay.player1_archetype %></span>
+        <span class="rank"><%= replay.player1_rank %></span>
+        <span class="vs">vs.</span>
+        <span class="rank"><%= replay.player2_rank %></span>
+        <span class="player player2"><%= replay.player2_archetype %></span>
+      </a>
     <% end %>
   </section>
 </div>

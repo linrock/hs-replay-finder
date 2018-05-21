@@ -52,16 +52,34 @@ class ReplayOutcome < ApplicationRecord
     ", archetype_id, max_rank, archetype_id, max_rank)
   end
 
+  def player1_archetype
+    Archetype.name_of_archetype_id data["player1_archetype"]
+  end
+
+  def player1_rank
+    rank = data["player1_legend_rank"]
+    rank != "None" ? rank : nil
+  end
+
+  def player2_archetype
+    Archetype.name_of_archetype_id data["player2_archetype"]
+  end
+
+  def player2_rank
+    rank = data["player2_legend_rank"]
+    rank != "None" ? rank : nil
+  end
+
   def replay_string
     p1_rank = data["player1_rank"].to_s
     player1 = [
-      Archetype.name_of_archetype_id(data["player1_archetype"]),
+      player1_archetype,
       p1_rank.to_i > 0 ? "(rank #{data["player1_rank"]})"
                   : "(legend #{data["player1_legend_rank"]})"
     ].join(" ")
     p2_rank = data["player2_rank"].to_s
     player2 = [
-      Archetype.name_of_archetype_id(data["player2_archetype"]),
+      player2_archetype,
       p2_rank.to_i > 0 ? "(rank #{data["player2_rank"]})"
                        : "(legend #{data["player2_legend_rank"]})"
     ].join(" ")

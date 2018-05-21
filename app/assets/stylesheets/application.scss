@@ -8,8 +8,8 @@ body {
 }
 
 .container {
-  width: 600px;
   margin: 50px auto;
+  width: 450px;
 }
 
 .stats {
@@ -26,5 +26,41 @@ body {
 }
 
 .replay-link {
-  display: block;
+  color: #111;
+  display: flex;
+  font-size: 14px;
+  padding: 5px 0;
+  text-decoration: none;
+  width: 450px;
+
+  &:hover {
+    background: #fafafa;
+    opacity: 0.7;
+  }
+
+  &:visited {
+    color: #999;
+  }
+
+  .player {
+    width: 150px;
+  }
+
+  .rank {
+    text-align: center;
+    width: 50px;
+  }
+
+  .vs {
+    text-align: center;
+    width: 50px;
+  }
+
+  .player1 {
+    text-align: right;
+  }
+
+  .player2 {
+    text-align: left;
+  }
 }
