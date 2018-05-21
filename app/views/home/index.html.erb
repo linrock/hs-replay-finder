@@ -50,32 +50,42 @@
   </div>
 
   <section class="replays">
+    <% last_found_at = nil %>
     <% @replays.each do |replay| %>
-      <a href="<%= replay.replay_link %>" class="replay-link" target="_blank">
-        <span class="player player1"><%= replay.player1_archetype %></span>
-        <span class="rank">
-          <% if replay.player1_legend_rank %>
-            <span class="legend-rank"><%= replay.player1_legend_rank %></span>
-            <svg class="legend-hexagon">
-              <use xlink:href="#hexagon"></use>
-            </svg>
-          <% else %>
-            <span class="rank-rank"><%= replay.player1_rank %></span>
+      <div class="replay-info">
+        <div class="replay-found-at">
+          <% found_at = replay_found_at(replay) %>
+          <% if last_found_at != found_at %>
+            <% last_found_at = found_at %>
+            <%= found_at %>
           <% end %>
-        </span>
-        <span class="vs">vs.</span>
-        <span class="rank">
-          <% if replay.player2_legend_rank %>
-            <span class="legend-rank"><%= replay.player2_legend_rank %></span>
-            <svg class="legend-hexagon">
-              <use xlink:href="#hexagon"></use>
-            </svg>
-          <% else %>
-            <span class="rank-rank"><%= replay.player2_rank %></span>
-          <% end %>
-        </span>
-        <span class="player player2"><%= replay.player2_archetype %></span>
-      </a>
+        </div>
+        <a href="<%= replay.replay_link %>" class="replay-link" target="_blank">
+          <span class="player player1"><%= replay.player1_archetype %></span>
+          <span class="rank">
+            <% if replay.player1_legend_rank %>
+              <span class="legend-rank"><%= replay.player1_legend_rank %></span>
+              <svg class="legend-hexagon">
+                <use xlink:href="#hexagon"></use>
+              </svg>
+            <% else %>
+              <span class="rank-rank"><%= replay.player1_rank %></span>
+            <% end %>
+          </span>
+          <span class="vs">vs.</span>
+          <span class="rank">
+            <% if replay.player2_legend_rank %>
+              <span class="legend-rank"><%= replay.player2_legend_rank %></span>
+              <svg class="legend-hexagon">
+                <use xlink:href="#hexagon"></use>
+              </svg>
+            <% else %>
+              <span class="rank-rank"><%= replay.player2_rank %></span>
+            <% end %>
+          </span>
+          <span class="player player2"><%= replay.player2_archetype %></span>
+        </a>
+      </div>
     <% end %>
   </section>
 </div>
