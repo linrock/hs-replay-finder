@@ -10,21 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_05_21_025254) do
+ActiveRecord::Schema.define(version: 2018_05_21_025248) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "archetypes", force: :cascade do |t|
-    t.jsonb "data"
+    t.jsonb "data", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "replay_outcomes", force: :cascade do |t|
-    t.jsonb "data"
+    t.string "hsreplay_id", null: false
+    t.jsonb "data", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["hsreplay_id"], name: "index_replay_outcomes_on_hsreplay_id", unique: true
   end
 
 end
