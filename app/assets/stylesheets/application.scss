@@ -1,0 +1,22 @@
+/*
+ *= require_tree .
+ *= require_self
+ */
+
+body {
+  font-family: "Helvetica Neue", Arial, sans-serif;
+}
+
+.replays {
+  margin: 50px auto;
+  width: 600px;
+}
+
+.replay-info {
+  margin: 10px 0;
+  font-size: 14px;
+}
+
+.replay-link {
+  display: block;
+}
