@@ -1,7 +1,6 @@
 require 'json'
 require 'pry'
 
-"320" # cube warlock
 archetype = "219" # odd rogue
 min_rank = 5
 
