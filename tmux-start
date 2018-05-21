@@ -1,0 +1,14 @@
+#!/bin/bash
+
+TMUX_SESSION=hsrpf
+
+tmux -q has-session -t $TMUX_SESSION
+if [ $? != 0 ]
+then
+  tmux new -s $TMUX_SESSION -d
+  tmux selectp -t $TMUX_SESSION
+  tmux send-keys "bundle exec puma -C config/puma.rb" C-m
+  tmux splitw -h
+  tmux send-keys "bundle exec rails runner 'ReplayOutcomeImporter.new.keep_fetching'" C-m
+fi
+tmux attach -t $TMUX_SESSION
