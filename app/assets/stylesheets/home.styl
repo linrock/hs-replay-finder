@@ -34,7 +34,7 @@ h1
   color #111
   display flex
   font-size 14px
-  padding 5px 0
+  padding 8px 0
   text-decoration none
   width 450px
 
@@ -50,15 +50,25 @@ h1
     width 150px
 
   .rank
-    opacity 0.5
+    position relative
     text-align center
     width 50px
 
-    .legend-rank
-      color #333
+    .legend-hexagon
+      fill #fff100
+      opacity 0.7
+      position absolute
+      width 24px
+      height 24px
+      left 50%
+      top 50%
+      margin-top -12px
+      margin-left -12px
+      z-index -1
 
-    .rank-rank
-      color #333
+      path
+        stroke #cecece
+        stroke-width 2px
 
   .vs
     text-align center

@@ -41,6 +41,14 @@
     </div>
   </section>
 
+  <div style="display: none">
+    <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
+         width="21" height="24" viewbox="0 0 52 60"
+         id="hexagon">
+      <path d="M25.980762113533157 0L51.96152422706631 15L51.96152422706631 45L25.980762113533157 60L0 45L0 15Z"></path>
+    </svg>
+  </div>
+
   <section class="replays">
     <% @replays.each do |replay| %>
       <a href="<%= replay.replay_link %>" class="replay-link" target="_blank">
@@ -48,16 +56,22 @@
         <span class="rank">
           <% if replay.player1_legend_rank %>
             <span class="legend-rank"><%= replay.player1_legend_rank %></span>
+            <svg class="legend-hexagon">
+              <use xlink:href="#hexagon"></use>
+            </svg>
           <% else %>
-            <span class="rank-rank">r<%= replay.player1_rank %></span>
+            <span class="rank-rank"><%= replay.player1_rank %></span>
           <% end %>
         </span>
         <span class="vs">vs.</span>
         <span class="rank">
           <% if replay.player2_legend_rank %>
             <span class="legend-rank"><%= replay.player2_legend_rank %></span>
+            <svg class="legend-hexagon">
+              <use xlink:href="#hexagon"></use>
+            </svg>
           <% else %>
-            <span class="rank-rank">r<%= replay.player2_rank %></span>
+            <span class="rank-rank"><%= replay.player2_rank %></span>
           <% end %>
         </span>
         <span class="player player2"><%= replay.player2_archetype %></span>
