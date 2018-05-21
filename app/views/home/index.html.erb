@@ -42,10 +42,8 @@
   </section>
 
   <div style="display: none">
-    <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
-         width="21" height="24" viewbox="0 0 52 60"
-         id="hexagon">
-      <path d="M25.980762113533157 0L51.96152422706631 15L51.96152422706631 45L25.980762113533157 60L0 45L0 15Z"></path>
+    <svg id="hexagon" width="22" viewBox="0 0 175 200">
+      <polyline points="87,0 174,50 174,150 87,200 0,150 0,50 87,0"/>
     </svg>
   </div>
 
@@ -58,22 +56,28 @@
           <span class="rank">
             <% if replay.player1_legend_rank %>
               <span class="legend-rank"><%= replay.player1_legend_rank %></span>
-              <svg class="legend-hexagon">
+              <svg class="hexagon legend-hexagon">
                 <use xlink:href="#hexagon"></use>
               </svg>
             <% else %>
               <span class="rank-rank"><%= replay.player1_rank %></span>
+              <svg class="hexagon rank-hexagon">
+                <use xlink:href="#hexagon"></use>
+              </svg>
             <% end %>
           </span>
           <span class="vs">vs.</span>
           <span class="rank">
             <% if replay.player2_legend_rank %>
               <span class="legend-rank"><%= replay.player2_legend_rank %></span>
-              <svg class="legend-hexagon">
+              <svg class="hexagon legend-hexagon">
                 <use xlink:href="#hexagon"></use>
               </svg>
             <% else %>
               <span class="rank-rank"><%= replay.player2_rank %></span>
+              <svg class="hexagon rank-hexagon">
+                <use xlink:href="#hexagon"></use>
+              </svg>
             <% end %>
           </span>
           <span class="player player2"><%= replay.player2_archetype %></span>
