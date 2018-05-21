@@ -53,13 +53,6 @@
     <% last_found_at = nil %>
     <% @replays.each do |replay| %>
       <div class="replay-info">
-        <div class="replay-found-at">
-          <% found_at = replay_found_at(replay) %>
-          <% if last_found_at != found_at %>
-            <% last_found_at = found_at %>
-            <%= found_at %>
-          <% end %>
-        </div>
         <a href="<%= replay.replay_link %>" class="replay-link" target="_blank">
           <span class="player player1"><%= replay.player1_archetype %></span>
           <span class="rank">
@@ -85,6 +78,14 @@
           </span>
           <span class="player player2"><%= replay.player2_archetype %></span>
         </a>
+
+        <div class="replay-found-at">
+          <% found_at = replay_found_at(replay) %>
+          <% if last_found_at != found_at %>
+            <% last_found_at = found_at %>
+            <%= found_at %>
+          <% end %>
+        </div>
       </div>
     <% end %>
   </section>
