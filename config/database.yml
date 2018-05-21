@@ -80,6 +80,4 @@ test:
 #
 production:
   <<: *default
-  database: hs-replay-finder_production
-  username: hs-replay-finder
-  password: <%= ENV['HS-REPLAY-FINDER_DATABASE_PASSWORD'] %>
+  url: <%= ENV['DATABASE_URL'] %>
