@@ -3,7 +3,7 @@
 class Archetype < ApplicationRecord
 
   def self.find_by_archetype_id(id)
-    find_by("data ->> 'id' = ?", id)
+    find_by("data ->> 'id' = ?", id.to_s)
   end
 
   def self.name_of_archetype_id(id)

@@ -24,8 +24,43 @@ class ReplayStats
         puts "missing archetype - #{p1_archetype} vs #{p2_archetype}"
       end
     end
-    archetype_stats.select do |arch, counts|
+    archetype_stats.select do |_, counts|
       counts[:wins] + counts[:losses] > min_games
+    end
+  end
+
+  def wins_and_losses(min_games = 50)
+    wins_and_losses = {}
+    archetype_wins_and_losses(min_games).map do |arch_id, counts|
+      archetype = Archetype.find_by_archetype_id(arch_id)
+      class_name = archetype.data["player_class_name"].capitalize
+      wins_and_losses[class_name] ||= { wins: 0, losses: 0, archetypes: {} }
+      wins_and_losses[class_name][:wins] += counts[:wins]
+      wins_and_losses[class_name][:losses] += counts[:losses]
+      wins_and_losses[class_name][:archetypes][archetype.data["name"]] = counts
+    end
+    wins_and_losses
+  end
+
+  def winrates(min_games = 50)
+    wins_and_losses(min_games).each do |class_name, stats|
+      winrate = 100.0 * stats[:wins] / (stats[:wins] + stats[:losses])
+      stats[:winrate] = "%0.1f" % winrate
+      stats.delete(:wins)
+      stats.delete(:losses)
+      stats[:archetypes] = Hash[stats[:archetypes].map do |arch_name, arch_stats|
+        winrate = 100.0 * arch_stats[:wins] / (arch_stats[:wins] + arch_stats[:losses])
+        arch_stats.delete(:wins)
+        arch_stats.delete(:losses)
+        [
+          arch_name.gsub(/#{class_name}\z/, '').strip,
+          arch_stats[:winrate] = "%0.1f" % winrate
+        ]
+      end]
+      [
+        class_name,
+        stats
+      ]
     end
   end
 end
