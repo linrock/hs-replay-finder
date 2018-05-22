@@ -56,16 +56,32 @@ class ReplayOutcome < ApplicationRecord
     Archetype.name_of_archetype_id data["player1_archetype"]
   end
 
+  def player1_is_legend?
+    data["player1_legend_rank"] != "None"
+  end
+
+  def player1_won?
+    data["player2_won"] == "False"
+  end
+
   def player1_rank
     data["player1_rank"] != "None" ? data["player1_rank"] : nil
   end
 
   def player1_legend_rank
-    data["player1_legend_rank"] != "None" ? data["player1_legend_rank"] : nil
+    player1_is_legend? ? data["player1_legend_rank"] : nil
   end
 
   def player2_archetype
     Archetype.name_of_archetype_id data["player2_archetype"]
+  end
+
+  def player2_is_legend?
+    data["player2_legend_rank"] != "None"
+  end
+
+  def player2_won?
+    data["player2_won"] == "True"
   end
 
   def player2_rank
@@ -73,7 +89,7 @@ class ReplayOutcome < ApplicationRecord
   end
 
   def player2_legend_rank
-    data["player2_legend_rank"] != "None" ? data["player2_legend_rank"] : nil
+    player2_is_legend? ? data["player2_legend_rank"] : nil
   end
 
   def replay_string
