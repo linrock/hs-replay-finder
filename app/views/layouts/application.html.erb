@@ -2,13 +2,17 @@
 <html>
   <head>
     <title>Hearthstone Replay Finder</title>
+    <meta name="description"
+          content="Hearthstone replays and stats by legend-rank players"/>
+
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
     <%= stylesheet_link_tag    'application', media: 'all' %>
-    <%= javascript_include_tag 'application' %>
-    <%= javascript_pack_tag    'hello_vue' %>
-    <%= stylesheet_pack_tag    'hello_vue' %>
+    <%# javascript_include_tag 'application' %>
+
+    <%= javascript_pack_tag    'application' %>
+    <%= stylesheet_pack_tag    'application' %>
   </head>
 
   <body>

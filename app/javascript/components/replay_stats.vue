@@ -14,9 +14,6 @@
     },
 
     computed: {
-      replays() {
-        return this.store.replays
-      },
       meta() {
         return this.store.meta
       },

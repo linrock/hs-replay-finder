@@ -15,7 +15,8 @@ class Archetype < ApplicationRecord
   end
 
   def self.ids_by_class_name(class_name)
-    where("LOWER(data ->> 'name') LIKE ?", "% #{class_name.downcase}").pluck("data ->> 'id'")
+    where("LOWER(data ->> 'name') LIKE ?", "% #{class_name.downcase}")
+      .pluck("data ->> 'id'")
   end
 
   # class -> [archetype, ...]
@@ -25,9 +26,14 @@ class Archetype < ApplicationRecord
                  else
                    Archetype.all
                  end
-    archetypes.group_by { |arch| arch.data["player_class_name"] }.map do |class_name, archetypes|
+    archetypes.group_by { |arch|
+      arch.data["player_class_name"]
+    }.map do |class_name, archetypes|
       class_name = class_name.capitalize
-      [class_name, archetypes.map {|ar| ar.data["name"].gsub(/#{class_name}/, '').strip }]
+      [
+        class_name,
+        archetypes.map {|ar| ar.data["name"].gsub(/#{class_name}/, '').strip }
+      ]
     end.to_h
   end
 end
