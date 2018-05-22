@@ -27,31 +27,6 @@ class ReplayOutcome < ApplicationRecord
     end
   end
 
-  def self.filter_by_criteria
-    archetype_id = '219'
-    max_rank = 0
-    where("
-      (
-        data ->> 'player1_archetype' = ? AND
-        data ->> 'player2_won' = 'False' AND
-        (
-          data ->> 'player1_rank' = 'None' OR
-          (data ->> 'player1_rank')::int <= '?' OR
-          data ->> 'player1_legend_rank' != 'None'
-        )
-      ) OR
-      (
-        data ->> 'player2_archetype' = ? AND
-        data ->> 'player2_won' = 'True' AND
-        (
-          data ->> 'player2_rank' = 'None' OR
-          (data ->> 'player2_rank')::int <= '?' OR
-          data ->> 'player2_legend_rank' != 'None'
-        )
-      )
-    ", archetype_id, max_rank, archetype_id, max_rank)
-  end
-
   def player1_archetype
     Archetype.name_of_archetype_id data["player1_archetype"]
   end

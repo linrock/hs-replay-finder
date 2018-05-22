@@ -6,7 +6,7 @@ class ReplaysController < ApplicationController
       archetype: params[:archetype] || 'any',
       outcome: params[:outcome] || 'any',
     }
-    @replays = ReplayOutcome.filter_by_criteria.order('id DESC')
+    @replays = ReplayOutcomeQuery.new(@query).replay_outcomes.order('id DESC').limit(100)
     render json: {
       meta: {
         count: @replays.count,

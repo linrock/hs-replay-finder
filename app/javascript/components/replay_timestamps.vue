@@ -56,6 +56,9 @@
 </script>
 
 <style lang="stylus" scoped>
+  .replay-timestamps
+    margin-left 30px
+
   .time-ago
     color #111
     padding 8px 0
