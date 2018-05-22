@@ -4,15 +4,13 @@
       .label class
       select(v-model="selectedClass")
         option any
-        option Rogue
-        option Shaman
-        option Paladin
+        option(v-for="className in classes") {{ className }}
 
     .filter
       .label archetype
       select(v-model="selectedArchetype")
         option any
-        option Odd
+        option(v-for="archetype in archetypes") {{ archetype }}
 
     .filter
       .label outcome
@@ -31,12 +29,15 @@
   import fetchReplays from '../api'
   import { store } from '../store'
 
+  // depends on a global window.archetypes
+
   export default {
     data() {
       return {
         selectedClass: `any`,
         selectedArchetype: `any`,
         selectedOutcome: `any`,
+        classes: Object.keys(window.archetypes).sort(),
         store,
       }
     },
@@ -52,7 +53,10 @@
           archetype: this.selectedArchetype,
           outcome: this.selectedOutcome,
         }
-      }
+      },
+      archetypes() {
+        return window.archetypes[this.selectedClass] || []
+      },
     },
 
     watch: {
@@ -60,6 +64,9 @@
         console.log(`query changed: ${JSON.stringify(newQuery)}`)
         this.store.query = newQuery
         this.fetchReplays()
+      },
+      selectedClass(newSelectedClass) {
+        this.selectedArchetype = 'any'
       },
     },
 

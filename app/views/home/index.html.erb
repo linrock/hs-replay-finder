@@ -9,52 +9,7 @@
     </svg>
   </div>
 
-  <% if false %>
-  <section class="replays">
-    <% last_found_at = nil %>
-    <% @replays.each do |replay| %>
-      <div class="replay-info">
-        <a href="<%= replay.replay_link %>" class="replay-link" target="_blank">
-          <span class="player player1"><%= replay.player1_archetype %></span>
-          <span class="rank">
-            <% if replay.player1_legend_rank %>
-              <span class="legend-rank"><%= replay.player1_legend_rank %></span>
-              <svg class="hexagon legend-hexagon">
-                <use xlink:href="#hexagon"></use>
-              </svg>
-            <% else %>
-              <span class="rank-rank"><%= replay.player1_rank %></span>
-              <svg class="hexagon rank-hexagon">
-                <use xlink:href="#hexagon"></use>
-              </svg>
-            <% end %>
-          </span>
-          <span class="vs">vs.</span>
-          <span class="rank">
-            <% if replay.player2_legend_rank %>
-              <span class="legend-rank"><%= replay.player2_legend_rank %></span>
-              <svg class="hexagon legend-hexagon">
-                <use xlink:href="#hexagon"></use>
-              </svg>
-            <% else %>
-              <span class="rank-rank"><%= replay.player2_rank %></span>
-              <svg class="hexagon rank-hexagon">
-                <use xlink:href="#hexagon"></use>
-              </svg>
-            <% end %>
-          </span>
-          <span class="player player2"><%= replay.player2_archetype %></span>
-        </a>
-
-        <div class="replay-found-at">
-          <% found_at = replay_found_at(replay) %>
-          <% if last_found_at != found_at %>
-            <% last_found_at = found_at %>
-            <%= found_at %>
-          <% end %>
-        </div>
-      </div>
-    <% end %>
-  </section>
-  <% end %>
+  <script id="archetypes-map" type="text/javascript">
+    window.archetypes = <%=  @archetype_map.to_json.html_safe %>;
+  </script>
 </div>

@@ -1,6 +1,6 @@
 class HomeController < ApplicationController
 
   def index
-    # @replays = ReplayOutcome.filter_by_criteria.order('id DESC')
+    @archetype_map = Archetype.to_map
   end
 end
