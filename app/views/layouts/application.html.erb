@@ -8,11 +8,12 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%= stylesheet_link_tag    'application', media: 'all' %>
-    <%# javascript_include_tag 'application' %>
-
-    <%= javascript_pack_tag    'application' %>
-    <%= stylesheet_pack_tag    'application' %>
+    <%= stylesheet_link_tag('application', media: 'all')
+          .gsub(/\/assets/, 'assets').html_safe %>
+    <%= javascript_pack_tag('application')
+          .gsub(/\/packs/, 'packs').html_safe %>
+    <%= stylesheet_pack_tag('application')
+          .gsub(/\/packs/, 'packs').html_safe %>
   </head>
 
   <body>
