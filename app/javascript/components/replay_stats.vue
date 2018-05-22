@@ -1,13 +1,27 @@
 <template>
-  <div class="replay-stats">
-    123 replays found
-  </div>
+  <div class="replay-stats">{{ replaysCount }}</div>
 </template>
 
 <script>
-  export default {
-  }
+  import { store } from '../store'
 
+  export default {
+    data() {
+      return {
+        store,
+      }
+    },
+
+    computed: {
+      replays() {
+        return this.store.replays
+      },
+      replaysCount() {
+        const nReplays = this.replays.length
+        return nReplays > 0 ? `${nReplays} replays found` : ``
+      },
+    }
+  }
 </script>
 
 <style lang="stylus" scoped>

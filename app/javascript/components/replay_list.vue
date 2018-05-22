@@ -6,24 +6,32 @@
 
 <script>
   import fetchReplays from '../api'
+  import { store } from '../store'
   import ReplayRow from "./replay_row"
 
   export default {
     data() {
       return {
-        replays: []
+        store,
       }
     },
 
     created() {
-      fetchReplays({}).then(data => {
+      const query = {}
+      fetchReplays(query).then(data => {
         console.log(`${data.replays.length} replays found`)
-        this.replays = data.replays
+        this.store.replays = data.replays
       })
     },
 
+    computed: {
+      replays() {
+        return this.store.replays
+      }
+    },
+
     components: {
-      ReplayRow
+      ReplayRow,
     }
   }
 </script>
