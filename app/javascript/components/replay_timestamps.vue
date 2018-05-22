@@ -40,9 +40,7 @@
 
   export default {
     data() {
-      return {
-        store,
-      }
+      return { store }
     },
 
     computed: {

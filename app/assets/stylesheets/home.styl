@@ -1,3 +1,9 @@
+html
+  box-sizing border-box
+
+*, *:before, *:after
+  box-sizing: inherit
+
 body
   font-family "Helvetica Neue", Arial, sans-serif
 
@@ -5,9 +11,6 @@ h1
   font-size 18px
   font-weight bold
   margin-bottom 30px
-
-*
-  box-sizing border-box
 
 .container
   width 600px
@@ -18,19 +21,3 @@ h1
   position fixed
   left 50px
   top 20px
-
-  .stats
-    margin-top 160px
-
-// Replays section
-
-.replays
-  margin-bottom 50px
-
-.replay-info
-  display flex
-  font-size 14px
-
-  .replay-found-at
-    padding 8px 0 8px 15px
-    width 150px
