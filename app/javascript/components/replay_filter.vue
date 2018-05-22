@@ -1,33 +1,20 @@
 <template lang="pug">
   .replay-filter
-    .filter
-      .label class
-      select(v-model="selectedClass")
-        option any
-        option(v-for="className in classes") {{ className }}
-
-    .filter
-      .label archetype
-      select(v-model="selectedArchetype")
-        option any
-        option(v-for="archetype in archetypes") {{ archetype }}
-
-    .filter
-      .label outcome
-      select(v-model="selectedOutcome")
-        option any
-        option Win
-        option Loss
-
-    .filter
-      .label rank
-      .select Legend
+    .instructions
+      | Find replays and stats of games
+      | by legend-rank players. Choose
+      | a class and archetype to filter
+      | the list.
+    class-selector
+    class-stats
 
 </template>
 
 <script>
   import fetchReplays from '../api'
   import { store } from '../store'
+  import ClassSelector from './class_selector'
+  import ClassStats from "./class_stats"
 
   // depends on a global window.archetypes
 
@@ -37,7 +24,6 @@
         selectedClass: `any`,
         selectedArchetype: `any`,
         selectedOutcome: `any`,
-        classes: Object.keys(window.archetypes).sort(),
         store,
       }
     },
@@ -49,8 +35,8 @@
     computed: {
       query() {
         return {
-          class: this.selectedClass,
-          archetype: this.selectedArchetype,
+          class: store.query.class,
+          archetype: store.query.archetype,
           outcome: this.selectedOutcome,
         }
       },
@@ -62,7 +48,6 @@
     watch: {
       query(newQuery, oldQuery) {
         console.log(`query changed: ${JSON.stringify(newQuery)}`)
-        this.store.query = newQuery
         this.fetchReplays()
       },
       selectedClass(newSelectedClass) {
@@ -86,6 +71,11 @@
         })
       },
     },
+
+    components: {
+      ClassSelector,
+      ClassStats,
+    }
   }
 </script>
 
@@ -95,11 +85,10 @@
     left 50px
     top 65px
 
-    .filter
-      display flex
-      margin 5px 0
-
-      .label
-        width 100px
+    .instructions
+      font-size 14px
+      line-height 20px
+      width 240px
+      margin-bottom 30px
 
 </style>
