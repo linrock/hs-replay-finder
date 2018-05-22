@@ -12,11 +12,23 @@
     let timeAgo = ``
     const date = new Date(replay.found_at)
     const secondsSinceFound = (now - date)/1000
-    if (secondsSinceFound < 3600) {
-      timeAgo = `just now`
+    const minutesSinceFound = secondsSinceFound / 60
+    if (minutesSinceFound < 60) {
+      const minutes = parseInt(minutesSinceFound, 10)
+      if (minutes >= 30) {
+        timeAgo = `30 minutes ago`
+      } else if (minutes >= 15) {
+        timeAgo = `15 minutes ago`
+      } else if (minutes >= 5) {
+        timeAgo = `5 minutes ago`
+      } else {
+        timeAgo = `just now`
+      }
     } else {
-      const hoursSinceFound = secondsSinceFound / 3600
-      if (hoursSinceFound < 24) {
+      const hoursSinceFound = parseInt(minutesSinceFound / 60, 10)
+      if (hoursSinceFound === 1) {
+        timeAgo = `1 hour ago`
+      } else if (hoursSinceFound < 24) {
         timeAgo = `${parseInt(hoursSinceFound, 10)} hours ago`
       } else {
         const daysSinceFound = hoursSinceFound / 24
