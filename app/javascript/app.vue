@@ -1,15 +1,12 @@
-<template>
-  <main id="app">
-    <section id="sidebar">
-      <replay-filter/>
-      <replay-stats/>
-    </section>
+<template lang="pug">
+  main#app
+    section#sidebar
+      replay-filter
+      replay-stats
+    section#replays
+      replay-list
+      replay-timestamps
 
-    <section id="replays">
-      <replay-list/>
-      <replay-timestamps/>
-    </section>
-  </main>
 </template>
 
 <script>

@@ -1,13 +1,12 @@
-<template>
-  <div class="replay-row">
-    <a :href="replay.link" class="replay-link" target="_blank">
-      <span class="player player1">{{ replay.p1.archetype }}</span>
-      <player-rank :player="replay.p1"/>
-      <span class="vs">vs.</span>
-      <player-rank :player="replay.p2"/>
-      <span class="player player2">{{ replay.p2.archetype }}</span>
-    </a>
-  </div>
+<template lang="pug">
+  .replay-row
+    a.replay-link(:href="replay.link" target="_blank")
+      span.player.player1 {{ replay.p1.archetype }}
+      player-rank(:player="replay.p1")
+      span.vs vs.
+      player-rank(:player="replay.p2")
+      span.player.player2 {{ replay.p2.archetype }}
+
 </template>
 
 <script>

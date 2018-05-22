@@ -1,41 +1,31 @@
-<template>
-  <div class="replay-filter">
-    <div class="filter">
-      <div class="label">class</div>
-      <div class="select">
-        <select>
-          <option>Rogue</option>
-          <option>Shaman</option>
-          <option>Paladin</option>
-        </select>
-      </div>
-    </div>
+<template lang="pug">
+  .replay-filter
+    .filter
+      .label class
+      .select
+        select
+          option Rogue
+          option Shaman
+          option Paladin
 
-    <div class="filter">
-      <div class="label">archetype</div>
-      <div class="select">
-        <select>
-          <option>Odd</option>
-        </select>
-      </div>
-    </div>
+    .filter
+      .label archetype
+      .select
+        select
+          option Odd
 
-    <div class="filter">
-      <div class="label">outcome</div>
-      <div class="select">
-        <select>
-          <option>Win</option>
-          <option>Loss</option>
-          <option>Any</option>
-        </select>
-      </div>
-    </div>
+    .filter
+      .label outcome
+      .select
+        select
+          option Win
+          option Loss
+          option Any
 
-    <div class="filter">
-      <div class="label">rank</div>
-      <div class="select">Legend</div>
-    </div>
-  </div>
+    .filter
+      .label rank
+      .select Legend
+
 </template>
 
 <script>

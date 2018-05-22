@@ -1,5 +1,6 @@
-<template>
-  <div class="replay-stats">{{ replaysCount }}</div>
+<template lang="pug">
+  .replay-stats {{ replaysCount }}
+
 </template>
 
 <script>

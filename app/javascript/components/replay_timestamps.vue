@@ -1,9 +1,7 @@
-<template>
-  <section class="replay-timestamps">
-    <div class="time-ago" v-for="timeAgo in timesAgo">
-      {{ timeAgo }}
-    </div>
-  </section>
+<template lang="pug">
+  section.replay-timestamps
+    .time-ago(v-for="timeAgo in timesAgo") {{ timeAgo }}
+
 </template>
 
 <script>

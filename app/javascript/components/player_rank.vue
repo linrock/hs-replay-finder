@@ -1,12 +1,9 @@
-<template>
-  <span class="rank">
-    <span :class="rankClass">
-      {{ player.rank }}
-    </span>
-    <svg :class="hexagonClass">
-      <use xlink:href="#hexagon"></use>
-    </svg>
-  </span>
+<template lang="pug">
+  span.rank
+    span(:class="rankClass") {{ player.rank }}
+    svg(:class="hexagonClass")
+      use(xlink:href="#hexagon")
+
 </template>
 
 <script>

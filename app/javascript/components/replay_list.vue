@@ -1,7 +1,7 @@
-<template>
-  <section class="replay-list">
-    <replay-row v-for="replay in replays" :replay="replay"/>
-  </section>
+<template lang="pug">
+  section.replay-list
+    replay-row(v-for="replay in replays" :replay="replay")
+
 </template>
 
 <script>
