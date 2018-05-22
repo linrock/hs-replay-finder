@@ -15,6 +15,7 @@ gem 'uglifier', '>= 1.3.0'
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 
+gem 'webpacker'
 gem 'dotenv-rails'
 
 # Reduces boot times through caching; required in config/boot.rb

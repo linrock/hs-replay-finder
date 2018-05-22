@@ -1,7 +1,7 @@
 class ReplaysController < ApplicationController
 
   def index
-    query = {
+    @query = {
       class: params[:class] || 'any',
       archetype: params[:archetype] || 'any',
       outcome: params[:outcome] || 'any',
@@ -11,7 +11,7 @@ class ReplaysController < ApplicationController
       meta: {
         count: @replays.count,
       },
-      query: query,
+      query: @query,
       replays: @replays.map do |r|
         {
           p1: {
