@@ -3,38 +3,44 @@
     img(
       v-for="className in classes"
       :src="imgSrc(className)"
+      :class="[{ active: classIsActive(className) }]"
       @click="selectClass(className)"
     )
-
 </template>
 
 <script>
   import { store } from '../store'
 
   const classes = [
-    "paladin",
-    "rogue",
-    "warlock",
-    "priest",
-    "druid",
-    "shaman",
-    "mage",
-    "hunter",
-    "warrior"
+    "Paladin",
+    "Rogue",
+    "Warlock",
+    "Priest",
+    "Druid",
+    "Shaman",
+    "Mage",
+    "Hunter",
+    "Warrior"
   ]
 
   export default {
     data() {
-      return { classes }
+      return {
+        store,
+        classes
+      }
     },
 
     methods: {
       imgSrc(className) {
-        return `assets/classes/${className}`
+        return `assets/classes/${className.toLowerCase()}`
+      },
+      classIsActive(className) {
+        return [`any`, className].includes(store.query.class)
       },
       selectClass(className) {
-        console.log(`selected ${className}`)
-        store.query.class = `${className[0].toUpperCase()}${className.slice(1)}`
+        store.query.archetype = `any`
+        store.query.class = store.query.class === className ? `any` : className
       }
     },
   }
@@ -49,6 +55,11 @@
     width 80px
     height 80px
     float left
+    opacity 0.3
+    transition opacity 0.2s ease-in-out
+
+    &.active
+      opacity 1
 
     &:hover
       cursor pointer

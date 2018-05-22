@@ -16,16 +16,9 @@
   import ClassSelector from './class_selector'
   import ClassStats from "./class_stats"
 
-  // depends on a global window.archetypes
-
   export default {
     data() {
-      return {
-        selectedClass: `any`,
-        selectedArchetype: `any`,
-        selectedOutcome: `any`,
-        store,
-      }
+      return { store }
     },
 
     created() {
@@ -37,11 +30,7 @@
         return {
           class: store.query.class,
           archetype: store.query.archetype,
-          outcome: this.selectedOutcome,
         }
-      },
-      archetypes() {
-        return window.archetypes[this.selectedClass] || []
       },
     },
 
@@ -50,9 +39,6 @@
         console.log(`query changed: ${JSON.stringify(newQuery)}`)
         this.fetchReplays()
       },
-      selectedClass(newSelectedClass) {
-        this.selectedArchetype = 'any'
-      },
     },
 
     methods: {
@@ -60,14 +46,6 @@
         return fetchReplays(this.query).then(data => {
           console.log(`${data.replays.length} replays found`)
           this.store.replays = data.replays
-          const meta = {
-            count: data.meta.count
-          }
-          if (data.meta.winrate) {
-            meta.winrate = data.meta.winrate
-          }
-          console.log(JSON.stringify(meta))
-          this.store.meta = meta
         })
       },
     },
@@ -87,7 +65,8 @@
 
     .instructions
       font-size 14px
-      line-height 20px
+      line-height 22px
+      opacity 0.7
       width 240px
       margin-bottom 30px
 
