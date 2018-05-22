@@ -2,6 +2,25 @@
 
 class ReplayOutcome < ApplicationRecord
 
+  def self.legend_players
+    where("
+      (
+        data ->> 'player1_rank' = 'None' AND
+        data ->> 'player1_legend_rank' != 'None'
+      )
+      OR
+      (
+         data ->> 'player2_rank' = 'None' AND
+         data ->> 'player2_legend_rank' != 'None'
+       )
+    ")
+  end
+
+  def self.unique_archetype_ids
+    (pluck("data ->> 'player1_archetype'") +
+     pluck("data ->> 'player2_archetype'")).uniq
+  end
+
   # Imports replays fetched as JSON data from the API endpoint
   # https://hsreplay.net/api/v1/live/replay_feed/
   def self.import_from_json(json_string)

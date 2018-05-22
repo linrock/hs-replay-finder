@@ -19,8 +19,13 @@ class Archetype < ApplicationRecord
   end
 
   # class -> [archetype, ...]
-  def self.to_map
-    Archetype.all.group_by { |arch| arch.data["player_class_name"] }.map do |class_name, archetypes|
+  def self.to_map(archetype_ids = nil)
+    archetypes = if archetype_ids
+                   Archetype.where("data ->> 'id' IN (?)", archetype_ids)
+                 else
+                   Archetype.all
+                 end
+    archetypes.group_by { |arch| arch.data["player_class_name"] }.map do |class_name, archetypes|
       class_name = class_name.capitalize
       [class_name, archetypes.map {|ar| ar.data["name"].gsub(/#{class_name}/, '').strip }]
     end.to_h
