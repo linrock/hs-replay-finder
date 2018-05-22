@@ -29,5 +29,32 @@
 </script>
 
 <style lang="stylus" scoped>
+  .rank
+    font-size 10px
+    position relative
+    text-align center
+    width 50px
+
+  .hexagon
+    position absolute
+    left 50%
+    top 50%
+    margin-top -12px
+    margin-left -11px
+    width 22px
+    height 25px
+    z-index -1
+
+    &.legend-hexagon
+      fill #fff100
+      stroke #737373
+      stroke-width 1px
+      opacity 0.7
+
+    &.rank-hexagon
+      fill none
+      stroke #737373
+      stroke-width 1px
+      opacity 0.7
 
 </style>

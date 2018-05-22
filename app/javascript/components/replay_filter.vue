@@ -5,6 +5,8 @@
       <div class="select">
         <select>
           <option>Rogue</option>
+          <option>Shaman</option>
+          <option>Paladin</option>
         </select>
       </div>
     </div>
@@ -23,6 +25,8 @@
       <div class="select">
         <select>
           <option>Win</option>
+          <option>Loss</option>
+          <option>Any</option>
         </select>
       </div>
     </div>

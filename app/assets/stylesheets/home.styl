@@ -6,6 +6,9 @@ h1
   font-weight bold
   margin-bottom 30px
 
+*
+  box-sizing border-box
+
 .container
   width 600px
   margin-left 320px
@@ -31,61 +34,3 @@ h1
   .replay-found-at
     padding 8px 0 8px 15px
     width 150px
-
-.replay-link
-  align-items center
-  color #111
-  display flex
-  padding 8px 0
-  text-decoration none
-  width 450px
-
-  &:hover
-    background #fafafa
-    opacity 0.7
-
-  &:visited
-    color #999
-    opacity 0.7
-
-  .player
-    font-weight 500
-    width 150px
-
-  .rank
-    font-size 10px
-    position relative
-    text-align center
-    width 50px
-
-    .hexagon
-      position absolute
-      left 50%
-      top 50%
-      margin-top -12px
-      margin-left -11px
-      width 22px
-      height 25px
-      z-index -1
-
-      &.legend-hexagon
-        fill #fff100
-        stroke #737373
-        stroke-width 1px
-        opacity 0.7
-
-      &.rank-hexagon
-        fill none
-        stroke #737373
-        stroke-width 1px
-        opacity 0.7
-
-  .vs
-    text-align center
-    width 50px
-
-  .player1
-    text-align right
-
-  .player2
-    text-align left
