@@ -1,5 +1,7 @@
 <template lang="pug">
-  .replay-stats {{ replaysCount }}
+  .replay-stats
+    .replay-count {{ replaysCount }}
+    .winrate(v-if="winrate") {{ winrate }}% winrate
 
 </template>
 
@@ -15,10 +17,19 @@
       replays() {
         return this.store.replays
       },
+      meta() {
+        return this.store.meta
+      },
       replaysCount() {
-        const nReplays = this.replays.length
+        const nReplays = this.count
         return nReplays > 0 ? `${nReplays} replays found` : ``
       },
+      count() {
+        return this.meta.count
+      },
+      winrate() {
+        return this.meta.winrate
+      }
     }
   }
 </script>
@@ -28,5 +39,8 @@
     position fixed
     left 50px
     top 220px
+
+    div
+      line-height 24px
 
 </style>

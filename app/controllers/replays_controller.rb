@@ -6,11 +6,10 @@ class ReplaysController < ApplicationController
       archetype: params[:archetype] || 'any',
       outcome: params[:outcome] || 'any',
     }
-    @replays = ReplayOutcomeQuery.new(@query).replay_outcomes.order('id DESC').limit(100)
+    r_query = ReplayOutcomeQuery.new(@query)
+    @replays = r_query.replay_outcomes.order('id DESC').limit(100)
     render json: {
-      meta: {
-        count: @replays.count,
-      },
+      meta: { count: @replays.count }.merge(r_query.meta_info),
       query: @query,
       replays: @replays.map do |r|
         {

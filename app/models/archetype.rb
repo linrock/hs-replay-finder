@@ -18,7 +18,7 @@ class Archetype < ApplicationRecord
     where("LOWER(data ->> 'name') LIKE ?", "% #{class_name.downcase}").pluck("data ->> 'id'")
   end
 
-  # class -> [archtype, ...]
+  # class -> [archetype, ...]
   def self.to_map
     Archetype.all.group_by { |arch| arch.data["player_class_name"] }.map do |class_name, archetypes|
       class_name = class_name.capitalize

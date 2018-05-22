@@ -30,5 +30,6 @@
 <style lang="stylus" scoped>
   .replay-list
     margin-left 400px
+    margin-bottom 100px
 
 </style>

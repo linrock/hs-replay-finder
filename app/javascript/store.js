@@ -5,4 +5,5 @@ export const store = {
     outcome: `any`,
   },
   replays: [],
+  meta: {},
 }

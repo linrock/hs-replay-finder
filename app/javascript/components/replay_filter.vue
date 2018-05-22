@@ -75,6 +75,14 @@
         return fetchReplays(this.query).then(data => {
           console.log(`${data.replays.length} replays found`)
           this.store.replays = data.replays
+          const meta = {
+            count: data.meta.count
+          }
+          if (data.meta.winrate) {
+            meta.winrate = data.meta.winrate
+          }
+          console.log(JSON.stringify(meta))
+          this.store.meta = meta
         })
       },
     },

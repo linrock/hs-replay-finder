@@ -30,6 +30,16 @@ class ReplayOutcomeQuery
     ReplayOutcome.where("#{p1_query} OR #{p2_query}", *prepared_variables*2)
   end
 
+  def meta_info
+    return {} if @class == 'any' or @outcome != 'any'
+    total = self.class.new(to_query.merge({ outcome: 'any' })).replay_outcomes.count
+    return {} if total == 0
+    wins = self.class.new(to_query.merge({ outcome: 'win' })).replay_outcomes.count
+    {
+      winrate: "%0.1f" % (100.0 * wins / total)
+    }
+  end
+
   def archetype_ids
     return @archetype_ids if defined? @archetype_ids
     @archetype_ids = archetype_ids!
@@ -50,5 +60,13 @@ class ReplayOutcomeQuery
 
   def any_outcome?
     @outcome == 'any'
+  end
+
+  def to_query
+    {
+      class: @class,
+      archetype: @archetype,
+      outcome: @outcome,
+    }
   end
 end
