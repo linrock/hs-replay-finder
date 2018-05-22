@@ -1,22 +1,31 @@
 <template>
-  <div id="app">
-    <p>{{ message }}</p>
-  </div>
+  <main id="app">
+    <section id="sidebar">
+      <replay-filter/>
+      <replay-stats/>
+    </section>
+
+    <replay-list/>
+  </main>
 </template>
 
 <script>
-export default {
-  data: function () {
-    return {
-      message: "Hello Vue!"
-    }
+  import ReplayFilter from "./components/replay_filter"
+  import ReplayList from "./components/replay_list"
+  import ReplayStats from "./components/replay_stats"
+
+  export default {
+    components: {
+      ReplayFilter,
+      ReplayList,
+      ReplayStats,
+    },
   }
-}
 </script>
 
-<style scoped>
-p {
-  font-size: 2em;
-  text-align: center;
-}
+<style lang="stylus" scoped>
+  p
+    font-size 2em
+    text-align center
+
 </style>

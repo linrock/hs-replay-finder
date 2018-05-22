@@ -25,6 +25,7 @@ class ReplaysController < ApplicationController
             rank: r.player2_is_legend? ? r.player2_legend_rank : r.player2_rank,
           },
           winner: r.player1_won? ? 'p1' : 'p2',
+          link: r.replay_link,
           found_at: r.created_at,
         }
       end
