@@ -1,4 +1,8 @@
 export const store = {
-  query: {},
+  query: {
+    class: `any`,
+    archetype: `any`,
+    outcome: `any`,
+  },
   replays: [],
 }

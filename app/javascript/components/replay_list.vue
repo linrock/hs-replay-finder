@@ -5,7 +5,6 @@
 </template>
 
 <script>
-  import fetchReplays from '../api'
   import { store } from '../store'
   import ReplayRow from "./replay_row"
 
@@ -14,14 +13,6 @@
       return {
         store,
       }
-    },
-
-    created() {
-      const query = {}
-      fetchReplays(query).then(data => {
-        console.log(`${data.replays.length} replays found`)
-        this.store.replays = data.replays
-      })
     },
 
     computed: {
