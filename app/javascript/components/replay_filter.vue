@@ -7,12 +7,14 @@
       | the list.
     class-selector
     class-stats
+    archetype-selector
 
 </template>
 
 <script>
   import fetchReplays from '../api'
   import { store } from '../store'
+  import ArchetypeSelector from './archetype_selector'
   import ClassSelector from './class_selector'
   import ClassStats from "./class_stats"
 
@@ -51,6 +53,7 @@
     },
 
     components: {
+      ArchetypeSelector,
       ClassSelector,
       ClassStats,
     }

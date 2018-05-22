@@ -1,14 +1,12 @@
 <template lang="pug">
   .class-stats(v-if="classWinrate && archetypes")
-    .stats-row
+    .winrate-label winrate
+    .stats-row(
+      :class="[{ active: store.query.archetype === `any` }]"
+      @click="clearActiveArchetype"
+    )
       .name {{ store.query.class }}
       .winrate {{ classWinrate }}%
-    .stats-row.archetype(
-      v-for="(winrate, name) in archetypes"
-      @click="selectArchetype(name)"
-    )
-      .name {{ name }}
-      .winrate {{ winrate }}%
 
 </template>
 
@@ -39,9 +37,8 @@
     },
 
     methods: {
-      selectArchetype(archetypeName) {
-        console.log(`selected archetype ${archetypeName}`)
-        store.query.archetype = archetypeName
+      clearActiveArchetype() {
+        store.query.archetype = `any`
       }
     }
   }
@@ -51,16 +48,28 @@
   .class-stats
     margin-top 30px
 
+    .winrate-label
+      width 240px
+      text-align right
+      font-size 10px
+      letter-spacing 0.4px
+      text-transform uppercase
+      opacity 0.5
+      margin-bottom 8px
+      padding-right 8px
+
     .stats-row
       display flex
       line-height 24px
       width 240px
+      padding 0 8px
 
-      &.archetype
-        opacity 0.8
+      &:hover
+        background #f0f0f0
+        cursor pointer
 
-        &:hover
-          cursor pointer
+      &.active
+        background #f0f0f0
 
       .name
         width 180px
