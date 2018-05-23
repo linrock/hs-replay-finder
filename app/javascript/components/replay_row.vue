@@ -2,9 +2,9 @@
   .replay-row
     a.replay-link(:href="replay.link" target="_blank")
       span.player.player1 {{ replay.p1.archetype }}
-      player-rank(:player="replay.p1")
+      player-rank(:player="replay.p1" :winner="replay.winner === `p1`")
       span.vs vs
-      player-rank(:player="replay.p2")
+      player-rank(:player="replay.p2" :winner="replay.winner === `p2`")
       span.player.player2 {{ replay.p2.archetype }}
 
 </template>
@@ -30,7 +30,7 @@
     align-items center
     color #111
     display flex
-    padding 8px 0
+    padding 10px 0
     text-decoration none
     width 510px
 
