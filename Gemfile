@@ -8,7 +8,6 @@ gem 'pg', '>= 0.18', '< 2.0'
 gem 'dalli', '~> 2.7'
 gem 'puma', '~> 3.11'
 gem 'sass-rails', '~> 5.0'
-gem 'stylus'
 gem 'uglifier', '>= 1.3.0'
 gem 'mini_racer', platforms: :ruby
 

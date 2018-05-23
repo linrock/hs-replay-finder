@@ -3,3 +3,35 @@
  *= require_tree .
  *= require_self
  */
+
+html {
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+body {
+  font-family: "Helvetica Neue", Arial, sans-serif;
+}
+
+h1 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 30px;
+}
+
+h2 {
+  font-size: 14px;
+  line-height: 22px;
+  opacity: 0.7;
+  width: 240px;
+}
+
+.container {
+  position: fixed;
+  left: 50px;
+  top: 20px;
+  width: 240px;
+}
