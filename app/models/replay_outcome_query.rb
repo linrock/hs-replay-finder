@@ -6,6 +6,10 @@ class ReplayOutcomeQuery
     @outcome = query[:outcome] || 'any'
   end
 
+  def replay_outcomes_with_limit
+    replay_outcomes.order('id DESC').limit(100)
+  end
+
   def replay_outcomes
     max_rank = 0
     p1_query = [
@@ -28,16 +32,6 @@ class ReplayOutcomeQuery
     ].compact.join(" AND ")
     prepared_variables = [ (archetype_ids if archetype_ids), max_rank ].compact
     ReplayOutcome.where("#{p1_query} OR #{p2_query}", *prepared_variables*2)
-  end
-
-  def meta_info
-    return {} if @class == 'any' or @outcome != 'any'
-    total = self.class.new(to_query.merge({ outcome: 'any' })).replay_outcomes.count
-    return {} if total == 0
-    wins = self.class.new(to_query.merge({ outcome: 'win' })).replay_outcomes.count
-    {
-      winrate: "%0.1f" % (100.0 * wins / total)
-    }
   end
 
   def archetype_ids

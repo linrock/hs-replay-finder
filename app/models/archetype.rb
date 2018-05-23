@@ -20,7 +20,7 @@ class Archetype < ApplicationRecord
 
   def self.ids_by_class_name(class_name)
     where("LOWER(data ->> 'name') LIKE ?", "% #{class_name.downcase}")
-      .pluck("data ->> 'id'")
+      .pluck(Arel.sql("data ->> 'id'"))
   end
 
   # class -> [archetype, ...]

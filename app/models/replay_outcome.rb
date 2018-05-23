@@ -106,6 +106,24 @@ class ReplayOutcome < ApplicationRecord
     "https://hsreplay.net/replay/#{hsreplay_id}"
   end
 
+  def to_json
+    {
+      p1: {
+        archetype: player1_archetype,
+        is_legend: player1_is_legend?,
+        rank: player1_is_legend? ? player1_legend_rank : player1_rank,
+      },
+      p2: {
+        archetype: player2_archetype,
+        is_legend: player2_is_legend?,
+        rank: player2_is_legend? ? player2_legend_rank : player2_rank,
+      },
+      winner: player1_won? ? 'p1' : 'p2',
+      link: replay_link,
+      found_at: created_at,
+    }
+  end
+
   def print_info
     puts replay_string
     puts replay_link
