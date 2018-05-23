@@ -33,7 +33,7 @@
 
     methods: {
       imgSrc(className) {
-        return `assets/classes/${className.toLowerCase()}`
+        return `assets/classes/${className.toLowerCase()}.png`
       },
       classIsActive(className) {
         return [`any`, className].includes(store.query.class)
