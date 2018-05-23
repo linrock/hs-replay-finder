@@ -67,13 +67,13 @@
 
 <style lang="stylus" scoped>
   .replay-timestamps
-    margin-left 30px
+    width 100px
 
-  .time-ago
-    color #111
-    font-size 12px
-    opacity 0.6
-    height 36px
-    line-height 36px
+    .time-ago
+      color #111
+      font-size 12px
+      opacity 0.6
+      height 36px
+      line-height 36px
 
 </style>

@@ -6,6 +6,7 @@
       archetype-selector
     section#replays(:class="[{ loading: isLoading }]")
       .replay-feed-title {{ replayFeedTitle }}
+      .loading-text(v-if="store.replays.length === 0") Loading...
       .replay-feed
         replay-list
         replay-timestamps
@@ -86,21 +87,32 @@
     left 50px
     top 165px
 
+  #replays
+    position relative
+    margin-left 350px
+    width 510px + 100px
+
   section.loading
     opacity 0.45
     transition 0.2s opacity 0.15s ease-in-out
 
+  .loading-text
+    position absolute
+    text-align center
+    margin-top 25px
+    width 510px
+
   .replay-feed-title
     font-weight bold
-    margin-left 350px
     margin-top 21px
-    width 510px
     text-align center
     padding-bottom 15px
     border-bottom 1px solid #f0f0f0
     margin-bottom 10px
+    width 510px
 
   .replay-feed
     display flex
+    width 100%
 
 </style>
