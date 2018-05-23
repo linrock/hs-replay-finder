@@ -1,6 +1,6 @@
 class HomeController < ApplicationController
 
   def index
-    @archetype_stats = ReplayStats.new(ReplayOutcome.legend_players).winrates
+    @archetype_stats = ReplayStatsCache.new.legend_winrates
   end
 end
