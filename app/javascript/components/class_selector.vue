@@ -50,12 +50,19 @@
   .class-selector
     width 240px
     height 240px
+    display flex
+    flex-wrap wrap
+    justify-content space-between
+    align-items center
 
   img
-    width 80px
-    height 80px
-    float left
+    width 77px
+    height 77px
+    display block
     opacity 0.3
+    border-radius 2px
+    margin auto
+    margin-left 0
     transition opacity 0.2s ease-in-out
 
     &.active

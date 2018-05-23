@@ -71,7 +71,9 @@
 
   .time-ago
     color #111
-    padding 8px 0
+    font-size 12px
+    opacity 0.6
     height 32px
+    line-height 32px
 
 </style>

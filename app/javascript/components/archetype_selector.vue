@@ -35,7 +35,6 @@
         return store.query.archetype === archetypeName
       },
       selectArchetype(archetypeName) {
-        console.log(`selected archetype ${archetypeName}`)
         store.query.archetype = archetypeName
       }
     }
@@ -43,15 +42,13 @@
 </script>
 
 <style lang="stylus" scoped>
-  .archetype-selector
-    margin-top 20px
-
   .archetype-row
     display flex
     line-height 24px
     width 240px
     padding 2px 8px
     opacity 0.7
+    border-radius 2px
 
     &:hover
       background #f0f0f0

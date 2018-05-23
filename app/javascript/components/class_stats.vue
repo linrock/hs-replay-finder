@@ -1,9 +1,11 @@
 <template lang="pug">
   .class-stats(v-if="classWinrate && archetypes")
-    .winrate-label winrate
+    .label-row
+      .class-label class
+      .winrate-label winrate
     .stats-row(
       :class="[{ active: store.query.archetype === `any` }]"
-      @click="clearActiveArchetype"
+      @click="store.query.archetype = `any`"
     )
       .name {{ store.query.class }}
       .winrate {{ classWinrate }}%
@@ -22,25 +24,20 @@
     },
 
     computed: {
+      className() {
+        return store.query.class
+      },
       classWinrate() {
-        const className = store.query.class
-        if (className != "any") {
-          return this.archetypeStats[className]["winrate"]
+        if (this.className !== "any") {
+          return this.archetypeStats[this.className]["winrate"]
         }
       },
       archetypes() {
-        const className = store.query.class
-        if (className != "any") {
-          return this.archetypeStats[className]["archetypes"]
+        if (this.className !== "any") {
+          return this.archetypeStats[this.className]["archetypes"]
         }
       },
     },
-
-    methods: {
-      clearActiveArchetype() {
-        store.query.archetype = `any`
-      }
-    }
   }
 </script>
 
@@ -48,21 +45,29 @@
   .class-stats
     margin-top 30px
 
-    .winrate-label
+    .label-row
       width 240px
-      text-align right
       font-size 10px
       letter-spacing 0.4px
       text-transform uppercase
+      display flex
       opacity 0.5
+      padding 0 9px
       margin-bottom 8px
-      padding-right 8px
+
+      .class-label
+        text-align left
+
+      .winrate-label
+        text-align right
+        margin-left auto
 
     .stats-row
       display flex
       line-height 24px
       width 240px
-      padding 0 8px
+      padding 2px 8px
+      border-radius 2px
 
       &:hover
         background #f0f0f0
@@ -73,6 +78,7 @@
 
       .name
         width 180px
+        font-weight bold
 
       .winrate
         width 60px
