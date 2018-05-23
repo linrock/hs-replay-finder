@@ -1,7 +1,7 @@
 <template lang="pug">
   .class-selector(@mouseleave="store.hover.class = null")
     img(
-      v-for="className in classes"
+      v-for="className in classNames"
       :src="imgSrc(className)"
       :class="[{ active: classIsActive(className) }]"
       @mouseenter="hoverOverClass(className)"
@@ -12,23 +12,19 @@
 <script>
   import { store } from '../store'
 
-  const classes = [
-    "Paladin",
-    "Rogue",
-    "Warlock",
-    "Priest",
-    "Druid",
-    "Shaman",
-    "Mage",
-    "Hunter",
-    "Warrior"
-  ]
-
   export default {
     data() {
       return {
-        store,
-        classes
+        archetypeStats: window.archetypeStats,
+        store
+      }
+    },
+
+    computed: {
+      classNames() {
+        return Object.entries(this.archetypeStats)
+          .sort((a,b) => parseFloat(b[1].winrate) - parseFloat(a[1].winrate))
+          .map(row => row[0])
       }
     },
 
