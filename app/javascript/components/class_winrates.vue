@@ -1,5 +1,5 @@
 <template lang="pug">
-  .class-stats(v-if="classWinrate")
+  .class-winrates(v-if="classWinrate")
     .label-row
       .class-label class
       .winrate-label winrate
@@ -39,7 +39,7 @@
 </script>
 
 <style lang="stylus" scoped>
-  .class-stats
+  .class-winrates
     margin-top 30px
 
     .label-row

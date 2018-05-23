@@ -2,7 +2,7 @@
   main#app
     section#sidebar
       class-selector
-      class-stats
+      class-winrates
       archetype-selector
     section#replays(:class="[{ loading: isLoading }]")
       .replay-feed-title {{ replayFeedTitle }}
@@ -18,7 +18,7 @@
   import fetchReplays from './api'
   import ArchetypeSelector from './components/archetype_selector'
   import ClassSelector from './components/class_selector'
-  import ClassStats from './components/class_stats'
+  import ClassWinrates from './components/class_winrates'
   import ReplayList from './components/replay_list'
   import ReplayTimestamps from './components/replay_timestamps'
 
@@ -74,7 +74,7 @@
     components: {
       ArchetypeSelector,
       ClassSelector,
-      ClassStats,
+      ClassWinrates,
       ReplayList,
       ReplayTimestamps,
     },

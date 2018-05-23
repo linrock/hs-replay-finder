@@ -33,10 +33,11 @@
     padding 10px 0
     text-decoration none
     width 510px
+    border-radius 2px
 
     &:hover
       background #fafafa
-      opacity 0.7
+      opacity 1
 
     &:visited
       color #999

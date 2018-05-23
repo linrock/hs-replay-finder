@@ -2,8 +2,8 @@
   .archetype-selector
     .archetype-row(
       v-for="archetype in archetypes"
-      :class="[{ active: archetypeActive(archetype.name) }]"
-      @click="selectArchetype(archetype.name)"
+      :class="[{ active: store.query.archetype === archetype.name }]"
+      @click="store.query.archetype = archetype.name"
     )
       .name {{ archetype.name }}
       .winrate {{ archetype.winrate }}%
@@ -30,15 +30,6 @@
             .map(row => ({ name: row[0], winrate: row[1] }))
         }
       },
-    },
-
-    methods: {
-      archetypeActive(archetypeName) {
-        return store.query.archetype === archetypeName
-      },
-      selectArchetype(archetypeName) {
-        store.query.archetype = archetypeName
-      }
     }
   }
 </script>

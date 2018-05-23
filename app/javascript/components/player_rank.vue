@@ -1,6 +1,6 @@
 <template lang="pug">
   span.rank
-    span(:class="rankClass") {{ player.rank }}
+    span.rank-num(:class="rankClass") {{ player.rank }}
     svg(class="crown" v-if="winner")
       use(xlink:href="#crown")
     svg(:class="hexagonClass")
@@ -38,6 +38,10 @@
     text-align center
     width 50px
 
+  .rank-num
+    position relative
+    z-index 3
+
   .crown
     position absolute
     left 50%
@@ -48,6 +52,7 @@
     fill #ffcd00
     stroke #737373
     stroke-width 1px
+    z-index 2
 
   .hexagon
     position absolute
@@ -57,7 +62,7 @@
     margin-left -11px
     width 22px
     height 25px
-    z-index -1
+    z-index 1
 
     &.legend-hexagon
       fill #fff100

@@ -75,5 +75,6 @@
       opacity 0.6
       height 36px
       line-height 36px
+      padding-left 10px
 
 </style>

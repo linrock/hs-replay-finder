@@ -37,8 +37,13 @@
       },
       selectClass(className) {
         store.query.archetype = `any`
-        store.hover.class = null
-        store.query.class = store.query.class === className ? `any` : className
+        if (store.query.class === className) {
+          store.query.class = `any`
+          store.hover.class = className
+        } else {
+          store.query.class = className
+          store.hover.class = null
+        }
       },
       hoverOverClass(className) {
         if (store.query.class === `any`) {
