@@ -77,8 +77,8 @@
         background #f0f0f0
 
       .name
-        width 180px
         font-weight bold
+        width 180px
 
       .winrate
         width 60px
