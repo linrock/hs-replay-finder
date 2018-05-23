@@ -5,7 +5,7 @@
       class-winrates
       archetype-selector
     section#replays(:class="[{ loading: isLoading }]")
-      .replay-feed-title {{ replayFeedTitle }}
+      h3.replay-feed-title {{ replayFeedTitle }}
       .loading-text(v-if="store.replays.length === 0") Loading...
       .replay-feed
         replay-list
@@ -88,7 +88,7 @@
   #sidebar
     position fixed
     left 50px
-    top 165px
+    top 169px
 
   #replays
     position relative
@@ -106,11 +106,11 @@
     width 510px
 
   .replay-feed-title
+    font-size 18px
     font-weight bold
     margin-top 21px
     text-align center
     padding-bottom 15px
-    border-bottom 1px solid #f0f0f0
     margin-bottom 10px
     width 510px
 

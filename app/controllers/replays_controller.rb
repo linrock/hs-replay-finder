@@ -1,4 +1,4 @@
-class ReplaysController < ApplicationController
+class ReplaysController < ActionController::API
 
   def index
     @query = {
