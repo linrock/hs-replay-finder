@@ -6,8 +6,12 @@ class Archetype < ApplicationRecord
     find_by("data ->> 'id' = ?", id.to_s)
   end
 
-  def self.name_of_archetype_id(id)
-    find_by_archetype_id(id).data["name"]
+  def self.name_of_archetype_id(id, use_cache = true)
+    if use_cache
+      ArchetypeCache.new.name_of_archetype_id id
+    else
+      find_by_archetype_id(id).data["name"]
+    end
   end
 
   def self.id_by_archetype_name(archetype_name)
