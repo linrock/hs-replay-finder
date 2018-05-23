@@ -35,6 +35,7 @@
         return store.query.archetype === archetypeName
       },
       selectArchetype(archetypeName) {
+        window.scrollTo(0, 0)
         store.query.archetype = archetypeName
       }
     }

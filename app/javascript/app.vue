@@ -1,17 +1,24 @@
 <template lang="pug">
   main#app
     section#sidebar
-      replay-filter
+      class-selector
+      class-stats
+      archetype-selector
     section#replays
-      replay-list
-      replay-timestamps
+      currently-viewing
+      .replay-feed
+        replay-list
+        replay-timestamps
 
 </template>
 
 <script>
   import { store } from './store'
   import fetchReplays from './api'
-  import ReplayFilter from './components/replay_filter'
+  import ArchetypeSelector from './components/archetype_selector'
+  import ClassSelector from './components/class_selector'
+  import ClassStats from './components/class_stats'
+  import CurrentlyViewing from './components/currently_viewing'
   import ReplayList from './components/replay_list'
   import ReplayTimestamps from './components/replay_timestamps'
 
@@ -50,7 +57,10 @@
     },
 
     components: {
-      ReplayFilter,
+      ArchetypeSelector,
+      ClassSelector,
+      ClassStats,
+      CurrentlyViewing,
       ReplayList,
       ReplayTimestamps,
     },
@@ -58,7 +68,12 @@
 </script>
 
 <style lang="stylus" scoped>
-  #replays
+  #sidebar
+    position fixed
+    left 50px
+    top 165px
+
+  .replay-feed
     display flex
 
 </style>

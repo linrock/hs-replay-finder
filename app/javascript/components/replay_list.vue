@@ -1,6 +1,6 @@
 <template lang="pug">
   section.replay-list
-    replay-row(v-for="replay in replays" :replay="replay")
+    replay-row(v-for="replay in store.replays" :replay="replay")
 
 </template>
 
@@ -10,15 +10,7 @@
 
   export default {
     data() {
-      return {
-        store,
-      }
-    },
-
-    computed: {
-      replays() {
-        return this.store.replays
-      }
+      return { store }
     },
 
     components: {

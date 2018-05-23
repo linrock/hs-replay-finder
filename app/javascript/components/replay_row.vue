@@ -3,7 +3,7 @@
     a.replay-link(:href="replay.link" target="_blank")
       span.player.player1 {{ replay.p1.archetype }}
       player-rank(:player="replay.p1")
-      span.vs vs.
+      span.vs vs
       player-rank(:player="replay.p2")
       span.player.player2 {{ replay.p2.archetype }}
 
@@ -43,7 +43,6 @@
       opacity 0.7
 
   .player
-    font-weight 500
     width 180px
 
   .player1
@@ -55,5 +54,7 @@
   .vs
     text-align center
     width 50px
+    font-weight 300
+    opacity 0.5
 
 </style>
