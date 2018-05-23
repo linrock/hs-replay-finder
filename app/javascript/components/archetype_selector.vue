@@ -1,12 +1,12 @@
 <template lang="pug">
   .archetype-selector
     .archetype-row(
-      v-for="(winrate, name) in archetypes"
-      :class="[{ active: archetypeActive(name) }]"
-      @click="selectArchetype(name)"
+      v-for="archetype in archetypes"
+      :class="[{ active: archetypeActive(archetype.name) }]"
+      @click="selectArchetype(archetype.name)"
     )
-      .name {{ name }}
-      .winrate {{ winrate }}%
+      .name {{ archetype.name }}
+      .winrate {{ archetype.winrate }}%
 
 </template>
 
@@ -25,7 +25,9 @@
       archetypes() {
         const className = store.query.class
         if (className !== "any") {
-          return this.archetypeStats[className]["archetypes"]
+          return Object.entries(this.archetypeStats[className]["archetypes"])
+            .sort((a,b) => parseFloat(b[1]) - parseFloat(a[1]))
+            .map(row => ({ name: row[0], winrate: row[1] }))
         }
       },
     },
