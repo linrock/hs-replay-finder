@@ -12,43 +12,17 @@
 </template>
 
 <script>
-  import fetchReplays from '../api'
-  import { store } from '../store'
   import ArchetypeSelector from './archetype_selector'
   import ClassSelector from './class_selector'
   import ClassStats from "./class_stats"
 
   export default {
-    data() {
-      return { store }
-    },
-
-    created() {
-      this.fetchReplays()
-    },
-
     computed: {
       query() {
         return {
           class: store.query.class,
           archetype: store.query.archetype,
         }
-      },
-    },
-
-    watch: {
-      query(newQuery, oldQuery) {
-        console.log(`query changed: ${JSON.stringify(newQuery)}`)
-        this.fetchReplays()
-      },
-    },
-
-    methods: {
-      fetchReplays() {
-        return fetchReplays(this.query).then(data => {
-          console.log(`${data.replays.length} replays found`)
-          this.store.replays = data.replays
-        })
       },
     },
 
