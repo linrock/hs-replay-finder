@@ -1,13 +1,13 @@
 <template lang="pug">
-  .class-stats(v-if="classWinrate && archetypes")
+  .class-stats(v-if="classWinrate")
     .label-row
       .class-label class
       .winrate-label winrate
     .stats-row(
-      :class="[{ active: store.query.archetype === `any` }]"
+      :class="[{ active: !store.hover.class && store.query.archetype === `any` }]"
       @click="store.query.archetype = `any`"
     )
-      .name {{ store.query.class }}
+      .name {{ className }}
       .winrate {{ classWinrate }}%
 
 </template>
@@ -25,16 +25,13 @@
 
     computed: {
       className() {
-        return store.query.class
+        return store.hover.class || store.query.class
       },
       classWinrate() {
         if (this.className !== "any") {
           return this.archetypeStats[this.className]["winrate"]
-        }
-      },
-      archetypes() {
-        if (this.className !== "any") {
-          return this.archetypeStats[this.className]["archetypes"]
+        } else if (store.hover.class) {
+          return this.archetypeStats[store.hover.class]["winrate"]
         }
       },
     },

@@ -1,9 +1,10 @@
 <template lang="pug">
-  .class-selector
+  .class-selector(@mouseleave="store.hover.class = null")
     img(
       v-for="className in classes"
       :src="imgSrc(className)"
       :class="[{ active: classIsActive(className) }]"
+      @mouseenter="hoverOverClass(className)"
       @click="selectClass(className)"
     )
 </template>
@@ -40,8 +41,14 @@
       },
       selectClass(className) {
         store.query.archetype = `any`
+        store.hover.class = null
         store.query.class = store.query.class === className ? `any` : className
-      }
+      },
+      hoverOverClass(className) {
+        if (store.query.class === `any`) {
+          store.hover.class = className
+        }
+      },
     },
   }
 </script>

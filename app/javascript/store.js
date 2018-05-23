@@ -3,5 +3,8 @@ export const store = {
     class: `any`,
     archetype: `any`,
   },
+  hover: {
+    class: null,
+  },
   replays: [],
 }
