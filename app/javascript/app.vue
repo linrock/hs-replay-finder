@@ -39,10 +39,13 @@
       fetchReplays() {
         this.isLoading = true
         return fetchReplays(this.query).then(data => {
-          this.store.replays = data.replays
-          this.isLoading = false
-          this.setReplayFeedTitle()
-          window.scrollTo(0, 0)
+          if (this.query.class === data.query.class &&
+              this.query.archetype === data.query.archetype) {
+            this.store.replays = data.replays
+            this.isLoading = false
+            this.setReplayFeedTitle()
+            window.scrollTo(0, 0)
+          }
         })
       },
       setReplayFeedTitle() {
@@ -59,8 +62,8 @@
     computed: {
       query() {
         return {
-          class: store.query.class,
-          archetype: store.query.archetype,
+          class: store.query.class.toLowerCase(),
+          archetype: store.query.archetype.toLowerCase(),
         }
       },
     },
