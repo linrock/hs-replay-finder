@@ -73,7 +73,7 @@
     color #111
     font-size 12px
     opacity 0.6
-    height 32px
-    line-height 32px
+    height 36px
+    line-height 36px
 
 </style>

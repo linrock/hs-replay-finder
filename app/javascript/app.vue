@@ -34,8 +34,8 @@
     methods: {
       fetchReplays() {
         return fetchReplays(this.query).then(data => {
-          console.log(`${data.replays.length} replays found`)
           this.store.replays = data.replays
+          window.scrollTo(0, 0)
         })
       },
     },
@@ -51,7 +51,6 @@
 
     watch: {
       query(newQuery, oldQuery) {
-        console.log(`query changed: ${JSON.stringify(newQuery)}`)
         this.fetchReplays()
       },
     },

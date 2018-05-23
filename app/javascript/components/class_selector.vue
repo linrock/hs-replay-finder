@@ -39,7 +39,6 @@
         return [`any`, className].includes(store.query.class)
       },
       selectClass(className) {
-        window.scrollTo(0, 0)
         store.query.archetype = `any`
         store.query.class = store.query.class === className ? `any` : className
       }
