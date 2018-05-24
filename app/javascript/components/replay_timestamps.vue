@@ -31,8 +31,12 @@
       } else if (hoursSinceFound < 24) {
         timeAgo = `${parseInt(hoursSinceFound, 10)} hours ago`
       } else {
-        const daysSinceFound = hoursSinceFound / 24
-        timeAgo = `${parseInt(daysSinceFound, 10)} days ago`
+        const daysSinceFound = parseInt(hoursSinceFound / 24, 10)
+        if (daysSinceFound === 1) {
+          timeAgo = `1 day ago`
+        } else {
+          timeAgo = `${daysSinceFound} days ago`
+        }
       }
     }
     return timeAgo
@@ -59,6 +63,8 @@
             timesAgo.push(``)
           }
         })
+        timesAgo.pop()
+        timesAgo.push(lastDifferentTimeAgo)
         return timesAgo
       }
     },

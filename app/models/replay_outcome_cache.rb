@@ -46,6 +46,7 @@ class ReplayOutcomeCache
           replay_hash(id)
         rescue
           logger.error "json_response! - replay #{id}"
+          nil
         end
       end.compact
     }.to_json

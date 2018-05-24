@@ -16,6 +16,7 @@
     props: {
       replay: {
         required: true,
+        type: Object,
       },
     },
 
