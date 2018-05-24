@@ -17,31 +17,6 @@ class ReplayOutcome < ApplicationRecord
      pluck("data ->> 'player2_archetype'")).uniq
   end
 
-  # Imports replays fetched as JSON data from the API endpoint
-  # https://hsreplay.net/api/v1/live/replay_feed/
-  def self.import_from_json(json_string)
-    data = JSON.parse json_string
-    replay_outcomes = data["data"]
-    replay_outcomes.each do |replay|
-      replay_id = replay["id"]
-      next if ReplayOutcome.exists?(hsreplay_id: replay_id)
-      ReplayOutcome.create!(hsreplay_id: replay_id, data: replay)
-    end
-  end
-
-  def self.import_from_downloaded_json
-    filenames = Dir.glob("scripts/data/replays.*.json").sort_by do |name|
-      name[/replays\.(\d*)\.json/, 1].to_i
-    end
-    filenames.each do |filename|
-      begin
-        import_from_json open(filename).read
-      rescue
-        binding.pry
-      end
-    end
-  end
-
   def player1_archetype
     Archetype.name_of_archetype_id data["player1_archetype"]
   end

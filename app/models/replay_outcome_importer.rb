@@ -9,7 +9,7 @@ class ReplayOutcomeImporter
     loop do
       begin
         json_string = open(API_ENDPOINT).read
-        ReplayOutcome.import_from_json json_string
+        import_from_json_api_response json_string
       rescue => e
         puts "#{e.class.name}: #{e.message}"
         puts e.backtrace
@@ -24,5 +24,38 @@ class ReplayOutcomeImporter
         sleep 60
       end
     end
+  end
+
+  def import_from_json_api_response(json_string)
+    data = JSON.parse json_string
+    replay_outcomes = data["data"]
+    replay_outcomes.each do |replay|
+      hsreplay_id = replay["id"]
+      next if ReplayOutcome.exists?(hsreplay_id: hsreplay_id)
+      replay_outcome = ReplayOutcome.new(hsreplay_id: hsreplay_id, data: replay)
+      if replay_outcome.valid?
+        replay_outcome.save!
+      else
+        logger.error "hsreplay #{replay_id} - #{replay.to_json}"
+      end
+    end
+  end
+
+  # Imports replays fetched as JSON data from the API endpoint
+  def self.import_from_downloaded_json
+    filenames = Dir.glob("scripts/data/replays.*.json").sort_by do |name|
+      name[/replays\.(\d*)\.json/, 1].to_i
+    end
+    filenames.each do |filename|
+      begin
+        import_from_json_api_response open(filename).read
+      rescue
+        binding.pry
+      end
+    end
+  end
+
+  def logger
+    @logger ||= Logger.new("#{Rails.root}/log/error.log")
   end
 end
