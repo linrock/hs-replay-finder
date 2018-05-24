@@ -4,15 +4,9 @@ class ReplayOutcome < ApplicationRecord
 
   def self.legend_players
     where("
-      (
-        data ->> 'player1_rank' = 'None' AND
-        data ->> 'player1_legend_rank' != 'None'
-      )
-      OR
-      (
-         data ->> 'player2_rank' = 'None' AND
-         data ->> 'player2_legend_rank' != 'None'
-       )
+      data ->> 'player1_legend_rank' != 'None'
+      AND
+      data ->> 'player2_legend_rank' != 'None'
     ")
   end
 
@@ -106,7 +100,7 @@ class ReplayOutcome < ApplicationRecord
     "https://hsreplay.net/replay/#{hsreplay_id}"
   end
 
-  def to_json
+  def to_hash
     {
       p1: {
         archetype: player1_archetype,

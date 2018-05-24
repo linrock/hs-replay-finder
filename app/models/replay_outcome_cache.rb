@@ -4,21 +4,23 @@ class ReplayOutcomeCache
     @cache = Rails.cache
   end
 
-  def replay_json(replay_id)
-    results = @cache.read replay_json_cache_key(replay_id)
-    return results if results.present?
-    replay_json!(replay_id)
+  # the hash representation of a replay outcome
+  def replay_hash(replay_id)
+    results = @cache.read replay_hash_cache_key(replay_id)
+    return results unless results.nil?
+    replay_hash!(replay_id)
   end
 
-  def replay_json!(replay_id)
-    results = ReplayOutcome.find(replay_id).to_json
-    @cache.write replay_json_cache_key(replay_id), results
+  def replay_hash!(replay_id)
+    results = ReplayOutcome.find(replay_id).to_hash
+    @cache.write replay_hash_cache_key(replay_id), results
     results 
   end
 
+  # the list of replay ids returned for a query
   def replay_outcome_ids(query)
     results = @cache.read replay_outcome_ids_cache_key(query)
-    return results if results.present?
+    return results unless results.nil?
     replay_outcome_ids!(query)
   end
 
@@ -28,14 +30,38 @@ class ReplayOutcomeCache
     results
   end
 
+  # the JSON response to a query
+  def json_response(query)
+    results = @cache.read json_response_cache_key(query)
+    return results unless results.nil?
+    json_response!(query)
+  end
+
+  def json_response!(query, expires_in = 2.minutes)
+    ids = replay_outcome_ids(query)
+    response_json = {
+      query: query,
+      replays: ids.map {|id| replay_hash(id) }
+    }.to_json
+    @cache.write json_response_cache_key(query), response_json, expires_in: expires_in
+    response_json
+  end
+
   private
 
-  def replay_json_cache_key(replay_id)
+  def replay_hash_cache_key(replay_id)
     "replay_outcomes:#{replay_id}:json"
   end
 
   def replay_outcome_ids_cache_key(query)
-    query_key = query.sort_by {|k, _| k }.map {|k, v| "#{k}=#{v}" }.join("&")
-    "replay_outcome_ids:query:#{query_key}"
+    "replay_outcomes:ids:#{query_key(query)}"
+  end
+
+  def json_response_cache_key(query)
+    "replay_outcomes:json_response:#{query_key(query)}"
+  end
+
+  def query_key(query)
+    query.sort_by {|k, _| k }.map {|k, v| "#{k}=#{v}" }.join("&")
   end
 end
