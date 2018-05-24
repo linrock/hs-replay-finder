@@ -1,6 +1,8 @@
 # Represents the outcome of a replay
 
 class ReplayOutcome < ApplicationRecord
+  validate :check_hsreplay_id
+  validate :check_data_format
 
   def self.legend_players
     where("
@@ -122,5 +124,34 @@ class ReplayOutcome < ApplicationRecord
     puts replay_string
     puts replay_link
     puts
+  end
+
+  private
+
+  def check_hsreplay_id
+    errors.add(:hsreplay_id, "is invalid") unless hsreplay_id == data["id"]
+  end
+
+  def check_data_format
+    errors.add(:data, "id is invalid") unless data["id"].to_s =~ /\A[0-9a-z]+\z/i
+    p1_rank, p1_legend_rank, p2_rank, p2_legend_rank = ranks = [
+      data["player1_rank"], data["player1_legend_rank"],
+      data["player2_rank"], data["player2_legend_rank"]
+    ]
+    ranks.each do |rank|
+      errors.add(:data, "player_ranks are invalid") unless rank == "None" || rank.to_i > 0
+    end
+    if ((p1_rank == "None" && p1_legend_rank == "None") ||
+        (p1_rank.to_i > 0 && p1_legend_rank.to_i > 0) ||
+        (p2_rank == "None" && p2_legend_rank == "None") ||
+        (p2_rank.to_i > 0 && p2_legend_rank.to_i > 0))
+      errors.add(:data, "player ranks are invalid")
+    end
+    unless data["player1_archetype"].to_i > 0 and data["player2_archetype"].to_i > 0
+      errors.add(:data, "player archetypes are invalid")
+    end
+    unless %w( True False ).include? data["player2_won"]
+      errors.add(:data, "player2_won is invalid")
+    end
   end
 end

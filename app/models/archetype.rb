@@ -2,6 +2,7 @@
 
 class Archetype < ApplicationRecord
   validate :check_data_format
+  validate :check_data_scsc_format
 
   def self.find_by_archetype_id(id)
     find_by("data ->> 'id' = ?", id.to_s)
@@ -63,22 +64,24 @@ class Archetype < ApplicationRecord
     %w( id name player_class player_class_name url ).each do |field|
       errors.add(:data, "#{field} must exist") unless data[field].present?
     end
+  end
+
+  def check_data_scsc_format
     scsc = data["standard_ccp_signature_core"]
-    unless scsc.nil?
-      unless %w( as_of components format ) == scsc.keys.sort
-        errors.add(:data, "standard_ccp_signature_core keys are unexpected - #{scsc.keys}")
-      end
-      begin
-        Time.parse(scsc["as_of"])
-      rescue
-        errors.add(:data, "standard_ccp_signature_core.as_of is invalid")
-      end
-      unless scsc["format"].is_a? Integer
-        errors.add(:data, "standard_ccp_signature_core.format is invalid")
-      end
-      unless scsc["components"].all? {|c| c.is_a? Integer }
-        errors.add(:data, "standard_ccp_signature_core.components is invalid")
-      end
+    return if scsc.nil?
+    unless %w( as_of components format ) == scsc.keys.sort
+      errors.add(:data, "standard_ccp_signature_core keys are unexpected - #{scsc.keys}")
+    end
+    begin
+      Time.parse(scsc["as_of"])
+    rescue
+      errors.add(:data, "standard_ccp_signature_core.as_of is invalid")
+    end
+    unless scsc["format"].is_a? Integer
+      errors.add(:data, "standard_ccp_signature_core.format is invalid")
+    end
+    unless scsc["components"].all? {|c| c.is_a? Integer }
+      errors.add(:data, "standard_ccp_signature_core.components is invalid")
     end
   end
 end
