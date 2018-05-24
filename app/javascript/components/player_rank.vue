@@ -1,8 +1,6 @@
 <template lang="pug">
-  span.rank
-    span.rank-num(:class="rankClass") {{ player.rank }}
-    svg(class="crown" v-if="winner")
-      use(xlink:href="#crown")
+  .rank
+    .rank-num(:class="rankClass") {{ player.rank }}
     svg(:class="hexagonClass")
       use(xlink:href="#hexagon")
 
@@ -13,19 +11,19 @@
     props: {
       player: {
         required: true,
+        type: Object,
       },
-      winner: {
-        required: true,
-        type: Boolean
-      }
     },
 
     computed: {
+      classPrefix() {
+        return this.player.is_legend ? `legend` : `rank`
+      },
       rankClass() {
-        return this.player.is_legend ? `legend-rank` : `rank-rank`
+        return `${this.classPrefix}-rank`
       },
       hexagonClass() {
-        return `hexagon ${this.player.is_legend ? `legend-hexagon` : `rank-hexagon`}`
+        return `hexagon ${this.classPrefix}-hexagon`
       },
     }
   }
@@ -42,18 +40,6 @@
     position relative
     z-index 3
 
-  .crown
-    position absolute
-    left 50%
-    top -15px
-    width 22px
-    height 16px
-    margin-left -11px
-    fill #ffcd00
-    stroke #737373
-    stroke-width 1px
-    z-index 2
-
   .hexagon
     position absolute
     left 50%
@@ -66,8 +52,8 @@
 
     &.legend-hexagon
       fill #fff100
-      stroke #737373
-      stroke-width 1px
+      stroke #ffcd00
+      stroke-width 2px
       opacity 0.7
 
     &.rank-hexagon

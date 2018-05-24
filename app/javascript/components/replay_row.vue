@@ -1,11 +1,18 @@
 <template lang="pug">
-  .replay-row
-    a.replay-link(:href="replay.link" target="_blank")
-      span.player.player1 {{ replay.p1.archetype }}
-      player-rank(:player="replay.p1" :winner="replay.winner === `p1`")
-      span.vs vs
-      player-rank(:player="replay.p2" :winner="replay.winner === `p2`")
-      span.player.player2 {{ replay.p2.archetype }}
+  a.replay-link(:href="replay.link" target="_blank")
+    .player.player1
+      .win-indicator
+        svg.crown(v-if="replay.winner === `p1`")
+          use(xlink:href="#crown")
+      .archetype {{ replay.p1.archetype }}
+    player-rank(:player="replay.p1")
+    .vs vs
+    player-rank(:player="replay.p2")
+    .player.player2
+      .archetype {{ replay.p2.archetype }}
+      .win-indicator
+        svg.crown(v-if="replay.winner === `p2`")
+          use(xlink:href="#crown")
 
 </template>
 
@@ -27,12 +34,13 @@
 </script>
 
 <style lang="stylus" scoped>
-  .replay-link
+  a.replay-link
     align-items center
     color #111
     display flex
-    padding 10px 0
     text-decoration none
+    justify-content center
+    font-size 15px
     width 510px
     border-radius 2px
 
@@ -44,19 +52,39 @@
       color #999
       opacity 0.7
 
+    > div
+      height 32px
+      line-height 32px
+
   .player
-    width 180px
+    display flex
+    width 190px
 
-  .player1
-    text-align right
+    &.player1
+      justify-content flex-end
 
-  .player2
-    text-align left
+    &.player2
+      justify-content flex-start
 
   .vs
-    text-align center
-    width 50px
     font-weight 300
+    text-align center
+    width 20px
     opacity 0.5
+
+  .win-indicator
+    width 30px
+    display flex
+    text-align center
+    align-items center
+    justify-content center
+
+  .crown
+    width 22px
+    height 16px
+    fill #ffcd00
+    stroke #737373
+    stroke-width 1px
+    z-index 2
 
 </style>
