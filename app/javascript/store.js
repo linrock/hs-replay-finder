@@ -6,5 +6,8 @@ export const store = {
   hover: {
     class: null,
   },
+  about: {
+    active: false,
+  },
   replays: [],
 }

@@ -15,14 +15,14 @@
   export default {
     data() {
       return {
-        archetypeStats: window.archetypeStats,
+        classes: window.legendStats.classes,
         store
       }
     },
 
     computed: {
       classNames() {
-        return Object.entries(this.archetypeStats)
+        return Object.entries(this.classes)
           .sort((a,b) => parseFloat(b[1].winrate) - parseFloat(a[1].winrate))
           .map(row => row[0])
       }

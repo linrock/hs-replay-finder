@@ -18,7 +18,7 @@
   export default {
     data() {
       return {
-        archetypeStats: window.archetypeStats,
+        classes: window.legendStats.classes,
         store,
       }
     },
@@ -29,9 +29,9 @@
       },
       classWinrate() {
         if (this.className !== "any") {
-          return this.archetypeStats[this.className]["winrate"]
+          return this.classes[this.className]["winrate"]
         } else if (store.hover.class) {
-          return this.archetypeStats[store.hover.class]["winrate"]
+          return this.classes[store.hover.class]["winrate"]
         }
       },
     },

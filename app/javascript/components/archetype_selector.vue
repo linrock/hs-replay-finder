@@ -16,7 +16,7 @@
   export default {
     data() {
       return {
-        archetypeStats: window.archetypeStats,
+        classes: window.legendStats.classes,
         store,
       }
     },
@@ -25,7 +25,7 @@
       archetypes() {
         const className = store.query.class
         if (className !== "any") {
-          return Object.entries(this.archetypeStats[className]["archetypes"])
+          return Object.entries(this.classes[className]["archetypes"])
             .sort((a,b) => parseFloat(b[1]) - parseFloat(a[1]))
             .map(row => ({ name: row[0], winrate: row[1] }))
         }

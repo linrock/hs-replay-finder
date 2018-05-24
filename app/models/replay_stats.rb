@@ -1,10 +1,13 @@
 class ReplayStats
 
+  # min number of games for an archetype to be considered
+  MIN_GAMES = 50
+
   def initialize(replay_outcomes)
     @replay_outcomes = replay_outcomes
   end
 
-  def archetype_wins_and_losses(min_games = 50)
+  def archetype_wins_and_losses
     archetype_stats = {}
     Archetype.all.each do |arch|
       archetype_stats[arch.data["id"]] = { wins: 0, losses: 0 }
@@ -25,13 +28,14 @@ class ReplayStats
       end
     end
     archetype_stats.select do |_, counts|
-      counts[:wins] + counts[:losses] > min_games
+      counts[:wins] + counts[:losses] > MIN_GAMES
     end
   end
 
-  def wins_and_losses(min_games = 50)
+  # does not ignore mirror matchups
+  def wins_and_losses
     wins_and_losses = {}
-    archetype_wins_and_losses(min_games).map do |arch_id, counts|
+    archetype_wins_and_losses.map do |arch_id, counts|
       archetype = Archetype.find_by_archetype_id(arch_id)
       class_name = archetype.data["player_class_name"].capitalize
       wins_and_losses[class_name] ||= { wins: 0, losses: 0, archetypes: {} }
@@ -42,8 +46,8 @@ class ReplayStats
     wins_and_losses
   end
 
-  def winrates(min_games = 50)
-    wins_and_losses(min_games).each do |class_name, stats|
+  def winrates
+    wins_and_losses.each do |class_name, stats|
       winrate = 100.0 * stats[:wins] / (stats[:wins] + stats[:losses])
       stats[:winrate] = "%0.1f" % winrate
       stats.delete(:wins)
@@ -62,5 +66,13 @@ class ReplayStats
         stats
       ]
     end
+  end
+
+  def replays_count
+    @replay_outcomes.count
+  end
+
+  def oldest_replay_timestamp
+    @replay_outcomes.order("created_at ASC").first.created_at
   end
 end
