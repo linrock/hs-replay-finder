@@ -11,27 +11,25 @@ class ReplayOutcomeQuery
   end
 
   def replay_outcomes
-    max_rank = 0
+    rank_query = "
+      data ->> 'player1_legend_rank' != 'None'
+      AND
+      data ->> 'player2_legend_rank' != 'None'
+    "
     p1_query = [
       ("data ->> 'player1_archetype' IN (?)" if archetype_ids),
       ("data ->> 'player2_won' = '#{(!winning_outcome?).to_s.capitalize}'" unless any_outcome?),
-      "(
-         data ->> 'player1_rank' = 'None' OR
-         (data ->> 'player1_rank')::int <= '?' OR
-         data ->> 'player1_legend_rank' != 'None'
-       )",
     ].compact.join(" AND ")
     p2_query = [
-      ("data ->> 'player2_archetype' IN(?)" if archetype_ids),
+      ("data ->> 'player2_archetype' IN (?)" if archetype_ids),
       ("data ->> 'player2_won' = '#{(winning_outcome?).to_s.capitalize}'" unless any_outcome?),
-      "(
-         data ->> 'player2_rank' = 'None' OR
-         (data ->> 'player2_rank')::int <= '?' OR
-         data ->> 'player2_legend_rank' != 'None'
-       )",
     ].compact.join(" AND ")
-    prepared_variables = [ (archetype_ids if archetype_ids), max_rank ].compact
-    ReplayOutcome.where("#{p1_query} OR #{p2_query}", *prepared_variables*2)
+    query = [
+      rank_query,
+      ("((#{p1_query}) OR (#{p2_query}))" if p1_query.present? && p2_query.present?)
+    ].compact.join (" AND ")
+    prepared_variables = [(archetype_ids if archetype_ids)].compact
+    ReplayOutcome.where(query, *prepared_variables*2)
   end
 
   def archetype_ids
