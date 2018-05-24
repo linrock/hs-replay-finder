@@ -41,7 +41,13 @@ class ReplayOutcomeCache
     ids = replay_outcome_ids(query)
     response_json = {
       query: query,
-      replays: ids.map {|id| replay_hash(id) }
+      replays: ids.map do |id|
+        begin
+          replay_hash(id)
+        rescue
+          logger.error "json_response! - replay #{id}"
+        end
+      end.compact
     }.to_json
     @cache.write json_response_cache_key(query), response_json, expires_in: expires_in
     response_json
@@ -50,7 +56,7 @@ class ReplayOutcomeCache
   private
 
   def replay_hash_cache_key(replay_id)
-    "replay_outcomes:#{replay_id}:json"
+    "replay_outcomes:#{replay_id}:hash"
   end
 
   def replay_outcome_ids_cache_key(query)
@@ -63,5 +69,9 @@ class ReplayOutcomeCache
 
   def query_key(query)
     query.sort_by {|k, _| k }.map {|k, v| "#{k}=#{v}" }.join("&")
+  end
+
+  def logger
+    @logger ||= Logger.new("#{Rails.root}/log/error.log")
   end
 end

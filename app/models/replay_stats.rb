@@ -13,18 +13,18 @@ class ReplayStats
       archetype_stats[arch.data["id"]] = { wins: 0, losses: 0 }
     end
     @replay_outcomes.each do |outcome|
-      p1_archetype = outcome.data["player1_archetype"].to_i
-      p2_archetype = outcome.data["player2_archetype"].to_i
-      begin
-        if outcome.player1_won?
-          archetype_stats[p1_archetype][:wins] += 1
-          archetype_stats[p2_archetype][:losses] += 1
-        else
-          archetype_stats[p1_archetype][:losses] += 1
-          archetype_stats[p2_archetype][:wins] += 1
-        end
-      rescue
-        puts "missing archetype - #{p1_archetype} vs #{p2_archetype}"
+      p1_arch = outcome.data["player1_archetype"].to_i
+      p2_arch = outcome.data["player2_archetype"].to_i
+      if archetype_stats[p1_arch].nil? || archetype_stats[p2_arch].nil?
+        logger.error "archetype_wins_and_losses - replay #{outcome.id} (#{p1_arch} vs #{p2_arch})"
+        next
+      end
+      if outcome.player1_won?
+        archetype_stats[p1_arch][:wins] += 1
+        archetype_stats[p2_arch][:losses] += 1
+      else
+        archetype_stats[p1_arch][:losses] += 1
+        archetype_stats[p2_arch][:wins] += 1
       end
     end
     archetype_stats.select do |_, counts|
@@ -75,5 +75,11 @@ class ReplayStats
 
   def oldest_replay_timestamp
     @replay_outcomes.order("created_at ASC").first.created_at
+  end
+
+  private
+
+  def logger
+    @logger ||= Logger.new "#{Rails.root}/log/error.log"
   end
 end

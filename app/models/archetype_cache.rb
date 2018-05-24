@@ -5,7 +5,7 @@ class ArchetypeCache
   end
 
   def name_of_archetype_id(id)
-    archetypes_map[id.to_s].data["name"] rescue binding.pry
+    archetypes_map[id.to_s].data["name"]
   end
 
   def archetypes_map
