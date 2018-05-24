@@ -69,7 +69,8 @@ class ReplayStats
   end
 
   def replays_count
-    @replay_outcomes.count
+    count = @replay_outcomes.count
+    count.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse
   end
 
   def oldest_replay_timestamp
