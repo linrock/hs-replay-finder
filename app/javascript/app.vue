@@ -1,5 +1,5 @@
 <template lang="pug">
-  main#app
+  main
     section#sidebar
       class-selector
       about-stats
