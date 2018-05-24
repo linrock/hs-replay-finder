@@ -2,7 +2,7 @@
   main
     section#sidebar
       class-selector
-      about-stats
+      about-winrates
       class-winrates
       archetype-selector
     section#replays(:class="[{ loading: isLoading }]")
@@ -17,7 +17,7 @@
 <script>
   import { store } from './store'
   import fetchReplays from './api'
-  import AboutStats from './components/about_stats'
+  import AboutWinrates from './components/about_winrates'
   import ArchetypeSelector from './components/archetype_selector'
   import ClassSelector from './components/class_selector'
   import ClassWinrates from './components/class_winrates'
@@ -77,7 +77,7 @@
     },
 
     components: {
-      AboutStats,
+      AboutWinrates,
       ArchetypeSelector,
       ClassSelector,
       ClassWinrates,

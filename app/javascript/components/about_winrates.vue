@@ -1,12 +1,12 @@
 <template lang="pug">
-  section.about
+  .about-winrates
     a.title(
       v-if="notViewingStats"
       href="javascript:"
       @click="store.about.active = !store.about.active"
-    ) About stats
-    .about-stats(v-if="notViewingStats && store.about.active")
-      | Stats calculated from {{ stats.count }}
+    ) About winrates
+    .explanation(v-if="notViewingStats && store.about.active")
+      | Winrates calculated from {{ stats.count }}
       | replays over the past {{ sinceDays }} days.
       | Archetypes with less than 50 games not shown.
 
@@ -36,7 +36,7 @@
 </script>
 
 <style lang="stylus" scoped>
-  .about
+  .about-winrates
     margin-top 35px
     font-size 12px
     padding 0 10px
@@ -50,10 +50,10 @@
       &:hover
         text-decoration underline
 
-  .about-stats
-    margin-top 8px
-    font-size 13px
-    line-height 20px
+  .explanation
+    margin-top 10px
+    font-size 12px
+    line-height 19px
     opacity 0.7
 
 </style>
