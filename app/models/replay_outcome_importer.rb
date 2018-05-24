@@ -36,7 +36,7 @@ class ReplayOutcomeImporter
       if replay_outcome.valid?
         replay_outcome.save!
       else
-        logger.error "hsreplay #{replay_id} - #{replay.to_json}"
+        logger.error "hsreplay #{hsreplay_id} - #{replay.to_json}"
       end
     end
   end
