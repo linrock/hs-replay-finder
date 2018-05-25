@@ -5,7 +5,7 @@
       .winrate-label winrate
     .stats-row(
       :class="[{ active: !store.hover.class && store.query.archetype === `any` }]"
-      @click="store.query.archetype = `any`"
+      @click="visitClass()"
     )
       .name {{ className }}
       .winrate {{ classWinrate }}%
@@ -35,6 +35,13 @@
         }
       },
     },
+
+    methods: {
+      visitClass() {
+        const classNameLower = store.query.class.toLowerCase()
+        this.$router.push({ path: classNameLower })
+      },
+    }
   }
 </script>
 
@@ -66,12 +73,9 @@
       padding 2px 8px
       border-radius 2px
 
-      &:hover
-        background #f0f0f0
+      &:hover, &.active
+        color #45ABFE
         cursor pointer
-
-      &.active
-        background #f0f0f0
 
       .name
         font-weight bold

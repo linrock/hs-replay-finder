@@ -45,8 +45,10 @@
     border-radius 2px
 
     &:hover
-      background #fafafa
       opacity 1
+
+      .player
+        color #45ABFE
 
     &:visited
       color #999

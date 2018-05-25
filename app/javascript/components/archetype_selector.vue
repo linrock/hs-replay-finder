@@ -48,15 +48,11 @@
     line-height 24px
     width 240px
     padding 2px 8px
-    opacity 0.7
     border-radius 2px
 
-    &:hover
-      background #f0f0f0
+    &:hover, &.active
+      color #45ABFE
       cursor pointer
-
-    &.active
-      background #f0f0f0
 
     .name
       width 180px
