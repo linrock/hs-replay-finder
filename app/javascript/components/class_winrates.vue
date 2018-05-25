@@ -25,13 +25,13 @@
 
   export default {
     data() {
-      return {
-        classes: window.legendStats.classes,
-        store,
-      }
+      return { store }
     },
 
     computed: {
+      classes() {
+        return store.legendStats.classes
+      },
       className() {
         return store.hover.class || store.query.class
       },

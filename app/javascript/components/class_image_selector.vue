@@ -14,15 +14,12 @@
 
   export default {
     data() {
-      return {
-        classes: window.legendStats.classes,
-        store
-      }
+      return { store }
     },
 
     computed: {
       classNames() {
-        return Object.entries(this.classes)
+        return Object.entries(store.legendStats.classes)
           .sort((a,b) => parseFloat(b[1].winrate) - parseFloat(a[1].winrate))
           .map(row => row[0])
       }

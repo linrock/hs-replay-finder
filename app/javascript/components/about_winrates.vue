@@ -17,15 +17,13 @@
 
   export default {
     data() {
-      return {
-        stats: window.legendStats.meta,
-        store
-      }
+      return { store }
     },
 
     computed: {
       sinceDays() {
-        const secondsSince = (new Date() - new Date(this.stats.since))/1000
+        const since = new Date(this.store.legendStats.meta.since)
+        const secondsSince = (new Date() - since) / 1000
         return parseInt(secondsSince / 86400, 10)
       },
       notViewingStats() {

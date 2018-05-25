@@ -17,8 +17,8 @@
   </svg>
 </div>
 
-<script id="archetypes-map" type="text/javascript">
-  window.legendStats = <%=  @legend_stats.to_json.html_safe %>;
+<script id="legend-stats" type="text/javascript">
+  window.legendStats = <%= sanitize(@legend_stats.to_json).html_safe %>;
 </script>
 
 <main id="vue-app"></main>

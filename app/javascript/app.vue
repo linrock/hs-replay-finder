@@ -32,6 +32,7 @@
     },
 
     created() {
+      store.legendStats = window.legendStats
       const query = this.routeToQueryMap[this.$route.params.path]
       if (query) {
         Object.assign(store.query, query)

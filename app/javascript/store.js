@@ -9,5 +9,6 @@ export const store = {
   about: {
     active: false,
   },
+  legendStats: {},
   replays: [],
 }
