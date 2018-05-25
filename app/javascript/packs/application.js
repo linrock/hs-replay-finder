@@ -1,13 +1,27 @@
 /* eslint no-console: 0 */
 
 import Vue from 'vue'
+import VueRouter from 'vue-router'
 import App from '../app.vue'
 
+Vue.use(VueRouter)
+
+const router = new VueRouter({
+  mode: 'history',
+  base: __dirname,
+  routes: [
+    {
+      path: '/:path',
+      component: App,
+    }
+  ]
+})
+
 document.addEventListener('DOMContentLoaded', () => {
-  const app = new Vue({
-    render: h => h(App)
-  })
-  app.$mount('#vue-app')
+  new Vue({
+    render: h => h(App),
+    router,
+  }).$mount('#vue-app')
 })
 
 

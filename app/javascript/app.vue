@@ -27,13 +27,19 @@
   export default {
     data() {
       return {
-        replayFeedTitle: `Recent replays`,
+        replayFeedTitle: ``,
         isLoading: false,
         store,
       }
     },
 
     created() {
+      const query = this.routeToQueryMap[this.$route.params.path]
+      if (query) {
+        Object.assign(store.query, query)
+      } else {
+        this.$router.replace({ path: `/` })
+      }
       this.fetchReplays()
     },
 
@@ -68,11 +74,42 @@
           archetype: store.query.archetype.toLowerCase(),
         }
       },
+      routeToQueryMap() {
+        const map = {}
+        Object.entries(window.legendStats.classes).forEach(([className, classData]) => {
+          const classNameLower = className.toLowerCase()
+          map[classNameLower] = {
+            class: className,
+            archetype: `any`,
+          }
+          Object.keys(classData.archetypes).forEach(archetypeName => {
+            const archetypeNameLower = archetypeName.toLowerCase().replace(/\s+/, '-')
+            map[`${archetypeNameLower}-${classNameLower}`] = {
+              class: className,
+              archetype: archetypeName,
+            }
+          })
+        })
+        return map
+      }
     },
 
     watch: {
       query(newQuery, oldQuery) {
         this.fetchReplays()
+      },
+      $route(to, from) {
+        const query = this.routeToQueryMap[this.$route.params.path]
+        if (query) {
+          store.query.class = query.class
+          store.query.archetype = query.archetype
+        } else {
+          if (to.path !== `/`) {
+            this.$router.replace({ path: `/` })
+          }
+          store.query.class = `any`
+          store.query.archetype = `any`
+        }
       },
     },
 

@@ -3,7 +3,7 @@
     .archetype-row(
       v-for="archetype in archetypes"
       :class="[{ active: store.query.archetype === archetype.name }]"
-      @click="store.query.archetype = archetype.name"
+      @click="visitArchetype(archetype.name)"
     )
       .name {{ archetype.name }}
       .winrate {{ archetype.winrate }}%
@@ -30,6 +30,14 @@
             .map(row => ({ name: row[0], winrate: row[1] }))
         }
       },
+    },
+
+    methods: {
+      visitArchetype(archetypeName) {
+        const archetypeNameLower = archetypeName.toLowerCase().replace(/\s+/, '-')
+        const classNameLower = store.query.class.toLowerCase()
+        this.$router.push({ path: `${archetypeNameLower}-${classNameLower}` })
+      }
     }
   }
 </script>

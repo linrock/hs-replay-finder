@@ -36,12 +36,11 @@
         return [`any`, className].includes(store.query.class)
       },
       selectClass(className) {
-        store.query.archetype = `any`
         if (store.query.class === className) {
-          store.query.class = `any`
+          this.$router.push({ path: `/` })
           store.hover.class = className
         } else {
-          store.query.class = className
+          this.$router.push({ path: className.toLowerCase() })
           store.hover.class = null
         }
       },
