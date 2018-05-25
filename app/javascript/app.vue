@@ -8,7 +8,8 @@
       h3.replay-feed-title {{ replayFeedTitle }}
       .loading-text(v-if="$store.state.replays.length === 0") Loading...
       .replay-feed
-        replay-list
+        .replay-list
+          replay-row(v-for="replay in $store.state.replays" :replay="replay")
         replay-timestamps
 
 </template>
@@ -17,7 +18,7 @@
   import AboutWinrates from './components/about_winrates'
   import ClassImageSelector from './components/class_image_selector'
   import ClassWinrates from './components/class_winrates'
-  import ReplayList from './components/replay_list'
+  import ReplayRow from './components/replay_row'
   import ReplayTimestamps from './components/replay_timestamps'
 
   import fetchReplays from './api'
@@ -107,7 +108,7 @@
       AboutWinrates,
       ClassImageSelector,
       ClassWinrates,
-      ReplayList,
+      ReplayRow,
       ReplayTimestamps,
     },
   }
@@ -146,5 +147,8 @@
   .replay-feed
     display flex
     width 100%
+
+    .replay-list
+      margin-bottom 100px
 
 </style>
