@@ -1,10 +1,9 @@
 <template lang="pug">
   main
     section#sidebar
-      class-selector
+      class-image-selector
       about-winrates
       class-winrates
-      archetype-selector
     section#replays(:class="[{ loading: isLoading }]")
       h3.replay-feed-title {{ replayFeedTitle }}
       .loading-text(v-if="store.replays.length === 0") Loading...
@@ -18,8 +17,7 @@
   import { store } from './store'
   import fetchReplays from './api'
   import AboutWinrates from './components/about_winrates'
-  import ArchetypeSelector from './components/archetype_selector'
-  import ClassSelector from './components/class_selector'
+  import ClassImageSelector from './components/class_image_selector'
   import ClassWinrates from './components/class_winrates'
   import ReplayList from './components/replay_list'
   import ReplayTimestamps from './components/replay_timestamps'
@@ -115,8 +113,7 @@
 
     components: {
       AboutWinrates,
-      ArchetypeSelector,
-      ClassSelector,
+      ClassImageSelector,
       ClassWinrates,
       ReplayList,
       ReplayTimestamps,

@@ -1,5 +1,5 @@
 <template lang="pug">
-  .class-selector(@mouseleave="store.hover.class = null")
+  .class-image-selector(@mouseleave="store.hover.class = null")
     img(
       v-for="className in classNames"
       :src="imgSrc(className)"
@@ -54,7 +54,7 @@
 </script>
 
 <style lang="stylus" scoped>
-  .class-selector
+  .class-image-selector
     width 240px
     height 240px
     display flex

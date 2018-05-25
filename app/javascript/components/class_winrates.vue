@@ -9,6 +9,14 @@
     )
       .name {{ className }}
       .winrate {{ classWinrate }}%
+    .archetype-selector
+      .stats-row(
+        v-for="archetype in archetypes"
+        :class="[{ active: store.query.archetype === archetype.name }]"
+        @click="visitArchetype(archetype.name)"
+      )
+        .name {{ archetype.name }}
+        .winrate {{ archetype.winrate }}%
 
 </template>
 
@@ -34,13 +42,27 @@
           return this.classes[store.hover.class]["winrate"]
         }
       },
+      classNameLower() {
+        return store.query.class.toLowerCase()
+      },
+      archetypes() {
+        const className = store.query.class
+        if (className !== "any") {
+          return Object.entries(this.classes[className]["archetypes"])
+            .sort((a,b) => parseFloat(b[1]) - parseFloat(a[1]))
+            .map(row => ({ name: row[0], winrate: row[1] }))
+        }
+      },
     },
 
     methods: {
       visitClass() {
-        const classNameLower = store.query.class.toLowerCase()
-        this.$router.push({ path: classNameLower })
+        this.$router.push({ path: this.classNameLower })
       },
+      visitArchetype(archetypeName) {
+        const archetypeNameLower = archetypeName.toLowerCase().replace(/\s+/, '-')
+        this.$router.push({ path: `${archetypeNameLower}-${this.classNameLower}` })
+      }
     }
   }
 </script>
@@ -78,8 +100,8 @@
         cursor pointer
 
       .name
-        font-weight bold
         width 180px
+        font-weight bold
 
       .winrate
         width 60px
