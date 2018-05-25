@@ -10,10 +10,12 @@
 </template>
 
 <script>
+  import { classPath } from '../utils'
+
   export default {
     computed: {
       classNames() {
-        return Object.entries(this.$store.state.legendStats.classes)
+        return Object.entries(this.$store.getters.classes)
           .sort((a,b) => parseFloat(b[1].winrate) - parseFloat(a[1].winrate))
           .map(row => row[0])
       }
@@ -31,14 +33,12 @@
           this.$router.push({ path: `/` })
           this.$store.dispatch(`hoverOverClass`, className)
         } else {
-          this.$router.push({ path: className.toLowerCase() })
+          this.$router.push({ path: classPath(className) })
           this.$store.dispatch(`hoverOverClass`, null)
         }
       },
       hoverOverClass(className) {
-        if (this.$store.state.query.class === `any`) {
-          this.$store.dispatch(`hoverOverClass`, className)
-        }
+        this.$store.dispatch(`hoverOverClass`, className)
       },
     },
   }

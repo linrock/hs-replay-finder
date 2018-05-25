@@ -14,18 +14,20 @@
 </template>
 
 <script>
-  import fetchReplays from './api'
   import AboutWinrates from './components/about_winrates'
   import ClassImageSelector from './components/class_image_selector'
   import ClassWinrates from './components/class_winrates'
   import ReplayList from './components/replay_list'
   import ReplayTimestamps from './components/replay_timestamps'
 
+  import fetchReplays from './api'
+  import { classPath } from './utils'
+
   export default {
     data() {
       return {
-        replayFeedTitle: ``,
         isLoading: false,
+        replayFeedTitle: ``,
       }
     },
 
@@ -68,15 +70,13 @@
       },
       routeToQueryMap() {
         const map = {}
-        Object.entries(window.legendStats.classes).forEach(([className, classData]) => {
-          const classNameLower = className.toLowerCase()
-          map[classNameLower] = {
+        Object.entries(this.$store.getters.classes).forEach(([className, classData]) => {
+          map[classPath(className)] = {
             class: className,
             archetype: `any`,
           }
           Object.keys(classData.archetypes).forEach(archetypeName => {
-            const archetypeNameLower = archetypeName.toLowerCase().replace(/\s+/, '-')
-            map[`${archetypeNameLower}-${classNameLower}`] = {
+            map[classPath(className, archetypeName)] = {
               class: className,
               archetype: archetypeName,
             }

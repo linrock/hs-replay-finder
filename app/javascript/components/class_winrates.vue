@@ -4,10 +4,10 @@
       .class-label class
       .winrate-label winrate
     .stats-row(
-      :class="[{ active: !$store.state.hover.class && $store.state.query.archetype === `any` }]"
+      :class="[{ active: className !== `any` && $store.state.query.archetype === `any` }]"
       @click="visitClass()"
     )
-      .name {{ className }}
+      .name {{ $store.state.hover.class }}
       .winrate {{ classWinrate }}%
     .archetype-selector
       .stats-row(
@@ -21,28 +21,26 @@
 </template>
 
 <script>
+  import { classPath } from '../utils'
+
   export default {
     computed: {
       classes() {
-        return this.$store.state.legendStats.classes
+        return this.$store.getters.classes
       },
       className() {
-        return this.$store.state.hover.class || this.$store.state.query.class
+        return this.$store.state.query.class
       },
       classWinrate() {
         if (this.className !== "any") {
-          return this.classes[this.className]["winrate"]
+          return this.classes[this.className].winrate
         } else if (this.$store.state.hover.class) {
-          return this.classes[this.$store.state.hover.class]["winrate"]
+          return this.classes[this.$store.state.hover.class].winrate
         }
       },
-      classNameLower() {
-        return this.$store.state.query.class.toLowerCase()
-      },
       archetypes() {
-        const className = this.$store.state.query.class
-        if (className !== "any") {
-          return Object.entries(this.classes[className]["archetypes"])
+        if (this.className !== "any") {
+          return Object.entries(this.classes[this.className].archetypes)
             .sort((a,b) => parseFloat(b[1]) - parseFloat(a[1]))
             .map(row => ({ name: row[0], winrate: row[1] }))
         }
@@ -51,11 +49,11 @@
 
     methods: {
       visitClass() {
-        this.$router.push({ path: this.classNameLower })
+        this.$router.push({ path: classPath(this.$store.state.query.class) })
       },
       visitArchetype(archetypeName) {
-        const archetypeNameLower = archetypeName.toLowerCase().replace(/\s+/, '-')
-        this.$router.push({ path: `${archetypeNameLower}-${this.classNameLower}` })
+        const path = classPath(this.$store.state.query.class, archetypeName)
+        this.$router.push({ path })
       }
     }
   }
