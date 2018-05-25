@@ -1,5 +1,5 @@
 <template lang="pug">
-  .class-image-selector(@mouseleave="$store.dispatch(`hoverOverClass`, null)")
+  .class-image-selector(@mouseleave="hoverOverClass(null)")
     img(
       v-for="className in $store.getters.classNames"
       :src="imgSrc(className)"
@@ -23,10 +23,10 @@
       selectClass(className) {
         if (this.$store.state.query.class === className) {
           this.$router.push({ path: `/` })
-          this.$store.dispatch(`hoverOverClass`, className)
+          this.hoverOverClass(className)
         } else {
           this.$router.push({ path: classPath(className) })
-          this.$store.dispatch(`hoverOverClass`, null)
+          this.hoverOverClass(null)
         }
       },
       hoverOverClass(className) {

@@ -5,7 +5,7 @@
       href="javascript:"
       @click="aboutActive = !aboutActive"
     ) About winrates
-    .explanation(v-if="notViewingStats && aboutActive")
+    .explanation(v-if="aboutActive && notViewingStats")
       | Winrates calculated from {{ $store.getters.aboutWinrates.count }}
       | replays over the past {{ sinceDays }} days.
       | Archetypes with less than 50 games not shown.

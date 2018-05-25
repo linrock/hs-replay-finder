@@ -1,7 +1,7 @@
 <template lang="pug">
   .rank
     .rank-num(:class="rankClass") {{ player.rank }}
-    svg(:class="hexagonClass")
+    svg.hexagon(:class="hexagonClass")
       use(xlink:href="#hexagon")
 
 </template>
@@ -37,7 +37,7 @@
         return `${this.classPrefix}-rank ${this.player.is_legend && this.legendRank}`
       },
       hexagonClass() {
-        return `hexagon ${this.classPrefix}-hexagon`
+        return `${this.classPrefix}-hexagon`
       },
     }
   }
