@@ -11,6 +11,13 @@
           .gsub(/\/packs/, 'packs').html_safe %>
     <%= stylesheet_pack_tag('application')
           .gsub(/\/packs/, 'packs').html_safe %>
+
+    <% if Rails.env.development? %>
+      <link href="/assets/fonts.css" rel="stylesheet">
+    <% else %>
+      <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700"
+            rel="stylesheet">
+    <% end %>
   </head>
 
   <body>

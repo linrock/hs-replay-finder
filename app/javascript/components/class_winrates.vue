@@ -54,8 +54,6 @@
 
 <style lang="stylus" scoped>
   .class-winrates
-    margin-top 30px
-
     .label-row
       width 240px
       font-size 10px

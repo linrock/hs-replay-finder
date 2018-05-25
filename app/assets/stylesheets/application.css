@@ -1,6 +1,5 @@
 /*
  *= require reset
- *= require_tree .
  *= require_self
  */
 
@@ -13,13 +12,13 @@ html {
 }
 
 body {
-  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-family: "Open Sans", Arial, sans-serif;
 }
 
 h1 {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
 }
 
 h2 {

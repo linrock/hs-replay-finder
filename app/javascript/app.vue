@@ -97,7 +97,7 @@
   #sidebar
     position fixed
     left 50px
-    top 169px
+    top 155px
 
   #replays
     position relative
@@ -114,14 +114,12 @@
     margin-top 25px
     width 510px
 
-  .replay-feed-title
-    font-size 18px
-    font-weight bold
-    margin-top 21px
-    text-align center
-    padding-bottom 15px
-    margin-bottom 10px
+  h3.replay-feed-title
     width 510px
+    font-size 16px
+    font-weight bold
+    margin 20px 0
+    text-align center
 
   .replay-feed
     display flex

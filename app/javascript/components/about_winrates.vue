@@ -35,7 +35,6 @@
 
 <style lang="stylus" scoped>
   .about-winrates
-    margin-top 35px
     font-size 12px
     padding 0 10px
     width 240px
