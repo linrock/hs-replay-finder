@@ -12,9 +12,8 @@ class ReplayOutcome < ApplicationRecord
     ")
   end
 
-  def self.unique_archetype_ids
-    (pluck("data ->> 'player1_archetype'") +
-     pluck("data ->> 'player2_archetype'")).uniq
+  def self.with_archetype_ids(archetype_ids)
+    where("data ->> 'player1_archetype' IN (?) OR data ->> 'player2_archetype' IN (?)", *archetype_ids*2)
   end
 
   def player1_archetype

@@ -16,11 +16,25 @@
     },
 
     computed: {
+      legendRank() {
+        const rank = parseInt(this.player.rank, 10)
+        if (rank <= 10) {
+          return `top-10`
+        } else if (rank < 100) {
+          return `top`
+        } else if (rank <= 500) {
+          return `high`
+        } else if (rank < 1000) {
+          return `mid`
+        } else {
+          return `low`
+        }
+      },
       classPrefix() {
         return this.player.is_legend ? `legend` : `rank`
       },
       rankClass() {
-        return `${this.classPrefix}-rank`
+        return `${this.classPrefix}-rank ${this.player.is_legend && this.legendRank}`
       },
       hexagonClass() {
         return `hexagon ${this.classPrefix}-hexagon`
@@ -39,6 +53,28 @@
   .rank-num
     position relative
     z-index 3
+
+  .legend-rank
+    &.top-10
+      font-weight bold
+      font-size 16px
+
+    &.top
+      font-weight bold
+      font-size 12px
+      letter-spacing 0.5px
+
+    &.high
+      letter-spacing 0.3px
+      font-size 11px
+
+    &.mid
+      letter-spacing 0.3px
+      font-size 11px
+      opacity 0.8
+
+    &.low
+      opacity 0.4
 
   .hexagon
     position absolute
