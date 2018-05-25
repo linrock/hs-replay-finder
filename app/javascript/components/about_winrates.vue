@@ -3,31 +3,31 @@
     a.title(
       v-if="notViewingStats"
       href="javascript:"
-      @click="store.about.active = !store.about.active"
+      @click="aboutActive = !aboutActive"
     ) About winrates
-    .explanation(v-if="notViewingStats && store.about.active")
-      | Winrates calculated from {{ stats.count }}
+    .explanation(v-if="notViewingStats && aboutActive")
+      | Winrates calculated from {{ $store.state.legendStats.meta.count }}
       | replays over the past {{ sinceDays }} days.
       | Archetypes with less than 50 games not shown.
 
 </template>
 
 <script>
-  import { store } from '../store'
-
   export default {
     data() {
-      return { store }
+      return {
+        aboutActive: false,
+      }
     },
 
     computed: {
       sinceDays() {
-        const since = new Date(this.store.legendStats.meta.since)
+        const since = new Date(this.$store.state.legendStats.meta.since)
         const secondsSince = (new Date() - since) / 1000
         return parseInt(secondsSince / 86400, 10)
       },
       notViewingStats() {
-        return store.query.class === `any` && !store.hover.class
+        return this.$store.state.query.class === `any` && !this.$store.state.hover.class
       },
     }
   }

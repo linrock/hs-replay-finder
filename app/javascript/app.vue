@@ -6,7 +6,7 @@
       class-winrates
     section#replays(:class="[{ loading: isLoading }]")
       h3.replay-feed-title {{ replayFeedTitle }}
-      .loading-text(v-if="store.replays.length === 0") Loading...
+      .loading-text(v-if="$store.state.replays.length === 0") Loading...
       .replay-feed
         replay-list
         replay-timestamps
@@ -14,7 +14,6 @@
 </template>
 
 <script>
-  import { store } from './store'
   import fetchReplays from './api'
   import AboutWinrates from './components/about_winrates'
   import ClassImageSelector from './components/class_image_selector'
@@ -27,28 +26,25 @@
       return {
         replayFeedTitle: ``,
         isLoading: false,
-        store,
       }
     },
 
     created() {
-      store.legendStats = window.legendStats
+      this.$store.dispatch(`setLegendStats`, window.legendStats)
       const query = this.routeToQueryMap[this.$route.params.path]
-      if (query) {
-        Object.assign(store.query, query)
-      } else {
+      if (!query) {
         this.$router.replace({ path: `/` })
       }
-      this.fetchReplays()
+      this.$store.dispatch(`setQuery`, query || {})
     },
 
     methods: {
       fetchReplays() {
         this.isLoading = true
-        return fetchReplays(this.query).then(data => {
-          if (this.query.class === data.query.class &&
-              this.query.archetype === data.query.archetype) {
-            this.store.replays = data.replays
+        return fetchReplays(this.queryParams).then(data => {
+          if (this.queryParams.class === data.query.class &&
+              this.queryParams.archetype === data.query.archetype) {
+            this.$store.dispatch(`setReplays`, data.replays)
             this.isLoading = false
             this.setReplayFeedTitle()
             window.scrollTo(0, 0)
@@ -56,8 +52,8 @@
         })
       },
       setReplayFeedTitle() {
-        const archetype = store.query.archetype
-        const className = store.query.class
+        const archetype = this.$store.state.query.archetype
+        const className = this.$store.state.query.class
         if (archetype === `any`) {
           this.replayFeedTitle = className === `any` ? `Recent replays` : className
         } else {
@@ -67,11 +63,8 @@
     },
 
     computed: {
-      query() {
-        return {
-          class: store.query.class.toLowerCase(),
-          archetype: store.query.archetype.toLowerCase(),
-        }
+      queryParams() {
+        return this.$store.getters.queryParams
       },
       routeToQueryMap() {
         const map = {}
@@ -94,20 +87,18 @@
     },
 
     watch: {
-      query(newQuery, oldQuery) {
+      queryParams(newQueryParams, oldQueryParams) {
         this.fetchReplays()
       },
       $route(to, from) {
         const query = this.routeToQueryMap[this.$route.params.path]
         if (query) {
-          store.query.class = query.class
-          store.query.archetype = query.archetype
+          this.$store.dispatch('setQuery', query)
         } else {
           if (to.path !== `/`) {
             this.$router.replace({ path: `/` })
           }
-          store.query.class = `any`
-          store.query.archetype = `any`
+          this.$store.dispatch('setQuery', { class: `any`, archetype: `any` })
         }
       },
     },

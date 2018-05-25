@@ -2,7 +2,9 @@
 
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+
 import App from '../app'
+import store from '../store'
 
 Vue.use(VueRouter)
 
@@ -23,10 +25,10 @@ const router = new VueRouter({
 })
 
 document.addEventListener('DOMContentLoaded', () => {
-  const el = document.body.appendChild(document.createElement('main'))
   new Vue({
+    el: document.body.appendChild(document.createElement('main')),
     render: h => h(App),
     router,
-    el,
+    store,
   })
 })

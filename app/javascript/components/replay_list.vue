@@ -1,18 +1,13 @@
 <template lang="pug">
   section.replay-list
-    replay-row(v-for="replay in store.replays" :replay="replay")
+    replay-row(v-for="replay in $store.state.replays" :replay="replay")
 
 </template>
 
 <script>
-  import { store } from '../store'
   import ReplayRow from "./replay_row"
 
   export default {
-    data() {
-      return { store }
-    },
-
     components: {
       ReplayRow,
     }

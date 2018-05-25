@@ -5,8 +5,6 @@
 </template>
 
 <script>
-  import { store } from '../store'
-
   const now = new Date()
   const timeAgo = replay => {
     let timeAgo = ``
@@ -43,18 +41,11 @@
   }
 
   export default {
-    data() {
-      return { store }
-    },
-
     computed: {
-      replays() {
-        return this.store.replays
-      },
       timesAgo() {
         const timesAgo = []
         let lastDifferentTimeAgo = null
-        this.replays.forEach(replay => {
+        this.$store.state.replays.forEach(replay => {
           const lastTimeAgo = timeAgo(replay)
           if (lastDifferentTimeAgo !== lastTimeAgo) {
             lastDifferentTimeAgo = lastTimeAgo

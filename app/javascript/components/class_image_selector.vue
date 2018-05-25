@@ -1,5 +1,5 @@
 <template lang="pug">
-  .class-image-selector(@mouseleave="store.hover.class = null")
+  .class-image-selector(@mouseleave="$store.dispatch(`hoverOverClass`, null)")
     img(
       v-for="className in classNames"
       :src="imgSrc(className)"
@@ -10,16 +10,10 @@
 </template>
 
 <script>
-  import { store } from '../store'
-
   export default {
-    data() {
-      return { store }
-    },
-
     computed: {
       classNames() {
-        return Object.entries(store.legendStats.classes)
+        return Object.entries(this.$store.state.legendStats.classes)
           .sort((a,b) => parseFloat(b[1].winrate) - parseFloat(a[1].winrate))
           .map(row => row[0])
       }
@@ -30,20 +24,20 @@
         return `assets/classes/${className.toLowerCase()}.png`
       },
       classIsActive(className) {
-        return [`any`, className].includes(store.query.class)
+        return [`any`, className].includes(this.$store.state.query.class)
       },
       selectClass(className) {
-        if (store.query.class === className) {
+        if (this.$store.state.query.class === className) {
           this.$router.push({ path: `/` })
-          store.hover.class = className
+          this.$store.dispatch(`hoverOverClass`, className)
         } else {
           this.$router.push({ path: className.toLowerCase() })
-          store.hover.class = null
+          this.$store.dispatch(`hoverOverClass`, null)
         }
       },
       hoverOverClass(className) {
-        if (store.query.class === `any`) {
-          store.hover.class = className
+        if (this.$store.state.query.class === `any`) {
+          this.$store.dispatch(`hoverOverClass`, className)
         }
       },
     },

@@ -4,7 +4,7 @@
       .class-label class
       .winrate-label winrate
     .stats-row(
-      :class="[{ active: !store.hover.class && store.query.archetype === `any` }]"
+      :class="[{ active: !$store.state.hover.class && $store.state.query.archetype === `any` }]"
       @click="visitClass()"
     )
       .name {{ className }}
@@ -12,7 +12,7 @@
     .archetype-selector
       .stats-row(
         v-for="archetype in archetypes"
-        :class="[{ active: store.query.archetype === archetype.name }]"
+        :class="[{ active: $store.state.query.archetype === archetype.name }]"
         @click="visitArchetype(archetype.name)"
       )
         .name {{ archetype.name }}
@@ -21,32 +21,26 @@
 </template>
 
 <script>
-  import { store } from '../store'
-
   export default {
-    data() {
-      return { store }
-    },
-
     computed: {
       classes() {
-        return store.legendStats.classes
+        return this.$store.state.legendStats.classes
       },
       className() {
-        return store.hover.class || store.query.class
+        return this.$store.state.hover.class || this.$store.state.query.class
       },
       classWinrate() {
         if (this.className !== "any") {
           return this.classes[this.className]["winrate"]
-        } else if (store.hover.class) {
-          return this.classes[store.hover.class]["winrate"]
+        } else if (this.$store.state.hover.class) {
+          return this.classes[this.$store.state.hover.class]["winrate"]
         }
       },
       classNameLower() {
-        return store.query.class.toLowerCase()
+        return this.$store.state.query.class.toLowerCase()
       },
       archetypes() {
-        const className = store.query.class
+        const className = this.$store.state.query.class
         if (className !== "any") {
           return Object.entries(this.classes[className]["archetypes"])
             .sort((a,b) => parseFloat(b[1]) - parseFloat(a[1]))
