@@ -1,7 +1,7 @@
 <template lang="pug">
   .class-image-selector(@mouseleave="$store.dispatch(`hoverOverClass`, null)")
     img(
-      v-for="className in classNames"
+      v-for="className in $store.getters.classNames"
       :src="imgSrc(className)"
       :class="[{ active: classIsActive(className) }]"
       @mouseenter="hoverOverClass(className)"
@@ -13,14 +13,6 @@
   import { classPath } from '../utils'
 
   export default {
-    computed: {
-      classNames() {
-        return Object.entries(this.$store.getters.classes)
-          .sort((a,b) => parseFloat(b[1].winrate) - parseFloat(a[1].winrate))
-          .map(row => row[0])
-      }
-    },
-
     methods: {
       imgSrc(className) {
         return `assets/classes/${className.toLowerCase()}.png`

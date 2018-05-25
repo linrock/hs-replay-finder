@@ -12,7 +12,7 @@ const store = new Vuex.Store({
     hover: {
       class: null,
     },
-    legendStats: {},
+    replayStats: {},
     replays: [],
   },
 
@@ -20,8 +20,8 @@ const store = new Vuex.Store({
     hoverOverClass(state, className) {
       state.hover.class = className
     },
-    setLegendStats(state, legendStats) {
-      state.legendStats = legendStats
+    setReplayStats(state, replayStats) {
+      state.replayStats = replayStats
     },
     setQuery(state, query) {
       state.query = query
@@ -37,8 +37,8 @@ const store = new Vuex.Store({
         commit('hoverOverClass', className)
       }
     },
-    setLegendStats({ commit }, legendStats) {
-      commit('setLegendStats', legendStats)
+    setReplayStats({ commit }, replayStats) {
+      commit('setReplayStats', replayStats)
     },
     setQuery({ commit }, query) {
       if (!query.class) {
@@ -56,7 +56,11 @@ const store = new Vuex.Store({
   },
 
   getters: {
-    classes: state => state.legendStats.classes,
+    aboutWinrates: state => state.replayStats.meta,
+    classNames: state => state.replayStats.classNames,
+    classStats: state => state.replayStats.classStats,
+    classArchetypes: state => state.replayStats.classArchetypes,
+    routeMap: state => state.replayStats.routeMap,
     queryParams: state => ({
       class: state.query.class.toLowerCase(),
       archetype: state.query.archetype.toLowerCase(),

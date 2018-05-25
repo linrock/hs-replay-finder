@@ -21,6 +21,7 @@
   import ReplayRow from './components/replay_row'
   import ReplayTimestamps from './components/replay_timestamps'
 
+  import ReplayStats from './models/replay_stats'
   import fetchReplays from './api'
   import { classPath } from './utils'
 
@@ -33,8 +34,8 @@
     },
 
     created() {
-      this.$store.dispatch(`setLegendStats`, window.legendStats)
-      const query = this.routeToQueryMap[this.$route.params.path]
+      this.$store.dispatch(`setReplayStats`, new ReplayStats(window.legendStats))
+      const query = this.$store.getters.routeMap[this.$route.params.path]
       if (!query) {
         this.$router.replace({ path: `/` })
       }
@@ -42,18 +43,6 @@
     },
 
     methods: {
-      fetchReplays() {
-        this.isLoading = true
-        return fetchReplays(this.queryParams).then(data => {
-          if (this.queryParams.class === data.query.class &&
-              this.queryParams.archetype === data.query.archetype) {
-            this.$store.dispatch(`setReplays`, data.replays)
-            this.isLoading = false
-            this.setReplayFeedTitle()
-            window.scrollTo(0, 0)
-          }
-        })
-      },
       setReplayFeedTitle() {
         const archetype = this.$store.state.query.archetype
         const className = this.$store.state.query.class
@@ -69,30 +58,11 @@
       queryParams() {
         return this.$store.getters.queryParams
       },
-      routeToQueryMap() {
-        const map = {}
-        Object.entries(this.$store.getters.classes).forEach(([className, classData]) => {
-          map[classPath(className)] = {
-            class: className,
-            archetype: `any`,
-          }
-          Object.keys(classData.archetypes).forEach(archetypeName => {
-            map[classPath(className, archetypeName)] = {
-              class: className,
-              archetype: archetypeName,
-            }
-          })
-        })
-        return map
-      }
     },
 
     watch: {
-      queryParams(newQueryParams, oldQueryParams) {
-        this.fetchReplays()
-      },
       $route(to, from) {
-        const query = this.routeToQueryMap[this.$route.params.path]
+        const query = this.$store.getters.routeMap[to.params.path]
         if (query) {
           this.$store.dispatch('setQuery', query)
         } else {
@@ -101,6 +71,19 @@
           }
           this.$store.dispatch('setQuery', { class: `any`, archetype: `any` })
         }
+      },
+      queryParams(newQueryParams, oldQueryParams) {
+        // fetch replays
+        this.isLoading = true
+        return fetchReplays(this.queryParams).then(data => {
+          if (this.queryParams.class === data.query.class &&
+              this.queryParams.archetype === data.query.archetype) {
+            this.$store.dispatch(`setReplays`, data.replays)
+            this.isLoading = false
+            this.setReplayFeedTitle()
+            window.scrollTo(0, 0)
+          }
+        })
       },
     },
 

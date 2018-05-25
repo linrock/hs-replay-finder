@@ -11,7 +11,7 @@
       .winrate {{ classWinrate }}%
     .archetype-selector
       .stats-row(
-        v-for="archetype in archetypes"
+        v-for="archetype in $store.getters.classArchetypes(className)"
         :class="[{ active: $store.state.query.archetype === archetype.name }]"
         @click="visitArchetype(archetype.name)"
       )
@@ -25,24 +25,17 @@
 
   export default {
     computed: {
-      classes() {
-        return this.$store.getters.classes
-      },
       className() {
         return this.$store.state.query.class
       },
-      classWinrate() {
-        if (this.className !== "any") {
-          return this.classes[this.className].winrate
-        } else if (this.$store.state.hover.class) {
-          return this.classes[this.$store.state.hover.class].winrate
-        }
+      classStats() {
+        return this.$store.getters.classStats
       },
-      archetypes() {
-        if (this.className !== "any") {
-          return Object.entries(this.classes[this.className].archetypes)
-            .sort((a,b) => parseFloat(b[1]) - parseFloat(a[1]))
-            .map(row => ({ name: row[0], winrate: row[1] }))
+      classWinrate() {
+        if (this.className !== `any`) {
+          return this.classStats[this.className].winrate
+        } else if (this.$store.state.hover.class) {
+          return this.classStats[this.$store.state.hover.class].winrate
         }
       },
     },
