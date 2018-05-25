@@ -1,2 +1,3 @@
 web: bundle exec rails s
-importer: bundle exec rails runner 'ReplayOutcomeImporter.new.keep_fetching'
+importer: bundle exec rails runner 'RepeatingTasks.new.import_replays'
+stats: bundle exec rails runner 'RepeatingTasks.new.calculate_legend_stats'
