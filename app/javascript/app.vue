@@ -63,14 +63,10 @@
     watch: {
       $route(to, from) {
         const query = this.$store.getters.routeMap[to.params.path]
-        if (query) {
-          this.$store.dispatch('setQuery', query)
-        } else {
-          if (to.path !== `/`) {
-            this.$router.replace({ path: `/` })
-          }
-          this.$store.dispatch('setQuery', { class: `any`, archetype: `any` })
+        if (!query && to.path !== `/`) {
+          this.$router.replace({ path: `/` })
         }
+        this.$store.dispatch('setQuery', query || {})
       },
       queryParams(newQueryParams, oldQueryParams) {
         // fetch replays
