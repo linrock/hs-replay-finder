@@ -6,7 +6,8 @@
       class-winrates
     section#replays(:class="[{ loading: isLoading }]")
       h3.replay-feed-title {{ replayFeedTitle }}
-      .loading-text(v-if="$store.state.replays.length === 0") Loading...
+      .loading-text(v-if="isLoading && $store.state.replays.length === 0") Loading...
+      .error-text(v-if="error") Failed to fetch replays :(
       .replay-feed
         .replay-list
           replay-row(v-for="replay in $store.state.replays" :replay="replay")
@@ -28,7 +29,8 @@
   export default {
     data() {
       return {
-        isLoading: false,
+        error: false,
+        isLoading: true,
         replayFeedTitle: ``,
       }
     },
@@ -66,20 +68,26 @@
         if (!query && to.path !== `/`) {
           this.$router.replace({ path: `/` })
         }
-        this.$store.dispatch('setQuery', query || {})
+        this.$store.dispatch(`setQuery`, query || {})
       },
       queryParams(newQueryParams, oldQueryParams) {
         // fetch replays
         this.isLoading = true
-        return fetchReplays(this.queryParams).then(data => {
-          if (this.queryParams.class === data.query.class &&
-              this.queryParams.archetype === data.query.archetype) {
-            this.$store.dispatch(`setReplays`, data.replays)
+        this.error = false
+        fetchReplays(this.queryParams)
+          .then(data => {
+            if (this.queryParams.class === data.query.class &&
+                this.queryParams.archetype === data.query.archetype) {
+              this.$store.dispatch(`setReplays`, data.replays)
+              this.isLoading = false
+              this.setReplayFeedTitle()
+              window.scrollTo(0, 0)
+            }
+          })
+          .catch(error => {
             this.isLoading = false
-            this.setReplayFeedTitle()
-            window.scrollTo(0, 0)
-          }
-        })
+            this.error = true
+          })
       },
     },
 
@@ -110,8 +118,16 @@
 
   .loading-text
     position absolute
+    top 240px
     text-align center
-    margin-top 25px
+    font-size 30px
+    width 510px
+
+  .error-text
+    position absolute
+    top 244px
+    text-align center
+    font-size 20px
     width 510px
 
   h3.replay-feed-title
