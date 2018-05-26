@@ -25,6 +25,10 @@ class Archetype < ApplicationRecord
       .pluck(Arel.sql("data ->> 'id'"))
   end
 
+  def self.class_names
+    Archetype.all.distinct.pluck(Arel.sql("data ->> 'player_class_name'"))
+  end
+
   # class -> [archetype, ...]
   def self.to_map(archetype_ids = nil)
     archetypes = if archetype_ids
@@ -32,15 +36,28 @@ class Archetype < ApplicationRecord
                  else
                    Archetype.all
                  end
-    archetypes.group_by { |arch|
-      arch.data["player_class_name"]
-    }.map do |class_name, archetypes|
-      class_name = class_name.capitalize
-      [
-        class_name,
-        archetypes.map {|ar| ar.data["name"].gsub(/#{class_name}/, '').strip }
-      ]
+    archetypes.group_by(&:class_name).map do |class_name, archetypes|
+      [ class_name, archetypes.map(&:class_prefix) ]
     end.to_h
+  end
+
+  def class_name
+    data["player_class_name"].capitalize
+  end
+
+  def class_prefix
+    data["name"].gsub(/#{class_name}\z/i, '').strip
+  end
+
+  def path
+    data["url"].split("/").last
+  end
+
+  def to_query
+    {
+      class: class_name.downcase,
+      archetype: class_prefix.downcase
+    }
   end
 
   private
