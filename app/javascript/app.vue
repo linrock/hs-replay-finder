@@ -30,18 +30,25 @@
     data() {
       return {
         error: false,
-        isLoading: true,
+        isLoading: false,
         replayFeedTitle: ``,
       }
     },
 
     created() {
-      this.$store.dispatch(`setReplayStats`, new ReplayStats(window.legendStats))
+      const { legendStats, data } = window.hsrpf
+      this.$store.dispatch(`setReplayStats`, new ReplayStats(legendStats))
       const query = this.$store.getters.routeMap[this.$route.params.path]
       if (!query) {
         this.$router.replace({ path: `/` })
       }
-      this.$store.dispatch(`setQuery`, query || {})
+      const replays = data.replays
+      if (replays && replays.length > 0) {
+        this.$store.dispatch(`setReplays`, replays)
+        this.setReplayFeedTitle()
+      } else {
+        this.$store.dispatch(`setQuery`, query || {})
+      }
     },
 
     methods: {
@@ -71,7 +78,6 @@
         this.$store.dispatch(`setQuery`, query || {})
       },
       queryParams(newQueryParams, oldQueryParams) {
-        // fetch replays
         this.isLoading = true
         this.error = false
         fetchReplays(this.queryParams)

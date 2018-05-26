@@ -30,9 +30,13 @@ class ReplayOutcomeCache
     results
   end
 
+  def json_response_cached(query)
+    @cache.read json_response_cache_key(query)
+  end
+
   # the JSON response to a query
   def json_response(query)
-    results = @cache.read json_response_cache_key(query)
+    results = json_response_cached(query)
     return results unless results.nil?
     json_response!(query)
   end

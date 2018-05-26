@@ -18,7 +18,10 @@
 </div>
 
 <script id="legend-stats" type="text/javascript">
-  window.legendStats = <%= sanitize(@legend_stats.to_json).html_safe %>;
+  window.hsrpf = {
+    legendStats: <%= sanitize(@legend_stats.to_json).html_safe %>,
+    data: <%= @data.html_safe %>
+  };
 </script>
 
 <% if ENV["GA_ID"] %>

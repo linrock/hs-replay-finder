@@ -4,7 +4,6 @@ class ReplaysController < ActionController::API
     @query = {
       class: params[:class] || 'any',
       archetype: params[:archetype] || 'any',
-      # outcome: params[:outcome] || 'any',
     }
     # @replays = ReplayOutcomeQuery.new(@query).replay_outcomes_with_limit
     cache = ReplayOutcomeCache.new
