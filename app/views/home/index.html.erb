@@ -20,3 +20,14 @@
 <script id="legend-stats" type="text/javascript">
   window.legendStats = <%= sanitize(@legend_stats.to_json).html_safe %>;
 </script>
+
+<% if ENV["GA_ID"] %>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=<%= ENV["GA_ID"] %>"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', '<%= ENV["GA_ID"] %>');
+  </script>
+<% end %>
