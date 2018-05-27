@@ -7,65 +7,61 @@ class ReplayStats
     @replay_outcomes = replay_outcomes
   end
 
+  # arch_id -> { wins, losses }
   def archetype_wins_and_losses
-    archetype_stats = {}
-    Archetype.all.each do |arch|
-      archetype_stats[arch.data["id"]] = { wins: 0, losses: 0 }
-    end
+    stats = Hash[Archetype.all.map {|arch| [arch.data["id"], { wins: 0, losses: 0 }] }]
     @replay_outcomes.each do |outcome|
-      p1_arch = outcome.data["player1_archetype"].to_i
-      p2_arch = outcome.data["player2_archetype"].to_i
-      if archetype_stats[p1_arch].nil? || archetype_stats[p2_arch].nil?
-        logger.error "archetype_wins_and_losses - replay #{outcome.id} (#{p1_arch} vs #{p2_arch})"
+      p1_arch_id = outcome.data["player1_archetype"].to_i
+      p2_arch_id = outcome.data["player2_archetype"].to_i
+      if stats[p1_arch_id].nil? || stats[p2_arch_id].nil?
+        logger.error "wins_and_losses - replay #{outcome.id} (#{p1_arch_id} vs #{p2_arch_id})"
         next
       end
       if outcome.player1_won?
-        archetype_stats[p1_arch][:wins] += 1
-        archetype_stats[p2_arch][:losses] += 1
+        stats[p1_arch_id][:wins] += 1
+        stats[p2_arch_id][:losses] += 1
       else
-        archetype_stats[p1_arch][:losses] += 1
-        archetype_stats[p2_arch][:wins] += 1
+        stats[p1_arch_id][:losses] += 1
+        stats[p2_arch_id][:wins] += 1
       end
     end
-    archetype_stats.select do |_, counts|
+    stats.select do |_, counts|
       counts[:wins] + counts[:losses] > MIN_GAMES
     end
   end
 
-  # does not ignore mirror matchups
+  # path -> { wins, losses }
   def wins_and_losses
-    wins_and_losses = {}
-    archetype_wins_and_losses.map do |arch_id, counts|
-      archetype = Archetype.find_by_archetype_id(arch_id)
-      class_name = archetype.data["player_class_name"].capitalize
-      wins_and_losses[class_name] ||= { wins: 0, losses: 0, archetypes: {} }
-      wins_and_losses[class_name][:wins] += counts[:wins]
-      wins_and_losses[class_name][:losses] += counts[:losses]
-      wins_and_losses[class_name][:archetypes][archetype.data["name"]] = counts
+    class_stats = Hash[PlayerClass::NAMES.map {|name| [name.downcase, { wins: 0, losses: 0 }] }]
+    archetype_stats = {}
+    archetype_wins_and_losses.each do |arch_id, counts|
+      archetype = Archetype.find_by_archetype_id arch_id
+      class_stats[archetype.class_name.downcase][:wins] += counts[:wins]
+      class_stats[archetype.class_name.downcase][:losses] += counts[:losses]
+      archetype_stats[archetype.path] = counts
     end
-    wins_and_losses
+    class_stats.merge(archetype_stats)
   end
 
   def winrates
-    wins_and_losses.each do |class_name, stats|
+    winrate_stats = wins_and_losses
+    winrate_stats.each do |path, stats|
       winrate = 100.0 * stats[:wins] / (stats[:wins] + stats[:losses])
       stats[:winrate] = "%0.1f" % winrate
       stats.delete(:wins)
       stats.delete(:losses)
-      stats[:archetypes] = Hash[stats[:archetypes].map do |arch_name, arch_stats|
-        winrate = 100.0 * arch_stats[:wins] / (arch_stats[:wins] + arch_stats[:losses])
-        arch_stats.delete(:wins)
-        arch_stats.delete(:losses)
-        [
-          arch_name.gsub(/#{class_name}\z/, '').strip,
-          arch_stats[:winrate] = "%0.1f" % winrate
-        ]
-      end]
-      [
-        class_name,
-        stats
-      ]
+      winrate_stats[path] = stats
     end
+    winrate_stats
+  end
+
+  def to_path_map
+    path_map = ArchetypeCache.new.path_map
+    winrate_stats = winrates
+    winrate_stats.each do |path, stats|
+      winrate_stats[path].merge!(path_map[path])
+    end
+    winrate_stats
   end
 
   def replays_count

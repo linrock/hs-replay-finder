@@ -22,7 +22,6 @@
   import ReplayRow from './components/replay_row'
   import ReplayTimestamps from './components/replay_timestamps'
 
-  import ReplayStats from './models/replay_stats'
   import fetchReplays from './api'
   import { classPath } from './utils'
 
@@ -36,10 +35,15 @@
     },
 
     created() {
-      const { legendStats, data } = window.hsrpf
-      this.$store.dispatch(`setReplayStats`, new ReplayStats(legendStats))
-      const query = this.$store.getters.routeMap[this.$route.params.path]
-      if (!query) {
+      const { legendStatss, data } = window.hsrpf
+      const routeMap = legendStatss.route_map
+      const aboutWinrates = legendStatss.about_winrates
+      this.$store.dispatch(`setInitialData`, { routeMap, aboutWinrates })
+      const path = this.$route.params.path || `/`
+      const query = this.$store.getters.routeMap(path)
+      if (query) {
+        this.$store.dispatch(`setPath`, path)
+      } else {
         this.$router.replace({ path: `/` })
       }
       const replays = data.replays
@@ -47,43 +51,35 @@
         this.$store.dispatch(`setReplays`, replays)
         this.setReplayFeedTitle()
       } else {
-        this.$store.dispatch(`setQuery`, query || {})
+        this.fetchReplays()
+      }
+    },
+
+    computed: {
+      path() {
+        return this.$store.state.path
+      },
+      query() {
+        return this.$store.getters.routeMap(this.path)
       }
     },
 
     methods: {
       setReplayFeedTitle() {
-        const archetype = this.$store.state.query.archetype
-        const className = this.$store.state.query.class
-        if (archetype === `any`) {
-          this.replayFeedTitle = className === `any` ? `Recent replays` : className
+        const route = this.$store.getters.routeMap(this.path)
+        if (!route.archetype) {
+          this.replayFeedTitle = !route.class ? `Recent replays` : route.class
         } else {
-          this.replayFeedTitle = `${archetype} ${className}`
+          this.replayFeedTitle = `${route.archetype} ${route.class}`
         }
       },
-    },
-
-    computed: {
-      queryParams() {
-        return this.$store.getters.queryParams
-      },
-    },
-
-    watch: {
-      $route(to, from) {
-        const query = this.$store.getters.routeMap[to.params.path]
-        if (!query && to.path !== `/`) {
-          this.$router.replace({ path: `/` })
-        }
-        this.$store.dispatch(`setQuery`, query || {})
-      },
-      queryParams(newQueryParams, oldQueryParams) {
+      fetchReplays() {
         this.isLoading = true
         this.error = false
-        fetchReplays(this.queryParams)
+        fetchReplays(this.path)
           .then(data => {
-            if (this.queryParams.class === data.query.class &&
-                this.queryParams.archetype === data.query.archetype) {
+            const query = this.$store.getters.routeMap(this.path)
+            if (this.path === data.path) {
               this.$store.dispatch(`setReplays`, data.replays)
               this.isLoading = false
               this.setReplayFeedTitle()
@@ -91,9 +87,23 @@
             }
           })
           .catch(error => {
+            console.error(error)
             this.isLoading = false
             this.error = true
           })
+      },
+    },
+
+    watch: {
+      $route(to, from) {
+        let path = to.params.path || `/`
+        const query = this.$store.getters.routeMap(path)
+        if (!query && path !== `/`) {
+          path = `/`
+          this.$router.replace({ path })
+        }
+        this.$store.dispatch(`setPath`, path)
+        this.fetchReplays(path)
       },
     },
 

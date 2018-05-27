@@ -32,12 +32,8 @@ class ArchetypeCache
 
   def path_map!
     results = Hash[archetypes_map.values.map {|arch| [arch.path, arch.to_query] }]
-    Archetype.class_names.each do |class_name|
-      class_name.downcase!
-      results[class_name] = {
-        class: class_name,
-        archetype: 'any'
-      }
+    PlayerClass::NAMES.each do |class_name|
+      results[class_name.downcase] = { class: class_name }
     end
     @cache.write path_map_cache_key, results
     results

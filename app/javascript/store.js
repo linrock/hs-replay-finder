@@ -1,30 +1,32 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+import RouteMap from './models/route_map'
+import AboutWinrates from './models/about_winrates'
+
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
-    query: {
-      class: `any`,
-      archetype: `any`,
-    },
-    hover: {
-      class: null,
-    },
-    replayStats: {},
+    path: "/",
+    hoverClassName: null,
+    aboutWinrates: {},
+    routeMap: {},
     replays: [],
   },
 
   mutations: {
-    hoverOverClass(state, className) {
-      state.hover.class = className
+    hoverOverClassName(state, className) {
+      state.hoverClassName = className
     },
-    setReplayStats(state, replayStats) {
-      state.replayStats = replayStats
+    setAboutWinrates(state, aboutWinrates) {
+      state.aboutWinrates = aboutWinrates
     },
-    setQuery(state, query) {
-      state.query = query
+    setRouteMap(state, routeMap) {
+      state.routeMap = routeMap
+    },
+    setPath(state, path) {
+      state.path = path
     },
     setReplays(state, replays) {
       state.replays = replays
@@ -32,23 +34,15 @@ const store = new Vuex.Store({
   },
 
   actions: {
-    hoverOverClass({ commit, state }, className) {
-      if ([`any`, className].includes(state.query.class)) {
-        commit('hoverOverClass', className)
-      }
+    hoverOverClassName({ commit }, className) {
+      commit('hoverOverClassName', className)
     },
-    setReplayStats({ commit }, replayStats) {
-      commit('setReplayStats', replayStats)
+    setInitialData({ commit }, initialData) {
+      commit('setRouteMap', new RouteMap(initialData.routeMap))
+      commit('setAboutWinrates', new AboutWinrates(initialData.aboutWinrates))
     },
-    setQuery({ commit }, query) {
-      if (!query.class) {
-        commit('setQuery', { class: `any`, archetype: `any` })
-      } else {
-        commit('setQuery', query)
-        if (query.class !== `any`) {
-          commit('hoverOverClass', query.class)
-        }
-      }
+    setPath({ commit }, path) {
+      commit('setPath', path || "/")
     },
     setReplays({ commit }, replays) {
       commit('setReplays', replays)
@@ -56,15 +50,12 @@ const store = new Vuex.Store({
   },
 
   getters: {
-    aboutWinrates: state => state.replayStats.meta,
-    classNames: state => state.replayStats.classNames,
-    classStats: state => state.replayStats.classStats,
-    classArchetypes: state => state.replayStats.classArchetypes,
-    routeMap: state => state.replayStats.routeMap,
-    queryParams: state => ({
-      class: state.query.class.toLowerCase(),
-      archetype: state.query.archetype.toLowerCase(),
-    })
+    numReplays: state => state.aboutWinrates.numReplays,
+    sinceDays: state => state.aboutWinrates.sinceDays,
+    classArray: state => state.routeMap.classArray,
+    classArchetypeRows: state => className => state.routeMap.classArchetypeRows(className),
+    currentRoute: (state, getters) => getters.routeMap(state.path),
+    routeMap: state => path => state.routeMap.getRoute(path),
   }
 })
 

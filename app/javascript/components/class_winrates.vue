@@ -1,22 +1,22 @@
 <template lang="pug">
-  .class-winrates(v-if="classWinrate")
+  .class-winrates(v-if="currentClassName")
     .label-row
       .class-label class
       .winrate-label winrate
     .stats-row(
-      :class="[{ active: className !== `any` && $store.state.query.archetype === `any` }]"
+      :class="[{ active: currentRoute.class && !currentRoute.archetype }]"
       @click="visitClass()"
     )
-      .name {{ $store.state.hover.class }}
+      .name {{ currentClassName }}
       .winrate {{ classWinrate }}%
     .archetype-selector
       .stats-row(
-        v-for="archetype in $store.getters.classArchetypes(className)"
-        :class="[{ active: $store.state.query.archetype === archetype.name }]"
-        @click="visitArchetype(archetype.name)"
+        v-for="([path, route]) in classArchetypeRows"
+        :class="[{ active: currentRoute.archetype === route.archetype }]"
+        @click="visitArchetype(path)"
       )
-        .name {{ archetype.name }}
-        .winrate {{ archetype.winrate }}%
+        .name {{ route.archetype }}
+        .winrate {{ route.winrate }}%
 
 </template>
 
@@ -25,27 +25,34 @@
 
   export default {
     computed: {
-      className() {
-        return this.$store.state.query.class
+      currentClassName() {
+        if (this.currentRoute && this.currentRoute.class) {
+          return this.currentRoute.class
+        } else {
+          return this.hoverClassName
+        }
       },
-      classStats() {
-        return this.$store.getters.classStats
+      hoverClassName() {
+        return this.$store.state.hoverClassName
+      },
+      currentRoute() {
+        return this.$store.getters.currentRoute
       },
       classWinrate() {
-        if (this.className !== `any`) {
-          return this.classStats[this.className].winrate
-        } else if (this.$store.state.hover.class) {
-          return this.classStats[this.$store.state.hover.class].winrate
+        return this.$store.getters.routeMap(this.currentClassName.toLowerCase()).winrate
+      },
+      classArchetypeRows() {
+        if (this.currentRoute.class) {
+          return this.$store.getters.classArchetypeRows(this.currentRoute.class)
         }
       },
     },
 
     methods: {
       visitClass() {
-        this.$router.push({ path: classPath(this.$store.state.query.class) })
+        this.$router.push({ path: this.currentRoute.class.toLowerCase() })
       },
-      visitArchetype(archetypeName) {
-        const path = classPath(this.$store.state.query.class, archetypeName)
+      visitArchetype(path) {
         this.$router.push({ path })
       }
     }

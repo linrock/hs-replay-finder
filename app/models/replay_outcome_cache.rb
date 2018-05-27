@@ -30,21 +30,22 @@ class ReplayOutcomeCache
     results
   end
 
-  def json_response_cached(query)
-    @cache.read json_response_cache_key(query)
+  def json_response_cached(path)
+    @cache.read json_response_cache_key(path)
   end
 
-  # the JSON response to a query
-  def json_response(query)
-    results = json_response_cached(query)
+  def json_response(path)
+    results = json_response_cached(path)
     return results unless results.nil?
-    json_response!(query)
+    json_response!(path)
   end
 
-  def json_response!(query, expires_in = 2.minutes)
+  def json_response!(path, expires_in = 2.minutes)
+    legend_stats = ReplayStatsCache.new.legend_stats
+    query = legend_stats[:route_map][path] || { class: 'any', archetype: 'any' }
     ids = replay_outcome_ids(query)
     response_json = {
-      query: query,
+      path: path,
       replays: ids.map do |id|
         begin
           replay_hash(id)
@@ -54,7 +55,7 @@ class ReplayOutcomeCache
         end
       end.compact
     }.to_json
-    @cache.write json_response_cache_key(query), response_json, expires_in: expires_in
+    @cache.write json_response_cache_key(path), response_json, expires_in: expires_in
     response_json
   end
 
@@ -68,8 +69,8 @@ class ReplayOutcomeCache
     "replay_outcomes:ids:#{query_key(query)}"
   end
 
-  def json_response_cache_key(query)
-    "replay_outcomes:json_response:#{query_key(query)}"
+  def json_response_cache_key(path)
+    "replay_outcomes:json_response:#{path}:v1"
   end
 
   def query_key(query)

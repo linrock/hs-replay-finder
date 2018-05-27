@@ -13,8 +13,8 @@ class ReplayStatsCache
   def legend_stats!
     replay_stats = ReplayStats.new(ReplayOutcome.legend_players)
     results = {
-      classes: replay_stats.winrates,
-      meta: {
+      route_map: replay_stats.to_path_map,
+      about_winrates: {
         count: replay_stats.replays_count,
         since: replay_stats.oldest_replay_timestamp,
       }
@@ -24,6 +24,6 @@ class ReplayStatsCache
   end
 
   def cache_key
-    "replay_stats:legend"
+    "replay_stats:legend:v1"
   end
 end

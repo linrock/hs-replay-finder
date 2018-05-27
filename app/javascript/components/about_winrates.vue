@@ -6,8 +6,8 @@
       @click="aboutActive = !aboutActive"
     ) About winrates
     .explanation(v-if="aboutActive && notViewingStats")
-      | Winrates calculated from {{ $store.getters.aboutWinrates.count }}
-      | replays over the past {{ sinceDays }} days.
+      | Winrates calculated from {{ $store.getters.numReplays }}
+      | replays over the past {{ $store.getters.sinceDays }} days.
       | Archetypes with less than 50 games not shown.
 
 </template>
@@ -21,13 +21,8 @@
     },
 
     computed: {
-      sinceDays() {
-        const since = new Date(this.$store.getters.aboutWinrates.since)
-        const secondsSince = (new Date() - since) / 1000
-        return parseInt(secondsSince / 86400, 10)
-      },
       notViewingStats() {
-        return this.$store.state.query.class === `any` && !this.$store.state.hover.class
+        return !this.$store.getters.currentRoute.class && !this.$store.state.hoverClassName
       },
     }
   }
