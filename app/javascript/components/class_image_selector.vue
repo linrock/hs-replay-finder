@@ -1,11 +1,12 @@
 <template lang="pug">
-  .class-image-selector(@mouseleave="hoverOverClass(null)")
-    img(
+  .class-image-selector(@mouseleave="hoverOverClassImage(null)")
+    router-link(
+      tag="img"
       v-for="([path, route]) in $store.getters.classArray"
       :src="imgSrc(path)"
-      :class="[{ active: classIsActive(route.class) }]"
-      @mouseenter="hoverOverClass(path)"
-      @click="selectClass(path)"
+      :class="[{ active: !currentRoute.class || currentRoute.class === route.class }]"
+      :to="$store.state.path === path ? `/` : path"
+      @mouseenter.native="hoverOverClassImage(path)"
     )
 </template>
 
@@ -23,21 +24,8 @@
       imgSrc(path) {
         return `assets/classes/${path}.png`
       },
-      classIsActive(className) {
-        return !this.currentRoute.class || this.currentRoute.class === className
-      },
-      selectClass(path) {
-        if (this.$store.state.path === path) {
-          this.$router.push({ path: `/` })
-          this.hoverOverClass(path)
-        } else {
-          this.$router.push({ path })
-          this.hoverOverClass(null)
-        }
-      },
-      hoverOverClass(path) {
-        const hoverOverClassName = path ? this.$store.getters.routeMap(path).class : null
-        this.$store.dispatch(`hoverOverClassName`, hoverOverClassName)
+      hoverOverClassImage(path) {
+        this.$store.dispatch(`hoverOverClassImage`, path)
       },
     },
   }

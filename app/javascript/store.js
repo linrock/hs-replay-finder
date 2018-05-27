@@ -34,7 +34,8 @@ const store = new Vuex.Store({
   },
 
   actions: {
-    hoverOverClassName({ commit }, className) {
+    hoverOverClassImage({ commit, getters }, path) {
+      const className = path ? getters.routeMap(path).class : null
       commit('hoverOverClassName', className)
     },
     setInitialData({ commit }, initialData) {

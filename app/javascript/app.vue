@@ -35,9 +35,9 @@
     },
 
     created() {
-      const { legendStatss, data } = window.hsrpf
-      const routeMap = legendStatss.route_map
-      const aboutWinrates = legendStatss.about_winrates
+      const { legendStats, data } = window.hsrpf
+      const routeMap = legendStats.route_map
+      const aboutWinrates = legendStats.about_winrates
       this.$store.dispatch(`setInitialData`, { routeMap, aboutWinrates })
       const path = this.$route.params.path || `/`
       const query = this.$store.getters.routeMap(path)
@@ -101,6 +101,9 @@
         if (!query && path !== `/`) {
           path = `/`
           this.$router.replace({ path })
+        }
+        if (query.class && !query.archetype) {
+          this.$store.dispatch(`hoverOverClassImage`, path)
         }
         this.$store.dispatch(`setPath`, path)
         this.fetchReplays(path)
