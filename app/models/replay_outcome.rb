@@ -12,6 +12,10 @@ class ReplayOutcome < ApplicationRecord
     ")
   end
 
+  def self.since(time_ago)
+    where("created_at > ?", time_ago)
+  end
+
   def self.with_archetype_ids(archetype_ids)
     where("data ->> 'player1_archetype' IN (?) OR data ->> 'player2_archetype' IN (?)", *archetype_ids*2)
   end

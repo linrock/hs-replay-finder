@@ -11,7 +11,7 @@ class ReplayStatsCache
   end
 
   def legend_stats!
-    replay_stats = ReplayStats.new(ReplayOutcome.legend_players)
+    replay_stats = ReplayStats.new(ReplayOutcome.legend_players.since(3.days.ago))
     results = {
       route_map: replay_stats.to_path_map,
       about_winrates: {

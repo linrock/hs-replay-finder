@@ -4,7 +4,7 @@ export default class AboutWinrates {
     this.about = about
   }
 
-  get daysSince() {
+  get sinceDays() {
     const since = new Date(this.about.since)
     const secondsSince = (new Date() - since) / 1000
     return parseInt(secondsSince / 86400, 10)
