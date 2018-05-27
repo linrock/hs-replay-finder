@@ -11,8 +11,6 @@
 </template>
 
 <script>
-  import { classPath } from '../utils'
-
   export default {
     computed: {
       currentRoute() {

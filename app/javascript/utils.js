@@ -1,18 +1,9 @@
 const now = new Date()
 
-export function classPath(className, archetypeName) {
-  const classNameLower = className.toLowerCase()
-  if (!archetypeName) {
-    return classNameLower
-  }
-  const archetypeNameLower = archetypeName.toLowerCase().replace(/\s+/, '-')
-  return `${archetypeNameLower}-${classNameLower}`
-}
-
 export function timeAgo(timestamp) {
   let timeAgo = ``
   const date = new Date(timestamp)
-  const secondsSinceFound = (now - date)/1000
+  const secondsSinceFound = (now - date) / 1000
   const minutesSinceFound = secondsSinceFound / 60
   if (minutesSinceFound < 60) {
     const minutes = parseInt(minutesSinceFound, 10)

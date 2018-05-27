@@ -3,17 +3,17 @@
     .label-row
       .class-label class
       .winrate-label winrate
-    .stats-row(
+    router-link.stats-row(
       :class="[{ active: currentRoute.class && !currentRoute.archetype }]"
-      @click="visitClass()"
+      :to="currentClassName.toLowerCase()"
     )
       .name {{ currentClassName }}
-      .winrate {{ classWinrate }}%
+      .winrate {{ currentClassWinrate }}%
     .archetype-selector
-      .stats-row(
+      router-link.stats-row(
         v-for="([path, route]) in classArchetypeRows"
         :class="[{ active: currentRoute.archetype === route.archetype }]"
-        @click="visitArchetype(path)"
+        :to="path"
       )
         .name {{ route.archetype }}
         .winrate {{ route.winrate }}%
@@ -21,24 +21,19 @@
 </template>
 
 <script>
-  import { classPath } from '../utils'
-
   export default {
     computed: {
+      currentRoute() {
+        return this.$store.getters.currentRoute
+      },
       currentClassName() {
         if (this.currentRoute && this.currentRoute.class) {
           return this.currentRoute.class
         } else {
-          return this.hoverClassName
+          return this.$store.state.hoverClassName
         }
       },
-      hoverClassName() {
-        return this.$store.state.hoverClassName
-      },
-      currentRoute() {
-        return this.$store.getters.currentRoute
-      },
-      classWinrate() {
+      currentClassWinrate() {
         return this.$store.getters.routeMap(this.currentClassName.toLowerCase()).winrate
       },
       classArchetypeRows() {
@@ -46,15 +41,6 @@
           return this.$store.getters.classArchetypeRows(this.currentRoute.class)
         }
       },
-    },
-
-    methods: {
-      visitClass() {
-        this.$router.push({ path: this.currentRoute.class.toLowerCase() })
-      },
-      visitArchetype(path) {
-        this.$router.push({ path })
-      }
     }
   }
 </script>
@@ -84,6 +70,8 @@
       width 240px
       padding 2px 8px
       border-radius 2px
+      text-decoration none
+      color inherit
 
       &:hover, &.active
         color #45ABFE

@@ -23,7 +23,6 @@
   import ReplayTimestamps from './components/replay_timestamps'
 
   import fetchReplays from './api'
-  import { classPath } from './utils'
 
   export default {
     data() {
