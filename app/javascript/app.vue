@@ -39,11 +39,11 @@
       const aboutWinrates = legendStats.about_winrates
       this.$store.dispatch(`setInitialData`, { routeMap, aboutWinrates })
       const path = this.$route.params.path || `/`
-      const query = this.$store.getters.routeMap(path)
-      if (query) {
-        this.$store.dispatch(`setPath`, path)
-      } else {
+      const route = this.$store.getters.routeMap(path)
+      if (Object.keys(route).length === 0) {
         this.$router.replace({ path: `/` })
+      } else {
+        this.$store.dispatch(`setPath`, path)
       }
       const replays = data.replays
       if (replays && replays.length > 0) {
@@ -58,14 +58,17 @@
       path() {
         return this.$store.state.path
       },
-      query() {
-        return this.$store.getters.routeMap(this.path)
+      currentRoute() {
+        return this.getRoute(this.path)
       }
     },
 
     methods: {
+      getRoute(path) {
+        return this.$store.getters.routeMap(path)
+      },
       setReplayFeedTitle() {
-        const route = this.$store.getters.routeMap(this.path)
+        const route = this.getRoute(this.path)
         if (!route.archetype) {
           this.replayFeedTitle = !route.class ? `Recent replays` : route.class
         } else {
@@ -77,7 +80,6 @@
         this.error = false
         fetchReplays(this.path)
           .then(data => {
-            const query = this.$store.getters.routeMap(this.path)
             if (this.path === data.path) {
               this.$store.dispatch(`setReplays`, data.replays)
               this.isLoading = false
@@ -96,16 +98,13 @@
     watch: {
       $route(to, from) {
         let path = to.params.path || `/`
-        const query = this.$store.getters.routeMap(path)
-        if (!query && path !== `/`) {
+        const route = this.getRoute(path)
+        if (!route && path !== `/`) {
           path = `/`
           this.$router.replace({ path })
         }
-        if (query.class && !query.archetype) {
-          this.$store.dispatch(`hoverOverClassImage`, path)
-        }
         this.$store.dispatch(`setPath`, path)
-        this.fetchReplays(path)
+        this.fetchReplays()
       },
     },
 

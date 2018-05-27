@@ -8,7 +8,7 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
-    path: "/",
+    path: `/`,
     hoverClassName: null,
     aboutWinrates: {},
     routeMap: {},
@@ -42,8 +42,12 @@ const store = new Vuex.Store({
       commit('setRouteMap', new RouteMap(initialData.routeMap))
       commit('setAboutWinrates', new AboutWinrates(initialData.aboutWinrates))
     },
-    setPath({ commit }, path) {
-      commit('setPath', path || "/")
+    setPath({ commit, dispatch, getters }, path) {
+      const route = getters.routeMap(path)
+      if (route.class && !route.archetype) {
+        dispatch(`hoverOverClassImage`, path)
+      }
+      commit('setPath', path || `/`)
     },
     setReplays({ commit }, replays) {
       commit('setReplays', replays)
