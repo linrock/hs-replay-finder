@@ -1,5 +1,7 @@
 class ReplayOutcomeCache
 
+  EXPIRES_IN = 3.minutes
+
   def initialize
     @cache = Rails.cache
   end
@@ -24,9 +26,9 @@ class ReplayOutcomeCache
     replay_outcome_ids!(query)
   end
 
-  def replay_outcome_ids!(query, expires_in = 2.minutes)
+  def replay_outcome_ids!(query)
     results = ReplayOutcomeQuery.new(query).replay_outcomes_with_limit.pluck(:id)
-    @cache.write replay_outcome_ids_cache_key(query), results, expires_in: expires_in
+    @cache.write replay_outcome_ids_cache_key(query), results, expires_in: EXPIRES_IN
     results
   end
 
@@ -38,10 +40,6 @@ class ReplayOutcomeCache
 
   def replay_outcome_ids_cache_key(query)
     "replay_outcomes:ids:#{query_key(query)}"
-  end
-
-  def json_response_cache_key(path)
-    "replay_outcomes:json_response:#{path}:v1"
   end
 
   def query_key(query)

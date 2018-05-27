@@ -1,7 +1,9 @@
 class JsonResponseCache
 
-  def initialize(path)
-    @path = path || "/"
+  EXPIRES_IN = 3.minutes
+
+  def initialize(path = "/")
+    @path = path
     @cache = Rails.cache
     @replay_outcome_cache = ReplayOutcomeCache.new
   end
@@ -16,7 +18,7 @@ class JsonResponseCache
     json_response!
   end
 
-  def json_response!(expires_in = 2.minutes)
+  def json_response!
     response_json = {
       path: @path,
       replays: replay_outcome_ids.map do |id|
@@ -28,15 +30,14 @@ class JsonResponseCache
         end
       end.compact
     }.to_json
-    puts json_response_cache_key
-    @cache.write json_response_cache_key, response_json, expires_in: expires_in
+    @cache.write json_response_cache_key, response_json, expires_in: EXPIRES_IN
     response_json
   end
 
   private
 
   def json_response_cache_key
-    "replay_outcomes:json_response:#{@path}:v1"
+    "replay_outcomes:json_responses:#{@path}:v1"
   end
 
   def replay_outcome_ids
