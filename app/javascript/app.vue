@@ -33,7 +33,7 @@
     },
 
     created() {
-      const { legendStats, data } = window.hsrpf
+      const { legendStats, replayData } = window.hsrpf
       const routeMap = legendStats.route_map
       const aboutWinrates = legendStats.about_winrates
       this.$store.dispatch(`setInitialData`, { routeMap, aboutWinrates })
@@ -44,8 +44,8 @@
       } else {
         this.$store.dispatch(`setPath`, path)
       }
-      const replays = data.replays
-      if (replays && replays.length > 0) {
+      const replays = replayData.replays
+      if (replays && replays.length > 0 && replayData.path == path) {
         this.setReplays(replays)
       } else {
         this.fetchReplays()

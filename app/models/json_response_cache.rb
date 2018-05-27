@@ -1,17 +1,17 @@
 class JsonResponseCache
 
   def initialize(path)
-    @path = path
+    @path = path || "/"
     @cache = Rails.cache
     @replay_outcome_cache = ReplayOutcomeCache.new
   end
 
-  def json_response_cached
+  def cached_json_response
     @cache.read json_response_cache_key
   end
 
   def json_response
-    results = json_response_cached
+    results = cached_json_response
     return results unless results.nil?
     json_response!
   end
@@ -28,6 +28,7 @@ class JsonResponseCache
         end
       end.compact
     }.to_json
+    puts json_response_cache_key
     @cache.write json_response_cache_key, response_json, expires_in: expires_in
     response_json
   end

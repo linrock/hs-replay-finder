@@ -20,7 +20,7 @@
 <script id="legend-stats" type="text/javascript">
   window.hsrpf = {
     legendStats: <%= sanitize(@legend_stats.to_json).html_safe %>,
-    data: <%= @data.html_safe %>
+    replayData: <%= @replay_data.html_safe %>
   };
 </script>
 
