@@ -2,8 +2,8 @@ class JsonResponseCache
 
   EXPIRES_IN = 3.minutes
 
-  def initialize(path = "/")
-    @path = path
+  def initialize(path)
+    @path = path || "/"
     @cache = Rails.cache
     @replay_outcome_cache = ReplayOutcomeCache.new
   end

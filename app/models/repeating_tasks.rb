@@ -14,7 +14,7 @@ class RepeatingTasks
   def warm_json_response_caches
     loop do
       t0 = Time.now
-      JsonResponseCache.new.json_response!
+      JsonResponseCache.new("/").json_response!
       ReplayStatsCache.new.legend_stats[:route_map].keys.each do |path|
         JsonResponseCache.new(path).json_response!
       end
