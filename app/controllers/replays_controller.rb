@@ -1,7 +1,6 @@
 class ReplaysController < ActionController::API
 
   def index
-    cache = ReplayOutcomeCache.new
-    render json: cache.json_response(params[:path])
+    render json: JsonResponseCache.new(params[:path]).json_response
   end
 end

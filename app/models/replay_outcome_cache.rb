@@ -30,35 +30,6 @@ class ReplayOutcomeCache
     results
   end
 
-  def json_response_cached(path)
-    @cache.read json_response_cache_key(path)
-  end
-
-  def json_response(path)
-    results = json_response_cached(path)
-    return results unless results.nil?
-    json_response!(path)
-  end
-
-  def json_response!(path, expires_in = 2.minutes)
-    legend_stats = ReplayStatsCache.new.legend_stats
-    query = legend_stats[:route_map][path] || { class: 'any', archetype: 'any' }
-    ids = replay_outcome_ids(query)
-    response_json = {
-      path: path,
-      replays: ids.map do |id|
-        begin
-          replay_hash(id)
-        rescue
-          logger.error "json_response! - replay #{id}"
-          nil
-        end
-      end.compact
-    }.to_json
-    @cache.write json_response_cache_key(path), response_json, expires_in: expires_in
-    response_json
-  end
-
   private
 
   def replay_hash_cache_key(replay_id)
@@ -75,9 +46,5 @@ class ReplayOutcomeCache
 
   def query_key(query)
     query.sort_by {|k, _| k }.map {|k, v| "#{k}=#{v}" }.join("&")
-  end
-
-  def logger
-    @logger ||= Logger.new("#{Rails.root}/log/error.log")
   end
 end
