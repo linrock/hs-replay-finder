@@ -5,7 +5,7 @@
       about-winrates
       class-winrates
     section#replays(:class="[{ loading: isLoading }]")
-      h3.replay-feed-title {{ replayFeedTitle }}
+      h3.replay-feed-title {{ $store.state.replayFeedTitle }}
       .loading-text(v-if="isLoading && $store.state.replays.length === 0") Loading...
       .error-text(v-if="error") Failed to fetch replays :(
       .replay-feed
@@ -29,7 +29,6 @@
       return {
         error: false,
         isLoading: false,
-        replayFeedTitle: ``,
       }
     },
 
@@ -39,7 +38,7 @@
       const aboutWinrates = legendStats.about_winrates
       this.$store.dispatch(`setInitialData`, { routeMap, aboutWinrates })
       const path = this.$route.params.path || `/`
-      const route = this.$store.getters.routeMap(path)
+      const route = this.getRoute(path)
       if (Object.keys(route).length === 0) {
         this.$router.replace({ path: `/` })
       } else {
@@ -47,8 +46,7 @@
       }
       const replays = data.replays
       if (replays && replays.length > 0) {
-        this.$store.dispatch(`setReplays`, replays)
-        this.setReplayFeedTitle()
+        this.setReplays(replays)
       } else {
         this.fetchReplays()
       }
@@ -67,13 +65,8 @@
       getRoute(path) {
         return this.$store.getters.routeMap(path)
       },
-      setReplayFeedTitle() {
-        const route = this.getRoute(this.path)
-        if (!route.archetype) {
-          this.replayFeedTitle = !route.class ? `Recent replays` : route.class
-        } else {
-          this.replayFeedTitle = `${route.archetype} ${route.class}`
-        }
+      setReplays(replays) {
+        this.$store.dispatch(`setReplays`, replays)
       },
       fetchReplays() {
         this.isLoading = true
@@ -81,9 +74,8 @@
         fetchReplays(this.path)
           .then(data => {
             if (this.path === data.path) {
-              this.$store.dispatch(`setReplays`, data.replays)
               this.isLoading = false
-              this.setReplayFeedTitle()
+              this.setReplays(data.replays)
               window.scrollTo(0, 0)
             }
           })

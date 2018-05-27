@@ -13,6 +13,7 @@ const store = new Vuex.Store({
     aboutWinrates: {},
     routeMap: {},
     replays: [],
+    replayFeedTitle: ``,
   },
 
   mutations: {
@@ -30,6 +31,9 @@ const store = new Vuex.Store({
     },
     setReplays(state, replays) {
       state.replays = replays
+    },
+    setReplayFeedTitle(state, replayFeedTitle) {
+      state.replayFeedTitle = replayFeedTitle
     }
   },
 
@@ -49,8 +53,14 @@ const store = new Vuex.Store({
       }
       commit('setPath', path || `/`)
     },
-    setReplays({ commit }, replays) {
+    setReplays({ commit, getters }, replays) {
+      const route = getters.currentRoute
       commit('setReplays', replays)
+      if (!route.archetype) {
+        commit('setReplayFeedTitle', !route.class ? `Recent replays` : route.class)
+      } else {
+        commit('setReplayFeedTitle', `${route.archetype} ${route.class}`)
+      }
     },
   },
 
