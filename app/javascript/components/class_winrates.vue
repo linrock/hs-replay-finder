@@ -9,14 +9,15 @@
     )
       .name {{ currentClassName }}
       .winrate {{ currentClassWinrate }}%
-    .archetype-selector
-      router-link.stats-row(
-        v-for="([path, route]) in classArchetypeRows"
-        :class="[{ active: currentRoute.archetype === route.archetype }]"
-        :to="path"
-      )
-        .name {{ route.archetype }}
-        .winrate {{ route.winrate }}%
+    transition(name="fade")
+      .archetype-selector(v-if="classArchetypeRows.length > 0")
+        router-link.stats-row(
+          v-for="([path, route]) in classArchetypeRows"
+          :class="[{ active: currentRoute.archetype === route.archetype }]"
+          :to="path"
+        )
+          .name {{ route.archetype }}
+          .winrate {{ route.winrate }}%
 
 </template>
 
@@ -39,6 +40,8 @@
       classArchetypeRows() {
         if (this.currentRoute.class) {
           return this.$store.getters.classArchetypeRows(this.currentRoute.class)
+        } else {
+          return []
         }
       },
     }
@@ -71,7 +74,7 @@
       padding 2px 8px
       border-radius 2px
       text-decoration none
-      color inherit
+      color #333
 
       &:hover, &.active
         color #45ABFE
@@ -84,5 +87,14 @@
       .winrate
         width 60px
         text-align right
+
+    .fade-enter-active, .fade-leave-active
+      transition all 0.2s ease
+      transform translate3d(0, 0, 0)
+      opacity 1
+
+    .fade-enter, .fade-leave-to
+      transform translate3d(0, -4px, 0)
+      opacity 0
 
 </style>
