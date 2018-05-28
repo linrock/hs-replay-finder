@@ -29,6 +29,7 @@
       return {
         error: false,
         isLoading: false,
+        pageTitlePrefix: document.getElementsByTagName(`title`)[0].text,
       }
     },
 
@@ -46,7 +47,7 @@
       }
       const replays = replayData.replays
       if (replays && replays.length > 0 && replayData.path == path) {
-        this.setReplays(replays)
+        this.setReplaysAndPageTitle(replays)
       } else {
         this.fetchReplays()
       }
@@ -65,8 +66,16 @@
       getRoute(path) {
         return this.$store.getters.routeMap(path)
       },
-      setReplays(replays) {
+      setReplaysAndPageTitle(replays) {
         this.$store.dispatch(`setReplays`, replays)
+        let newPageTitle = this.pageTitlePrefix
+        const route = this.getRoute(this.path)
+        if (route.class && route.archetype) {
+          newPageTitle = `${this.pageTitlePrefix} | ${route.archetype} ${route.class}`
+        } else if (route.class) {
+          newPageTitle = `${this.pageTitlePrefix} | ${route.class}`
+        }
+        document.title = newPageTitle
       },
       fetchReplays() {
         this.isLoading = true
@@ -75,7 +84,7 @@
           .then(data => {
             if (this.path === data.path) {
               this.isLoading = false
-              this.setReplays(data.replays)
+              this.setReplaysAndPageTitle(data.replays)
               window.scrollTo(0, 0)
             }
           })
@@ -90,8 +99,9 @@
     watch: {
       $route(to, from) {
         let path = to.params.path || `/`
+        let newPageTitle = this.pageTitlePrefix
         const route = this.getRoute(path)
-        if (!route && path !== `/`) {
+        if (Object.keys(route).length === 0 && path !== `/`) {
           path = `/`
           this.$router.replace({ path })
         }
