@@ -6,6 +6,9 @@ class RepeatingTasks
 
   def calculate_legend_stats
     loop do
+      cache = ArchetypeCache.new
+      cache.archetypes_map!
+      cache.path_map!
       ReplayStatsCache.new.legend_stats!
       sleep 3600
     end
