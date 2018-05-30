@@ -9,7 +9,7 @@
       | Winrates calculated from {{ $store.getters.numReplays }}
       | replays over the past {{ $store.getters.sinceDays }} days.
       | Archetypes with less than 50 games not shown.
-
+      a(href="https://github.com/linrock/hs-replay-finder" target="_blank").source Source code
 </template>
 
 <script>
@@ -37,10 +37,19 @@
     a
       color inherit
       text-decoration none
-      opacity 0.3
 
       &:hover
         text-decoration underline
+
+      &.title
+        opacity 0.35
+
+      &.source
+        display block
+        margin-top 10px
+
+        &:hover
+          color #45ABFE
 
   .explanation
     margin-top 10px
