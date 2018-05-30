@@ -4,7 +4,7 @@ class JsonResponseCache
 
   def initialize(options = {})
     @path = options[:path] || "/"
-    @filter = %w( top100 top1000 ).include?(options[:filter]) ? options[:filter] : ""
+    @filter = %w( top100 top1000 ).include?(options[:filter]) ? options[:filter] : "all"
     @cache = Rails.cache
     @replay_outcome_cache = ReplayOutcomeCache.new
   end
@@ -22,6 +22,7 @@ class JsonResponseCache
   def json_response!
     response_json = {
       path: @path,
+      filter: @filter,
       replays: replay_outcome_ids.map do |id|
         begin
           @replay_outcome_cache.replay_hash(id)

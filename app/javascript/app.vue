@@ -120,9 +120,9 @@
           this.$router.replace({ path })
         }
         this.$store.dispatch(`setPath`, path)
+        this.fetchReplays()
       },
-      apiQuery() {
-        console.log(`apiQueryChanged: ${JSON.stringify(this.apiQuery)}`)
+      filter() {
         this.fetchReplays()
       },
     },
