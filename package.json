@@ -6,6 +6,7 @@
     "axios": "^0.18.0",
     "caniuse-lite": "^1.0.30000844",
     "css-loader": "^0.28.11",
+    "fastclick": "^1.0.6",
     "pug": "^2.0.3",
     "pug-loader": "^2.4.0",
     "stylus": "^0.54.5",
