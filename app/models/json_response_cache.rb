@@ -2,8 +2,9 @@ class JsonResponseCache
 
   EXPIRES_IN = 3.minutes
 
-  def initialize(path)
-    @path = path || "/"
+  def initialize(options = {})
+    @path = options[:path] || "/"
+    @filter = %w( top100 top1000 ).include?(options[:filter]) ? options[:filter] : ""
     @cache = Rails.cache
     @replay_outcome_cache = ReplayOutcomeCache.new
   end
@@ -34,16 +35,16 @@ class JsonResponseCache
     response_json
   end
 
-  private
-
   def json_response_cache_key
-    "replay_outcomes:json_responses:#{@path}:v1"
+    "replay_outcomes:json_responses:#{@path}:#{@filter}:v1"
   end
+
+  private
 
   def replay_outcome_ids
     legend_stats = ReplayStatsCache.new.legend_stats
-    query = legend_stats[:route_map][@path] || { class: 'any', archetype: 'any' }
-    @replay_outcome_cache.replay_outcome_ids(query)
+    class_query = legend_stats[:route_map][@path] || { class: 'any', archetype: 'any' }
+    @replay_outcome_cache.replay_outcome_ids(class_query, { filter: @filter })
   end
 
   def logger

@@ -4,6 +4,7 @@ class ReplayOutcome < ApplicationRecord
   validate :check_hsreplay_id
   validate :check_data_format
 
+  # scopes
   def self.legend_players
     where("
       data ->> 'player1_legend_rank' != 'None'
@@ -12,12 +13,16 @@ class ReplayOutcome < ApplicationRecord
     ")
   end
 
-  def self.since(time_ago)
-    where("created_at > ?", time_ago)
+  def self.top_legend(n)
+    where("
+      (data ->> 'player1_legend_rank')::int <= ?
+      AND
+      (data ->> 'player2_legend_rank')::int <= ?
+    ", n, n)
   end
 
-  def self.with_archetype_ids(archetype_ids)
-    where("data ->> 'player1_archetype' IN (?) OR data ->> 'player2_archetype' IN (?)", *archetype_ids*2)
+  def self.since(time_ago)
+    where("created_at > ?", time_ago)
   end
 
   def player1_archetype
