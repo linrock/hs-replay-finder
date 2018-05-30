@@ -9,6 +9,7 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
   state: {
     path: `/`,
+    filter: `all`,
     hoverClassName: null,
     aboutWinrates: {},
     routeMap: {},
@@ -28,6 +29,9 @@ const store = new Vuex.Store({
     },
     setPath(state, path) {
       state.path = path
+    },
+    setFilterOption(state, filter) {
+      state.filter = filter
     },
     setReplays(state, replays) {
       state.replays = replays
@@ -53,14 +57,24 @@ const store = new Vuex.Store({
       }
       commit('setPath', path || `/`)
     },
-    setReplays({ commit, getters }, replays) {
+    setFilterOption({ commit }, filter) {
+      commit('setFilterOption', filter)
+    },
+    setReplays({ commit, getters, state }, replays) {
       const route = getters.currentRoute
       commit('setReplays', replays)
+      let replayFeedTitle
       if (!route.archetype) {
-        commit('setReplayFeedTitle', !route.class ? `Recent replays` : route.class)
+        replayFeedTitle = !route.class ? `Recent replays` : route.class
       } else {
-        commit('setReplayFeedTitle', `${route.archetype} ${route.class}`)
+        replayFeedTitle = `${route.archetype} ${route.class}`
       }
+      if (state.filter === `top100`) {
+        replayFeedTitle = `Top 100 - ${replayFeedTitle}`
+      } else if (state.filter === `top1000`) {
+        replayFeedTitle = `Top 1000 - ${replayFeedTitle}`
+      }
+      commit('setReplayFeedTitle', replayFeedTitle)
     },
   },
 

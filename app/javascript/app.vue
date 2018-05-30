@@ -1,12 +1,15 @@
 <template lang="pug">
   main
     section#sidebar
+      rank-filter
       class-image-selector
       about-winrates
       class-winrates
     section#replays(:class="[{ loading: isLoading }]")
       h3.replay-feed-title {{ $store.state.replayFeedTitle }}
-      .loading-text(v-if="isLoading && $store.state.replays.length === 0") Loading...
+      template(v-if="$store.state.replays.length === 0")
+        .loading-text(v-if="isLoading") Loading...
+        .loading-text(v-else) No replays found
       .error-text(v-if="error") Failed to fetch replays :(
       .replay-feed
         .replay-list
@@ -16,13 +19,14 @@
 </template>
 
 <script>
+  import axios from 'axios'
+
   import AboutWinrates from './components/about_winrates'
   import ClassImageSelector from './components/class_image_selector'
   import ClassWinrates from './components/class_winrates'
+  import RankFilter from './components/rank_filter'
   import ReplayRow from './components/replay_row'
   import ReplayTimestamps from './components/replay_timestamps'
-
-  import fetchReplays from './api'
 
   export default {
     data() {
@@ -57,9 +61,19 @@
       path() {
         return this.$store.state.path
       },
+      filter() {
+        return this.$store.state.filter
+      },
+      apiQuery() {
+        let query = `replays.json?path=${this.path || `/`}`
+        if (this.filter) {
+          query = `${query}&filter=${this.filter}`
+        }
+        return query
+      },
       currentRoute() {
         return this.getRoute(this.path)
-      }
+      },
     },
 
     methods: {
@@ -80,7 +94,7 @@
       fetchReplays() {
         this.isLoading = true
         this.error = false
-        fetchReplays(this.path)
+        axios.get(this.apiQuery).then(response => response.data)
           .then(data => {
             if (this.path === data.path) {
               this.isLoading = false
@@ -106,6 +120,9 @@
           this.$router.replace({ path })
         }
         this.$store.dispatch(`setPath`, path)
+      },
+      apiQuery() {
+        console.log(`apiQueryChanged: ${JSON.stringify(this.apiQuery)}`)
         this.fetchReplays()
       },
     },
@@ -114,6 +131,7 @@
       AboutWinrates,
       ClassImageSelector,
       ClassWinrates,
+      RankFilter,
       ReplayRow,
       ReplayTimestamps,
     },
@@ -126,7 +144,7 @@
   #sidebar
     position fixed
     left 30px
-    top 155px
+    top 145px
 
   #replays
     position relative
@@ -141,6 +159,7 @@
     top 240px
     text-align center
     font-size 30px
+    opacity 0.5
     width replay-feed-width
 
   .error-text
