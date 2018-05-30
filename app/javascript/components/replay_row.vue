@@ -55,8 +55,8 @@
       opacity 0.7
 
     > div
-      height 32px
-      line-height 32px
+      height 34px
+      line-height 34px
 
   .player
     display flex

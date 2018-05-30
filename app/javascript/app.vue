@@ -121,15 +121,16 @@
 </script>
 
 <style lang="stylus" scoped>
+  replay-feed-width = 510px
+
   #sidebar
     position fixed
-    left 50px
+    left 30px
     top 155px
 
   #replays
     position relative
-    margin-left 350px
-    width 510px + 100px
+    margin-left 280px
 
   section.loading
     opacity 0.45
@@ -140,17 +141,17 @@
     top 240px
     text-align center
     font-size 30px
-    width 510px
+    width replay-feed-width
 
   .error-text
     position absolute
     top 244px
     text-align center
     font-size 20px
-    width 510px
+    width replay-feed-width
 
   h3.replay-feed-title
-    width 510px
+    width replay-feed-width
     font-size 16px
     font-weight bold
     margin 20px 0

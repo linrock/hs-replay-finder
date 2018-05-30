@@ -37,8 +37,12 @@
       color #111
       font-size 12px
       opacity 0.4
-      height 32px
-      line-height 32px
+      height 34px
+      line-height 34px
       padding-left 10px
+
+  @media (max-width: 890px), (device-width: 375px)
+    .replay-timestamps
+      display none
 
 </style>
