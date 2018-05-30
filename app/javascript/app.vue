@@ -179,6 +179,7 @@
   .replay-feed
     display flex
     width 100%
+    min-height 1200px
 
     .replay-list
       margin-bottom 100px

@@ -1,7 +1,7 @@
 <template lang="pug">
   .rank-filter
     div Show me:
-    select(v-model="selected")
+    select(v-model="selected").needsclick
       option(disabled name="") games played by
       option(value="all") all legend players
       option(value="top1000") top 1000 players
