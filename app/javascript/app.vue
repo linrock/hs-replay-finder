@@ -7,7 +7,7 @@
       class-winrates
     section#replays(:class="[{ loading: isLoading }]")
       h3.replay-feed-title {{ $store.state.replayFeedTitle }}
-      template(v-if="$store.state.replays.length === 0")
+      template(v-if="$store.getters.replays.length === 0")
         .loading-text(v-if="isLoading") Loading...
         .loading-text(v-else) No replays found
       .error-text(v-if="error") Failed to fetch replays :(

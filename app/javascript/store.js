@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+import Replays from './models/replays'
 import RouteMap from './models/route_map'
 import AboutWinrates from './models/about_winrates'
 
@@ -10,10 +11,11 @@ const store = new Vuex.Store({
   state: {
     path: `/`,
     filter: `all`,
+    page: 1,
     hoverClassName: null,
     aboutWinrates: {},
     routeMap: {},
-    replays: [],
+    replays: new Replays(),
     replayFeedTitle: ``,
   },
 
@@ -34,7 +36,8 @@ const store = new Vuex.Store({
       state.filter = filter
     },
     setReplays(state, replays) {
-      state.replays = replays
+      state.replays = new Replays()
+      state.replays.addReplays(replays)
     },
     setReplayFeedTitle(state, replayFeedTitle) {
       state.replayFeedTitle = replayFeedTitle
@@ -85,6 +88,7 @@ const store = new Vuex.Store({
     classArchetypeRows: state => className => state.routeMap.classArchetypeRows(className),
     currentRoute: (state, getters) => getters.routeMap(state.path),
     routeMap: state => path => state.routeMap.getRoute(path),
+    replays: state => state.replays.replayList,
   }
 })
 

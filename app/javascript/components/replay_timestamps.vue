@@ -12,7 +12,7 @@
       timesAgo() {
         const timesAgo = []
         let lastDifferentTimeAgo = null
-        this.$store.state.replays.forEach(replay => {
+        this.$store.getters.replays.forEach(replay => {
           const lastTimeAgo = timeAgo(replay.found_at)
           if (lastDifferentTimeAgo !== lastTimeAgo) {
             lastDifferentTimeAgo = lastTimeAgo
