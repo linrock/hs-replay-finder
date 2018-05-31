@@ -1,13 +1,15 @@
 class ReplayOutcomeQuery
 
+  PAGE_SIZE = 100
+
   def initialize(query = {})
     @class = query[:class] || 'any'
     @archetype = query[:archetype] || 'any'
     @outcome = query[:outcome] || 'any'
   end
 
-  def replay_outcomes_with_limit
-    replay_outcomes.order('id DESC').limit(100)
+  def replay_outcomes_with_limit(page = 1)
+    replay_outcomes.order('id DESC').limit(PAGE_SIZE).offset((page - 1) * PAGE_SIZE)
   end
 
   def replay_outcomes

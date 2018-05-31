@@ -27,7 +27,7 @@ class ReplayOutcomeCache
   end
 
   def replay_outcome_ids!(query, options = {})
-    replay_query = ReplayOutcomeQuery.new(query).replay_outcomes_with_limit
+    replay_query = ReplayOutcomeQuery.new(query).replay_outcomes_with_limit(page = options[:page])
     case options[:filter]
       when "top100" then replay_query = replay_query.top_legend(100)
       when "top1000" then replay_query = replay_query.top_legend(1000)
@@ -44,7 +44,7 @@ class ReplayOutcomeCache
   end
 
   def replay_outcome_ids_cache_key(query, options)
-    "replay_outcomes:ids:#{query_key(query)}:#{options[:filter]}"
+    "replay_outcomes:ids:#{query_key(query)}:#{options[:filter]}:page=#{options[:page]}"
   end
 
   def query_key(query)

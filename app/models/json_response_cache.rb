@@ -5,6 +5,7 @@ class JsonResponseCache
   def initialize(options = {})
     @path = options[:path] || "/"
     @filter = %w( top100 top1000 ).include?(options[:filter]) ? options[:filter] : "all"
+    @page = (1..10).include?(options[:page].to_i) ? options[:page].to_i : 1
     @cache = Rails.cache
     @replay_outcome_cache = ReplayOutcomeCache.new
   end
@@ -23,6 +24,7 @@ class JsonResponseCache
     response_json = {
       path: @path,
       filter: @filter,
+      page: @page,
       replays: replay_outcome_ids.map do |id|
         begin
           @replay_outcome_cache.replay_hash(id)
@@ -37,7 +39,7 @@ class JsonResponseCache
   end
 
   def json_response_cache_key
-    "replay_outcomes:json_responses:#{@path}:#{@filter}:v1"
+    "replay_outcomes:json_responses:#{@path}:#{@filter}:page=#{@page}"
   end
 
   private
@@ -45,7 +47,7 @@ class JsonResponseCache
   def replay_outcome_ids
     legend_stats = ReplayStatsCache.new.legend_stats
     class_query = legend_stats[:route_map][@path] || { class: 'any', archetype: 'any' }
-    @replay_outcome_cache.replay_outcome_ids(class_query, { filter: @filter })
+    @replay_outcome_cache.replay_outcome_ids(class_query, { filter: @filter, page: @page })
   end
 
   def logger
