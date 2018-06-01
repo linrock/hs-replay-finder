@@ -1,5 +1,5 @@
 <template lang="pug">
-  a.replay-link(:href="replay.link" target="_blank")
+  a.replay-link(:href="replay.link" target="_blank" @click="trackClick")
     .player.player1
       .win-indicator
         svg.crown(v-if="replay.winner === `p1`")
@@ -25,6 +25,17 @@
         required: true,
         type: Object,
       },
+    },
+
+    methods: {
+      trackClick() {
+        if (window.gtag) {
+          window.gtag('event', 'click', {
+            event_category: 'link',
+            event_label: this.replay.link
+          })
+        }
+      }
     },
 
     components: {
