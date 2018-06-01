@@ -14,7 +14,7 @@ class ReplayOutcomeImporter
         puts "#{e.class.name}: #{e.message}"
         puts e.backtrace
         n_consecutive_errors += 1
-        if n_consecutive_errors > 3
+        if n_consecutive_errors > 6
           puts "Too many failures in a row. Exiting..."
           exit 1
         end
