@@ -13,7 +13,11 @@
       .error-text(v-if="error") Failed to fetch replays :(
       .replay-feed
         .replay-list
-          replay-row(v-for="replay in $store.state.replays" :replay="replay")
+          replay-row(
+            v-for="replay in $store.state.replays"
+            :key="replay.link"
+            :replay="replay"
+          )
         replay-timestamps
 
 </template>

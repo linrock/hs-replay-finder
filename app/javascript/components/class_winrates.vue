@@ -14,6 +14,7 @@
         router-link.stats-row(
           v-for="([path, route]) in classArchetypeRows"
           :class="[{ active: currentRoute.archetype === route.archetype }]"
+          :key="path"
           :to="path"
         )
           .name {{ route.archetype }}
