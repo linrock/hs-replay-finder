@@ -4,7 +4,7 @@ class JsonResponseCache
   PAGE_LIMIT = 5
 
   def self.warm_all_caches!
-    %w( all top100 top1000 ).each do |filter|
+    ReplayOutcomeFilter::FILTERS.each do |filter|
       self.new({ path: "/", filter: filter }).json_response!
       ReplayStatsCache.new.route_map.keys.each do |path|
         self.new({ path: path, filter: filter }).json_response!
@@ -15,7 +15,7 @@ class JsonResponseCache
   def initialize(options = {})
     @path = options[:path] || "/"
     @cache = Rails.cache
-    set_filter options[:filter]
+    @filter = ReplayOutcomeFilter.get_filter(options[:filter])
     set_page options[:page].to_i
   end
 
@@ -65,10 +65,6 @@ class JsonResponseCache
       filter: @filter,
       page: @page
     })
-  end
-
-  def set_filter(filter)
-    @filter = %w( top100 top1000 ).include?(filter) ? filter : "all"
   end
 
   def set_page(page)
