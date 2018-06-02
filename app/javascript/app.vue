@@ -47,11 +47,10 @@
       const aboutWinrates = legendStats.about_winrates
       this.$store.dispatch(`setInitialData`, { routeMap, aboutWinrates })
       const path = this.$route.params.path || `/`
-      const route = this.getRoute(path)
-      if (Object.keys(route).length === 0) {
-        this.$router.replace({ path: `/` })
-      } else {
+      if (this.routeExists(path)) {
         this.$store.dispatch(`setPath`, path)
+      } else {
+        this.$router.replace({ path: `/` })
       }
       const replays = replayData.replays
       if (replays && replays.length > 0 && replayData.path == path) {
@@ -75,14 +74,14 @@
         }
         return query
       },
-      currentRoute() {
-        return this.getRoute(this.path)
-      },
     },
 
     methods: {
       getRoute(path) {
         return this.$store.getters.routeMap(path)
+      },
+      routeExists(path) {
+        return Object.keys(this.getRoute(path)).length > 0
       },
       setReplaysAndPageTitle(replays) {
         this.$store.dispatch(`setReplays`, replays)
@@ -98,7 +97,8 @@
       fetchReplays() {
         this.isLoading = true
         this.error = false
-        axios.get(this.apiQuery).then(response => response.data)
+        axios.get(this.apiQuery)
+          .then(response => response.data)
           .then(data => {
             if (this.path === data.path) {
               this.isLoading = false
@@ -118,8 +118,7 @@
       $route(to, from) {
         let path = to.params.path || `/`
         let newPageTitle = this.pageTitlePrefix
-        const route = this.getRoute(path)
-        if (Object.keys(route).length === 0 && path !== `/`) {
+        if (!this.routeExists(path) && path !== `/`) {
           path = `/`
           this.$router.replace({ path })
         }
