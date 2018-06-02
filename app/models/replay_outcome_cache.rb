@@ -33,7 +33,8 @@ class ReplayOutcomeCache
       when "top1000" then replay_query = replay_query.top_legend(1000)
     end
     results = replay_query.pluck(:id)
-    @cache.write replay_outcome_ids_cache_key(query, options), results, expires_in: EXPIRES_IN
+    @cache.write replay_outcome_ids_cache_key(query, options), results,
+                 expires_in: EXPIRES_IN
     results
   end
 
