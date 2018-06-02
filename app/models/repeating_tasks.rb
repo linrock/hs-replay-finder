@@ -17,12 +17,7 @@ class RepeatingTasks
   def warm_json_response_caches
     loop do
       t0 = Time.now
-      ["", "top100", "top1000"].each do |filter|
-        JsonResponseCache.new({ path: "/", filter: filter }).json_response!
-        ReplayStatsCache.new.legend_stats[:route_map].keys.each do |path|
-          JsonResponseCache.new({ path: path, filter: filter }).json_response!
-        end
-      end
+      JsonResponseCache.warm_all_caches!
       puts "Refreshing json caches took #{Time.now - t0}s"
       sleep 120
     end

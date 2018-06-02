@@ -4,6 +4,10 @@ class ReplayStatsCache
     @cache = Rails.cache
   end
 
+  def route_map
+    legend_stats[:route_map]
+  end
+
   def legend_stats
     results = @cache.read cache_key
     return results if results.present?
