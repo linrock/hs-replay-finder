@@ -44,25 +44,25 @@ const store = new Vuex.Store({
   actions: {
     hoverOverClassImage({ commit, getters }, path) {
       const className = path ? getters.routeMap(path).class : null
-      commit('hoverOverClassName', className)
+      commit(`hoverOverClassName`, className)
     },
     setInitialData({ commit }, initialData) {
-      commit('setRouteMap', new RouteMap(initialData.routeMap))
-      commit('setAboutWinrates', new AboutWinrates(initialData.aboutWinrates))
+      commit(`setRouteMap`, new RouteMap(initialData.routeMap))
+      commit(`setAboutWinrates`, new AboutWinrates(initialData.aboutWinrates))
     },
     setPath({ commit, dispatch, getters }, path) {
       const route = getters.routeMap(path)
       if (route.class && !route.archetype) {
         dispatch(`hoverOverClassImage`, path)
       }
-      commit('setPath', path || `/`)
+      commit(`setPath`, path || `/`)
     },
     setFilterOption({ commit }, filter) {
-      commit('setFilterOption', filter)
+      commit(`setFilterOption`, filter)
     },
     setReplays({ commit, getters, state }, replays) {
       const route = getters.currentRoute
-      commit('setReplays', replays)
+      commit(`setReplays`, replays)
       let replayFeedTitle
       if (!route.archetype) {
         replayFeedTitle = !route.class ? `Recent replays` : route.class
@@ -74,7 +74,7 @@ const store = new Vuex.Store({
       } else if (state.filter === `top1000`) {
         replayFeedTitle = `Top 1000 - ${replayFeedTitle}`
       }
-      commit('setReplayFeedTitle', replayFeedTitle)
+      commit(`setReplayFeedTitle`, replayFeedTitle)
     },
   },
 
