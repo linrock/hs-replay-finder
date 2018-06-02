@@ -1,6 +1,6 @@
 class ReplayOutcomeQuery
 
-  PAGE_SIZE = 100
+  PAGE_SIZE = 50
 
   def initialize(query = {})
     @class = query[:class] || 'any'
@@ -8,11 +8,11 @@ class ReplayOutcomeQuery
     @outcome = query[:outcome] || 'any'
   end
 
-  def replay_outcomes_with_limit(page = 1)
-    replay_outcomes.order('id DESC').limit(PAGE_SIZE).offset((page - 1) * PAGE_SIZE)
+  def replay_outcomes(page = 1)
+    all_replay_outcomes.order('id DESC').limit(PAGE_SIZE).offset((page - 1) * PAGE_SIZE)
   end
 
-  def replay_outcomes
+  def all_replay_outcomes
     rank_query = "
       data ->> 'player1_legend_rank' != 'None'
       AND

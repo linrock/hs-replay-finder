@@ -1,13 +1,15 @@
 class JsonResponseCache
 
   EXPIRES_IN = 3.minutes
-  PAGE_LIMIT = 5
+  PAGE_LIMIT = 10
 
   def self.warm_all_caches!
-    ReplayOutcomeFilter::FILTERS.each do |filter|
-      self.new({ path: "/", filter: filter }).json_response!
-      ReplayStatsCache.new.route_map.keys.each do |path|
-        self.new({ path: path, filter: filter }).json_response!
+    %w( 1 2 3 ).each do |page|
+      ReplayOutcomeFilter::FILTERS.each do |filter|
+        self.new({ path: "/", filter: filter, page: page }).json_response!
+        ReplayStatsCache.new.route_map.keys.each do |path|
+          self.new({ path: path, filter: filter, page: page }).json_response!
+        end
       end
     end
   end
