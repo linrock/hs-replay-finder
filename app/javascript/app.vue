@@ -38,8 +38,11 @@
   import ReplayRow from './components/replay_row'
   import ReplayTimestamps from './components/replay_timestamps'
 
-  const infScrollTriggerDistance = 500
-  const infScrollPollInterval = 300
+  const infScroll = {
+    delayBeforeEnabling: 1000,
+    triggerDistance: 500,
+    pollInterval: 300,
+  }
 
   export default {
     data() {
@@ -72,10 +75,10 @@
       this.enableInfiniteScroll()
       this.scrollPoller = setInterval(() => {
         const d = this.distanceFromBottom()
-        if (d < infScrollTriggerDistance && !this.isLoading && this.infiniteScrollOn) {
+        if (d < infScroll.triggerDistance && !this.isLoading && this.infiniteScrollOn) {
           this.fetchReplays(this.$store.getters.currentPage + 1)
         }
-      }, infScrollPollInterval)
+      }, infScroll.pollInterval)
     },
 
     computed: {
@@ -106,7 +109,7 @@
         document.title = newPageTitle
       },
       enableInfiniteScroll() {
-        setTimeout(() => this.infiniteScrollOn = true, 1000)
+        setTimeout(() => this.infiniteScrollOn = true, infScroll.delayBeforeEnabling)
       },
       distanceFromBottom() {
         if (!this.$refs.bottom) {
