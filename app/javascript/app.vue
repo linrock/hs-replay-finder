@@ -153,6 +153,7 @@
           })
           .catch(error => {
             console.error(error)
+            this.infiniteScrollOn = false
             this.isLoading = false
             this.error = true
           })
@@ -210,11 +211,15 @@
     width replay-feed-width
 
   .error-text
-    position absolute
-    top 244px
+    width replay-feed-width
     text-align center
     font-size 20px
-    width replay-feed-width
+    padding 27px
+    background white
+    position fixed
+    top 271px
+    border 1px solid rgba(0,0,0,0.3)
+    z-index 5
 
   h3.replay-feed-title
     width replay-feed-width
