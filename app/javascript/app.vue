@@ -5,7 +5,7 @@
       class-image-selector
       about-winrates
       class-winrates
-    section#replays
+    section#replays(:class="[{ loading: isLoading && isLoadingPageOne }]")
       h3.replay-feed-title {{ $store.state.replayFeedTitle }}
       template(v-if="$store.getters.replays.length === 0")
         .loading-text(v-if="isLoading") Loading...
@@ -49,6 +49,7 @@
       return {
         error: false,
         isLoading: false,
+        isLoadingPageOne: false,
         pageTitlePrefix: document.getElementsByTagName(`title`)[0].text,
         infiniteScrollOn: false,
         scrollPoller: null,
@@ -132,6 +133,9 @@
         this.isLoading = true
         this.error = false
         page = page || 1
+        if (page === 1) {
+          this.isLoadingPageOne = true
+        }
         axios.get(this.apiQuery(page))
           .then(response => response.data)
           .then(data => {
@@ -139,6 +143,7 @@
               return
             }
             this.isLoading = false
+            this.isLoadingPageOne = false
             this.$store.dispatch(`setPage`, data.page)
             if (data.page === 1) {
               this.setReplaysAndPageTitle(data.replays)
@@ -159,6 +164,7 @@
             console.error(error)
             this.infiniteScrollOn = false
             this.isLoading = false
+            this.isLoadingPageOne = false
             this.error = true
           })
         if (window.gtag) {
@@ -211,6 +217,10 @@
   #replays
     position relative
     margin-left 280px
+
+  section.loading
+    opacity 0.5
+    transition opacity 0.15s ease-in-out
 
   .loading-text
     position absolute
