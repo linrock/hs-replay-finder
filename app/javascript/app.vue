@@ -128,6 +128,7 @@
       fetchReplays(page) {
         this.isLoading = true
         this.error = false
+        page = page || 1
         axios.get(this.apiQuery(page))
           .then(response => response.data)
           .then(data => {
@@ -157,6 +158,12 @@
             this.isLoading = false
             this.error = true
           })
+        if (window.gtag) {
+          window.gtag('event', 'fetch replays', {
+            event_category: this.path,
+            event_label: page
+          })
+        }
       },
       backToTop() {
         window.scrollTo(0, 0)
