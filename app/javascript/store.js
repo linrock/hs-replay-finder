@@ -39,8 +39,14 @@ const store = new Vuex.Store({
       state.replays = new Replays()
       state.replays.addReplays(replays)
     },
+    addReplays(state, replays) {
+      state.replays.addReplays(replays)
+    },
     setReplayFeedTitle(state, replayFeedTitle) {
       state.replayFeedTitle = replayFeedTitle
+    },
+    setPage(state, page) {
+      state.page = page
     }
   },
 
@@ -79,6 +85,12 @@ const store = new Vuex.Store({
       }
       commit(`setReplayFeedTitle`, replayFeedTitle)
     },
+    addReplays({ commit }, replays) {
+      commit(`addReplays`, replays)
+    },
+    setPage({ commit }, page) {
+      commit(`setPage`, page)
+    }
   },
 
   getters: {
@@ -87,6 +99,7 @@ const store = new Vuex.Store({
     classArray: state => state.routeMap.classArray,
     classArchetypeRows: state => className => state.routeMap.classArchetypeRows(className),
     currentRoute: (state, getters) => getters.routeMap(state.path),
+    currentPage: state => state.page,
     routeMap: state => path => state.routeMap.getRoute(path),
     replays: state => state.replays.replayList,
   }

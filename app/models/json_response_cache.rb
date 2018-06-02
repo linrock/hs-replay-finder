@@ -1,13 +1,13 @@
 class JsonResponseCache
 
   EXPIRES_IN = 3.minutes
+  PAGE_LIMIT = 5
 
   def initialize(options = {})
     @path = options[:path] || "/"
-    @filter = %w( top100 top1000 ).include?(options[:filter]) ? options[:filter] : "all"
-    @page = (1..10).include?(options[:page].to_i) ? options[:page].to_i : 1
     @cache = Rails.cache
-    @replay_outcome_cache = ReplayOutcomeCache.new
+    set_filter options[:filter]
+    set_page options[:page].to_i
   end
 
   def cached_json_response
@@ -27,7 +27,7 @@ class JsonResponseCache
       page: @page,
       replays: replay_outcome_ids.map do |id|
         begin
-          @replay_outcome_cache.replay_hash(id)
+          replay_outcome_cache.replay_hash(id)
         rescue
           logger.error "json_response! - replay #{id}"
           nil
@@ -44,10 +44,27 @@ class JsonResponseCache
 
   private
 
+  def set_filter(filter)
+    @filter = %w( top100 top1000 ).include?(filter) ? filter : "all"
+  end
+
+  def set_page(page)
+    @page = page
+    @page = 1 if @page < 1
+    @page = PAGE_LIMIT if @page > PAGE_LIMIT
+  end
+
+  def replay_outcome_cache
+    @replay_outcome_cache ||= ReplayOutcomeCache.new
+  end
+
   def replay_outcome_ids
     legend_stats = ReplayStatsCache.new.legend_stats
     class_query = legend_stats[:route_map][@path] || { class: 'any', archetype: 'any' }
-    @replay_outcome_cache.replay_outcome_ids(class_query, { filter: @filter, page: @page })
+    replay_outcome_cache.replay_outcome_ids(class_query, {
+      filter: @filter,
+      page: @page
+    })
   end
 
   def logger

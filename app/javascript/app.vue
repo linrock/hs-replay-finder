@@ -5,20 +5,26 @@
       class-image-selector
       about-winrates
       class-winrates
-    section#replays(:class="[{ loading: isLoading }]")
+    section#replays(:class="[{ loading: isLoading && $store.getters.currentPage === 1}]")
       h3.replay-feed-title {{ $store.state.replayFeedTitle }}
       template(v-if="$store.getters.replays.length === 0")
         .loading-text(v-if="isLoading") Loading...
         .loading-text(v-else) No replays found
       .error-text(v-if="error") Failed to fetch replays :(
-      .replay-feed
-        .replay-list
-          replay-row(
-            v-for="replay in $store.state.replays"
-            :key="replay.link"
-            :replay="replay"
-          )
-        replay-timestamps
+      .replay-feed-container
+        .replay-feed
+          .replay-list
+            replay-row(
+              v-for="replay in $store.getters.replays"
+              :key="replay.link"
+              :replay="replay"
+            )
+          replay-timestamps
+        .bottom(ref="bottom")
+          .back-to-top(
+            v-if="$store.getters.currentPage > 1 && !infiniteScrollOn"
+            @click="backToTop()"
+          ) Back to top
 
 </template>
 
@@ -38,6 +44,8 @@
         error: false,
         isLoading: false,
         pageTitlePrefix: document.getElementsByTagName(`title`)[0].text,
+        infiniteScrollOn: false,
+        scrollPoller: null,
       }
     },
 
@@ -58,6 +66,13 @@
       } else {
         this.fetchReplays()
       }
+      this.enableInfiniteScroll()
+      this.scrollPoller = setInterval(() => {
+        const d = this.distanceFromBottom()
+        if (d < 500 && !this.isLoading && this.infiniteScrollOn) {
+          this.fetchReplays(this.$store.getters.currentPage + 1)
+        }
+      }, 300)
     },
 
     computed: {
@@ -66,13 +81,6 @@
       },
       filter() {
         return this.$store.state.filter
-      },
-      apiQuery() {
-        let query = `replays.json?path=${this.path || `/`}`
-        if (this.filter) {
-          query = `${query}&filter=${this.filter}`
-        }
-        return query
       },
     },
 
@@ -94,16 +102,45 @@
         }
         document.title = newPageTitle
       },
-      fetchReplays() {
+      enableInfiniteScroll() {
+        setTimeout(() => this.infiniteScrollOn = true, 1000)
+      },
+      distanceFromBottom() {
+        if (!this.$refs.bottom) {
+          return Infinity
+        } else {
+          return this.$refs.bottom.offsetTop - (window.scrollY + window.innerHeight)
+        }
+      },
+      apiQuery(page) {
+        let query = `replays.json?path=${this.path || `/`}`
+        if (this.filter) {
+          query = `${query}&filter=${this.filter}`
+        }
+        if (page) {
+          query = `${query}&page=${page}`
+        }
+        return query
+      },
+      fetchReplays(page) {
         this.isLoading = true
         this.error = false
-        axios.get(this.apiQuery)
+        axios.get(this.apiQuery(page))
           .then(response => response.data)
           .then(data => {
             if (this.path === data.path) {
               this.isLoading = false
-              this.setReplaysAndPageTitle(data.replays)
-              window.scrollTo(0, 0)
+              this.$store.dispatch(`setPage`, data.page)
+              if (data.page === 1) {
+                this.setReplaysAndPageTitle(data.replays)
+                this.enableInfiniteScroll()
+                this.backToTop()
+              } else {
+                this.$store.dispatch(`addReplays`, data.replays)
+                if (data.page < page || data.replays.length === 0) {
+                  this.infiniteScrollOn = false
+                }
+              }
             }
           })
           .catch(error => {
@@ -112,6 +149,9 @@
             this.error = true
           })
       },
+      backToTop() {
+        window.scrollTo(0, 0)
+      }
     },
 
     watch: {
@@ -184,7 +224,17 @@
     width 100%
     min-height 1200px
 
-    .replay-list
-      margin-bottom 100px
+  .bottom
+    height 100px
+    width replay-feed-width
+
+    .back-to-top
+      text-align center
+      margin-top 35px
+      opacity 0.4
+
+      &:hover
+        cursor pointer
+        opacity 0.9
 
 </style>
