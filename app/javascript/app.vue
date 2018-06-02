@@ -5,7 +5,7 @@
       class-image-selector
       about-winrates
       class-winrates
-    section#replays(:class="[{ loading: isLoading && $store.getters.currentPage === 1}]")
+    section#replays
       h3.replay-feed-title {{ $store.state.replayFeedTitle }}
       template(v-if="$store.getters.replays.length === 0")
         .loading-text(v-if="isLoading") Loading...
@@ -128,18 +128,19 @@
         axios.get(this.apiQuery(page))
           .then(response => response.data)
           .then(data => {
-            if (this.path === data.path) {
-              this.isLoading = false
-              this.$store.dispatch(`setPage`, data.page)
-              if (data.page === 1) {
-                this.setReplaysAndPageTitle(data.replays)
-                this.enableInfiniteScroll()
-                this.backToTop()
-              } else {
-                this.$store.dispatch(`addReplays`, data.replays)
-                if (data.page < page || data.replays.length === 0) {
-                  this.infiniteScrollOn = false
-                }
+            if (this.path !== data.path) {
+              return
+            }
+            this.isLoading = false
+            this.$store.dispatch(`setPage`, data.page)
+            if (data.page === 1) {
+              this.setReplaysAndPageTitle(data.replays)
+              this.enableInfiniteScroll()
+              this.backToTop()
+            } else {
+              this.$store.dispatch(`addReplays`, data.replays)
+              if (data.page < page || data.replays.length === 0) {
+                this.infiniteScrollOn = false
               }
             }
           })
@@ -192,10 +193,6 @@
   #replays
     position relative
     margin-left 280px
-
-  section.loading
-    opacity 0.45
-    transition 0.2s opacity 0.15s ease-in-out
 
   .loading-text
     position absolute
