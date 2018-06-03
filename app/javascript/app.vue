@@ -38,6 +38,7 @@
   import ReplayRow from './components/replay_row'
   import ReplayTimestamps from './components/replay_timestamps'
 
+  const pageTitleSuffix = `Hearthstone Replay Finder`
   const infScroll = {
     delayBeforeEnabling: 1000,
     triggerDistance: 500,
@@ -50,7 +51,6 @@
         error: false,
         isLoading: false,
         isLoadingPageOne: false,
-        pageTitlePrefix: document.getElementsByTagName(`title`)[0].text,
         infiniteScrollOn: false,
         scrollPoller: null,
       }
@@ -100,12 +100,12 @@
       },
       setReplaysAndPageTitle(replays) {
         this.$store.dispatch(`setReplays`, replays)
-        let newPageTitle = this.pageTitlePrefix
+        let newPageTitle = pageTitleSuffix
         const route = this.getRoute(this.path)
         if (route.class && route.archetype) {
-          newPageTitle = `${this.pageTitlePrefix} | ${route.archetype} ${route.class}`
+          newPageTitle = `${route.archetype} ${route.class} | ${pageTitleSuffix}`
         } else if (route.class) {
-          newPageTitle = `${this.pageTitlePrefix} | ${route.class}`
+          newPageTitle = `${route.class} | ${pageTitleSuffix}`
         }
         document.title = newPageTitle
       },
@@ -182,7 +182,6 @@
     watch: {
       $route(to, from) {
         let path = to.params.path || `/`
-        let newPageTitle = this.pageTitlePrefix
         if (!this.routeExists(path) && path !== `/`) {
           path = `/`
           this.$router.replace({ path })
