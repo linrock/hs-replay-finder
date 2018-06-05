@@ -55,7 +55,7 @@ class ReplayStats
     winrate_stats
   end
 
-  def to_path_map
+  def to_route_map
     winrate_stats = winrates
     winrate_stats.each do |path, stats|
       winrate_stats[path].merge!(route_map.lookup(path))

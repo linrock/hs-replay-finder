@@ -61,8 +61,7 @@ class JsonResponseCache
   end
 
   def replay_outcome_ids
-    stats_cache = ReplayStatsCache.new
-    class_query = stats_cache.route_map[@path] || { class: 'any', archetype: 'any' }
+    class_query = RouteMap.new.lookup(@path) || { class: 'any', archetype: 'any' }
     replay_outcome_cache.replay_outcome_ids(class_query, {
       filter: @filter,
       page: @page

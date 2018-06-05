@@ -17,7 +17,7 @@ class ReplayStatsCache
   def legend_stats!
     replay_stats = ReplayStats.new(ReplayOutcome.legend_players.since(5.days.ago))
     results = {
-      route_map: replay_stats.to_path_map,
+      route_map: replay_stats.to_route_map,
       about_winrates: {
         count: replay_stats.replays_count,
         since: replay_stats.oldest_replay_timestamp,
