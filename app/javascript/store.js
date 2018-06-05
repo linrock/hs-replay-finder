@@ -70,8 +70,9 @@ const store = new Vuex.Store({
       commit(`setFilterOption`, filter)
     },
     setReplays({ commit, getters, state }, replays) {
-      const route = getters.currentRoute
       commit(`setReplays`, replays)
+    },
+    setReplayFeedTitle({ commit, state }, route) {
       let replayFeedTitle
       if (!route.archetype) {
         replayFeedTitle = !route.class ? `Recent replays` : route.class

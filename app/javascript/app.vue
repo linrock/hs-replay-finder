@@ -62,16 +62,16 @@
       const aboutWinrates = legendStats.about_winrates
       this.$store.dispatch(`setInitialData`, { routeMap, aboutWinrates })
       const path = this.$route.params.path || `/`
-      if (this.routeExists(path)) {
-        this.$store.dispatch(`setPath`, path)
-      } else {
-        this.$router.replace({ path: `/` })
-      }
+      this.$store.dispatch(`setPath`, path)
       const replays = replayData.replays
-      if (replays && replays.length > 0 && replayData.path == path) {
-        this.setReplaysAndPageTitle(replays)
+      if (replays && replays.length > 0 && replayData.path === path) {
+        this.setReplays(replays)
       } else {
         this.fetchReplays()
+      }
+      const route = replayData.route || this.$store.getters.currentRoute
+      if (route) {
+        this.setPageTitle(route)
       }
       this.enableInfiniteScroll()
       this.scrollPoller = setInterval(() => {
@@ -95,13 +95,12 @@
       getRoute(path) {
         return this.$store.getters.routeMap(path)
       },
-      routeExists(path) {
-        return Object.keys(this.getRoute(path)).length > 0
-      },
-      setReplaysAndPageTitle(replays) {
+      setReplays(replays) {
         this.$store.dispatch(`setReplays`, replays)
+      },
+      setPageTitle(route) {
+        this.$store.dispatch(`setReplayFeedTitle`, route)
         let newPageTitle = pageTitleSuffix
-        const route = this.getRoute(this.path)
         if (route.class && route.archetype) {
           newPageTitle = `${route.archetype} ${route.class} | ${pageTitleSuffix}`
         } else if (route.class) {
@@ -146,7 +145,8 @@
             this.isLoadingPageOne = false
             this.$store.dispatch(`setPage`, data.page)
             if (data.page === 1) {
-              this.setReplaysAndPageTitle(data.replays)
+              this.setReplays(data.replays)
+              this.setPageTitle(data.route || {})
               if (data.replays.length === data.page_size) {
                 this.enableInfiniteScroll()
               } else {
@@ -161,6 +161,10 @@
             }
           })
           .catch(error => {
+            if (error.request.status === 404) {
+              this.$router.replace({ path: `/` })
+              return
+            }
             console.error(error)
             this.infiniteScrollOn = false
             this.isLoading = false
@@ -182,10 +186,6 @@
     watch: {
       $route(to, from) {
         let path = to.params.path || `/`
-        if (!this.routeExists(path) && path !== `/`) {
-          path = `/`
-          this.$router.replace({ path })
-        }
         this.$store.dispatch(`setPath`, path)
         this.fetchReplays()
       },
