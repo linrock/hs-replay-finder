@@ -2,7 +2,9 @@ class HomeController < ApplicationController
 
   def index
     @legend_stats = ReplayStatsCache.new.legend_stats
-    @replay_data = JsonResponseCache.new(params).cached_json_response || "{}"
+    if route_map.exists? params[:path]
+      @replay_data = JsonResponseCache.new(params).cached_json_response || "{}"
+    end
     set_title
     set_meta_description
   end
@@ -19,9 +21,13 @@ class HomeController < ApplicationController
     @meta_desc = "Hearthstone replays and winrates by legend-rank #{player_type_str}. Learn how the best players play the top decks."
   end
 
+  def route_map
+    @route_map ||= RouteMap.new
+  end
+
   def player_type
     return @player_type if defined? @player_type
-    route = ArchetypeCache.new.path_map[params[:path]]
+    route = route_map.lookup params[:path]
     return "" unless route.present?
     @player_type = if route[:class] and route[:archetype]
                      "#{route[:archetype]} #{route[:class]}"

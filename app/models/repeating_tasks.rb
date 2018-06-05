@@ -8,7 +8,8 @@ class RepeatingTasks
     loop do
       cache = ArchetypeCache.new
       cache.archetypes_map!
-      cache.path_map!
+      route_map = RouteMap.new
+      route_map.to_hash!
       ReplayStatsCache.new.legend_stats!
       sleep 3600
     end

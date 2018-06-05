@@ -56,10 +56,9 @@ class ReplayStats
   end
 
   def to_path_map
-    path_map = ArchetypeCache.new.path_map
     winrate_stats = winrates
     winrate_stats.each do |path, stats|
-      winrate_stats[path].merge!(path_map[path])
+      winrate_stats[path].merge!(route_map.lookup(path))
     end
     winrate_stats
   end
@@ -74,6 +73,10 @@ class ReplayStats
   end
 
   private
+
+  def route_map
+    @route_map ||= RouteMap.new
+  end
 
   def logger
     @logger ||= Logger.new "#{Rails.root}/log/error.log"
