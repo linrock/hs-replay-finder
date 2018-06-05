@@ -36,6 +36,7 @@ class JsonResponseCache
       path: @path,
       filter: @filter,
       page: @page,
+      route: route,
       page_size: ReplayOutcomeQuery::PAGE_SIZE,
       replays: replay_outcome_ids.map do |id|
         begin
@@ -61,11 +62,19 @@ class JsonResponseCache
   end
 
   def replay_outcome_ids
-    class_query = RouteMap.new.lookup(@path) || { class: 'any', archetype: 'any' }
+    class_query = route || { class: 'any', archetype: 'any' }
     replay_outcome_cache.replay_outcome_ids(class_query, {
       filter: @filter,
       page: @page
     })
+  end
+
+  def route_map
+    @route_map ||= RouteMap.new
+  end
+
+  def route
+    @route ||= route_map.lookup(@path)
   end
 
   def set_page(page)
