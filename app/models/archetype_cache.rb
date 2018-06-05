@@ -10,9 +10,9 @@ class ArchetypeCache
 
   # hash { archetype_id => archetype }
   def archetypes_map
-    results = @cache.read archetypes_map_cache_key
-    return results if results.present?
-    archetypes_map!
+    @cache.fetch archetypes_map_cache_key do
+      archetypes_map!
+    end
   end
 
   def archetypes_map!

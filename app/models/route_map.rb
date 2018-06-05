@@ -15,9 +15,9 @@ class RouteMap
   end
 
   def to_hash
-    results = @cache.read route_map_cache_key
-    return results if results.present?
-    to_hash!
+    @cache.fetch route_map_cache_key do
+      to_hash!
+    end
   end
 
   def to_hash!

@@ -26,9 +26,9 @@ class JsonResponseCache
   end
 
   def json_response
-    results = cached_json_response
-    return results unless results.nil?
-    json_response!
+    @cache.fetch json_response_cache_key do
+      json_response!
+    end
   end
 
   def json_response!

@@ -9,9 +9,9 @@ class ReplayStatsCache
   end
 
   def legend_stats
-    results = @cache.read cache_key
-    return results if results.present?
-    legend_stats!
+    @cache.fetch cache_key do
+      legend_stats!
+    end
   end
 
   def legend_stats!
