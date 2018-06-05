@@ -1,5 +1,4 @@
 class ReplayOutcomeCache
-
   EXPIRES_IN = 3.minutes
 
   def initialize
@@ -14,14 +13,12 @@ class ReplayOutcomeCache
   end
 
   def replay_hash!(replay_id)
-    results = ReplayOutcome.find(replay_id).to_hash
-    @cache.write replay_hash_cache_key(replay_id), results
-    results 
+    ReplayOutcome.find(replay_id).to_hash
   end
 
   # the list of replay ids returned for a query
   def replay_outcome_ids(query, options = {})
-    @cache.fetch replay_outcome_ids_cache_key(query, options) do
+    @cache.fetch(replay_outcome_ids_cache_key(query, options), expires_in: EXPIRES_IN) do
       replay_outcome_ids!(query, options)
     end
   end
@@ -32,10 +29,7 @@ class ReplayOutcomeCache
       when "top100" then replay_query = replay_query.top_legend(100)
       when "top1000" then replay_query = replay_query.top_legend(1000)
     end
-    results = replay_query.pluck(:id)
-    @cache.write replay_outcome_ids_cache_key(query, options), results,
-                 expires_in: EXPIRES_IN
-    results
+    replay_query.pluck(:id)
   end
 
   private

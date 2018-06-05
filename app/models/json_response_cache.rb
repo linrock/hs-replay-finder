@@ -22,15 +22,15 @@ class JsonResponseCache
   end
 
   def json_response
-    @cache.fetch cache_key do
-      json_response!
-    end
+    results = cached_json_response
+    return results unless results.nil?
+    json_response!
   end
 
   def json_response!
-    json_response_string = @json_response.to_json
-    @cache.write cache_key, json_response_string, expires_in: EXPIRES_IN
-    json_response_string
+    results = @json_response.to_json
+    @cache.write cache_key, results, expires_in: EXPIRES_IN
+    results
   end
 
   private
