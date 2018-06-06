@@ -78,13 +78,19 @@
 </script>
 
 <style lang="stylus" scoped>
+  .popular-archetypes
+    border-radius 2px
+    width 240px
+    padding 9px
+    background rgba(0,0,0,0.04)
+
   h2
-    font-size 15px
+    font-size 14px
     margin-bottom 4px
 
   h3
-    font-size 13px
-    margin-bottom 10px
+    font-size 12px
+    margin-bottom 11px
     opacity 0.4
 
   .archetype-stats
