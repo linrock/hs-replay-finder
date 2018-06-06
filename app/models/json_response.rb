@@ -1,5 +1,5 @@
 class JsonResponse
-  PAGE_LIMIT = 10
+  PAGE_LIMIT = 25
 
   def initialize(options = {})
     @path = options[:path] || "/"
