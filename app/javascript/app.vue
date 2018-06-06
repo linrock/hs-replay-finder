@@ -5,6 +5,8 @@
       class-image-selector
       about-winrates
       class-winrates
+    section#popular
+      popular-archetypes
     section#replays(:class="[{ loading: isLoading && isLoadingPageOne }]")
       h3.replay-feed-title {{ $store.state.replayFeedTitle }}
       template(v-if="$store.getters.replays.length === 0")
@@ -34,6 +36,7 @@
   import AboutWinrates from './components/about_winrates'
   import ClassImageSelector from './components/class_image_selector'
   import ClassWinrates from './components/class_winrates'
+  import PopularArchetypes from './components/popular_archetypes'
   import RankFilter from './components/rank_filter'
   import ReplayRow from './components/replay_row'
   import ReplayTimestamps from './components/replay_timestamps'
@@ -198,6 +201,7 @@
       AboutWinrates,
       ClassImageSelector,
       ClassWinrates,
+      PopularArchetypes,
       RankFilter,
       ReplayRow,
       ReplayTimestamps,
@@ -212,6 +216,11 @@
     position fixed
     left 30px
     top 145px
+
+  #popular
+    position fixed
+    left 30px
+    top 525px
 
   #replays
     position relative

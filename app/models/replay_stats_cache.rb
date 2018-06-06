@@ -9,13 +9,12 @@ class ReplayStatsCache
   end
 
   def legend_stats
-    @cache.fetch cache_key do
-      legend_stats!
-    end
+    results = @cache.read legend_stats_cache_key
+    return results unless results.nil?
+    legend_stats!
   end
 
   def legend_stats!
-    replay_stats = ReplayStats.new(ReplayOutcome.legend_players.since(5.days.ago))
     results = {
       route_map: replay_stats.to_route_map,
       about_winrates: {
@@ -23,11 +22,17 @@ class ReplayStatsCache
         since: replay_stats.oldest_replay_timestamp,
       }
     }
-    @cache.write cache_key, results
+    @cache.write legend_stats_cache_key, results
     results
   end
 
-  def cache_key
-    "replay_stats:legend:v1"
+  private
+
+  def replay_stats
+    @replay_stats ||= ReplayStats.new(ReplayOutcome.legend_players.since(5.days.ago))
+  end
+
+  def legend_stats_cache_key
+    "replay_stats:legend_stats:v1"
   end
 end

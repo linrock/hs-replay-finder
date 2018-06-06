@@ -12,7 +12,7 @@ export default class AboutWinrates {
   get sinceDays(): number {
     const since = new Date(this.about.since).getTime()
     const secondsSince = ((new Date()).getTime() - since) / 1000
-    return ~~(secondsSince / 86400)
+    return Math.round(secondsSince / 86400)
   }
 
   get numReplays(): string {

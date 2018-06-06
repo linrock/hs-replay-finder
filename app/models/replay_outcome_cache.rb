@@ -24,12 +24,10 @@ class ReplayOutcomeCache
   end
 
   def replay_outcome_ids!(query, options = {})
-    replay_query = ReplayOutcomeQuery.new(query).replay_outcomes(page = options[:page])
-    case options[:filter]
-      when "top100" then replay_query = replay_query.top_legend(100)
-      when "top1000" then replay_query = replay_query.top_legend(1000)
-    end
-    replay_query.pluck(:id)
+    ReplayOutcomeQuery.new(query)
+      .replay_outcomes(page = options[:page])
+      .filter(options[:filter])
+      .pluck(:id)
   end
 
   private

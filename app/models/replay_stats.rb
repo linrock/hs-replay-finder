@@ -63,6 +63,26 @@ class ReplayStats
     winrate_stats
   end
 
+  # Counts the number of games played by each archetype
+  def archetype_counts
+    counts = {}
+    ids = @replay_outcomes.map(&:archetype_ids).flatten
+    ids.each do |arch_id|
+      counts[arch_id] ||= 0
+      counts[arch_id] += 1
+    end
+    total_n_games = @replay_outcomes.length
+    counts.sort_by {|id, n_games| -n_games }.take(3).map do |id, n_games|
+      archetype = Archetype.find_by_archetype_id id
+      {
+        name: archetype.name,
+        path: archetype.path,
+        n_games: n_games,
+        percent_games: "%0.2f" % (n_games * 100.0 / total_n_games),
+      }
+    end
+  end
+
   def replays_count
     count = @replay_outcomes.count
     count.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse

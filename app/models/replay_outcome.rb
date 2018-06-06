@@ -5,7 +5,14 @@ class ReplayOutcome < ApplicationRecord
   validate :check_data_format
 
   # scopes
-  def self.legend_players
+  scope :filter, -> (filter) do
+    case filter
+      when "top100" then self.top_legend(100)
+      when "top1000" then self.top_legend(1000)
+    end
+  end
+
+  scope :legend_players, -> do
     where("
       data ->> 'player1_legend_rank' != 'None'
       AND
@@ -23,6 +30,10 @@ class ReplayOutcome < ApplicationRecord
 
   def self.since(time_ago)
     where("created_at > ?", time_ago)
+  end
+
+  def archetype_ids
+    [ data["player1_archetype"], data["player2_archetype"] ]
   end
 
   def player1_archetype

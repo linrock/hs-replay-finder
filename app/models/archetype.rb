@@ -12,7 +12,7 @@ class Archetype < ApplicationRecord
     if use_cache
       ArchetypeCache.new.name_of_archetype_id id
     else
-      find_by_archetype_id(id).data["name"]
+      find_by_archetype_id(id).name
     end
   end
 
@@ -37,12 +37,16 @@ class Archetype < ApplicationRecord
     end.to_h
   end
 
+  def name
+    data["name"]
+  end
+
   def class_name
     data["player_class_name"].capitalize
   end
 
   def class_prefix
-    data["name"].gsub(/#{class_name}\z/i, '').strip
+    name.gsub(/#{class_name}\z/i, '').strip
   end
 
   def path
