@@ -20,6 +20,12 @@
     watch: {
       selected() {
         this.$store.dispatch(`setFilterOption`, this.selected)
+        if (window.gtag) {
+          window.gtag('event', 'filter', {
+            event_category: 'select',
+            event_label: this.selected
+          })
+        }
       }
     }
   }
