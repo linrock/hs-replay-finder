@@ -4,7 +4,6 @@ class ReplayOutcome < ApplicationRecord
   validate :check_hsreplay_id
   validate :check_data_format
 
-  # scopes
   scope :filter, -> (filter) do
     case filter
       when "top100" then self.top_legend(100)
@@ -20,7 +19,7 @@ class ReplayOutcome < ApplicationRecord
     ")
   end
 
-  def self.top_legend(n)
+  scope :top_legend, -> (n) do
     where("
       (data ->> 'player1_legend_rank')::int <= ?
       AND
@@ -28,7 +27,7 @@ class ReplayOutcome < ApplicationRecord
     ", n, n)
   end
 
-  def self.since(time_ago)
+  scope :since, -> (time_ago) do
     where("created_at > ?", time_ago)
   end
 

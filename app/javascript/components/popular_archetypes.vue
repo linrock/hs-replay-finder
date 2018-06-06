@@ -35,7 +35,6 @@
         axios.get(this.apiQuery)
           .then(response => response.data)
           .then(data => {
-            console.log(JSON.stringify(data))
             this.archetypeStats = data
             if (data.filter === `top1000`) {
               this.title = `Top 1000 - ${titleSuffix}`
@@ -70,7 +69,6 @@
 
     watch: {
       apiQuery() {
-        console.log(`api query changed`)
         this.fetchPopularArchetypes()
       }
     }
